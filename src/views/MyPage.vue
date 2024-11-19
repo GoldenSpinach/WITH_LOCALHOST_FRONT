@@ -1,0 +1,9 @@
+<template>
+    <div>my page</div>
+</template>
+
+<script setup lang='ts'>
+
+</script>
+
+<style></style>
