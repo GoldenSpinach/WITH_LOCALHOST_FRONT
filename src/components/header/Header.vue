@@ -21,6 +21,9 @@
         <AreaSelector
           v-if="isAreaSelectorToggled"
           class="absolute z-50 top-[75px] start-[35px]"
+          @choose-area="addRegion"
+          @choose-city="addcity"
+          @selectedOptions="selectedOptions"
         />
         <div class="flex flex-col mt-[3px]">
           <label for="local" class="text-xs text-zinc-400 mb-[5px]">출발</label>
@@ -106,7 +109,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, type Ref } from "vue";
 import { RouterLink } from "vue-router";
 import AreaSelector from "@/components/area/AreaSelector.vue";
 import OptionSelector from "@/components/option/OptionSelector.vue";
@@ -114,6 +117,16 @@ const isLogin = ref(true);
 const isToggled = ref(false);
 const isAreaSelectorToggled = ref(false);
 const isOptionSelectorToggled = ref(false);
+const selectedOptions: Ref<{
+  region: number | null;
+  cities: number[];
+  extras: string[];
+}> = ref({
+  region: null,
+  cities: [],
+  extras: [],
+});
+
 const toggleAreaDropdown = () => {
   isAreaSelectorToggled.value = !isAreaSelectorToggled.value;
 };
@@ -122,6 +135,12 @@ const toggleOptionDropdown = () => {
 };
 const toggleDropdown = () => {
   isToggled.value = !isToggled.value;
+};
+const addRegion = (regionId: number) => {
+  selectedOptions.value.region = regionId;
+};
+const addcity = (cityId: number) => {
+  selectedOptions.value.cities.push(cityId);
 };
 // 문서 클릭 이벤트 핸들러
 const handleClickOutside = (event: MouseEvent) => {
