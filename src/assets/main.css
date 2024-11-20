@@ -1,0 +1,8 @@
+/* src/assets/main.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ *{
+    padding: 0;
+    margin: 0;
+ }
