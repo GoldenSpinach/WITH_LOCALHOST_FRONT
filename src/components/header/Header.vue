@@ -74,9 +74,9 @@
           />
         </div>
       </div>
-      <button type="submit" class="ml-4 absolute end-[40px]">
+      <RouterLink to="/guide" class="ml-4 absolute end-[40px]">
         <img src="@/assets/images/search.svg" alt="검색" class="w-6 h-6" />
-      </button>
+      </RouterLink>
     </form>
     <div class="relative">
       <div
