@@ -1,5 +1,5 @@
 <template>
-  <section class="flex flex-col items-center justify-center">
+  <section class="flex flex-col items-center justify-center h-screen">
     <div class="flex flex-col gap-48 justify-center items-center">
       <div class="flex items-center gap-24 relative">
         <div class="text-7xl flex flex-col gap-[15px] font-bold">
@@ -44,8 +44,9 @@ import { Carousel, Slide } from "vue3-carousel";
 import defaultImage from "@/assets/images/default.png";
 
 import "vue3-carousel/dist/carousel.css";
+import { dList } from "@/dummy";
 
-const tours = ref([]);
+const tours = ref(dList);
 </script>
 
 <style></style>

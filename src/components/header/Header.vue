@@ -4,7 +4,10 @@
       <img class="w-[100px] h-[50px]" src="@/assets/images/logo.png" alt="" />
     </RouterLink>
     <form
-      class="flex w-3/4 px-[50px] max-w-[11670px] h-[70px] items-center gap-4 p-4 rounded-full shadow-lg border border-gray-200 relative"
+      :class="[
+        'flex w-3/4 px-[50px] max-w-[1167px] h-[70px] items-center gap-4 p-4 rounded-full shadow-lg border border-gray-200 relative transition-all duration-500',
+        isHome ? 'mt-[550px]' : 'mt-0',
+      ]"
     >
       <div class="flex">
         <div class="flex flex-col mt-[3px]">
@@ -106,7 +109,7 @@
 
 <script setup>
 import { onMounted, onUnmounted, ref, watchEffect } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRoute } from "vue-router";
 import AreaSelector from "@/components/area/AreaSelector.vue";
 import OptionSelector from "@/components/option/OptionSelector.vue";
 const isLogin = ref(true);
@@ -119,6 +122,12 @@ const selectedOptions = ref({
   cities: [],
   extras: [],
   options: [],
+});
+const isHome = ref(false);
+const route = useRoute();
+
+watchEffect(() => {
+  isHome.value = route.path === "/";
 });
 
 const toggleAreaDropdown = () => {
