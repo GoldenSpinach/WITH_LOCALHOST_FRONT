@@ -1,9 +1,7 @@
 <template>
-    <div>login page</div>
+  <div>login page</div>
 </template>
 
-<script setup lang='ts'>
-
-</script>
+<script setup></script>
 
 <style></style>
