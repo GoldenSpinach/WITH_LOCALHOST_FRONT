@@ -1,8 +1,8 @@
 <template>
     <header class="flex h-[100px]  items-center justify-between px-[40px]">
-        <div class="w-[100px] h-[50px] bg-sky-500 rounded">
+        <RouterLink to="/" class="w-[100px] h-[50px] bg-sky-500 rounded">
             <img class="w-[100px] h-[50px]" src="@/assets/images/logo.png" alt="">
-        </div>
+        </RouterLink>
         <div class="relative">
             <div class="flex gap-[15px] p-[10px] border border-zinc-300 rounded-full cursor-pointer"
                 @click="toggleDropdown">
