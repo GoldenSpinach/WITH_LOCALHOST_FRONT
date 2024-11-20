@@ -45,35 +45,29 @@
           <label for="local" class="text-xs text-zinc-400 mb-[3px]"
             >추가 옵션</label
           >
-          <div class="flex relative">
-            <div class="flex gap-[6px]">
+          <div class="flex gap-[6px]">
+            <div class="flex gap-[6px] max-w-[340px] relative overflow-hidden">
               <div
-                class="min-w-[65px] max-h-[36px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center"
+                v-for="option in selectedOptions.options"
+                :key="option.id"
+                class="min-w-[100px] max-h-[36px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center"
+                @click="deleteOption(option.id)"
               >
-                차량
+                {{ option.name }}
               </div>
-              <div
-                class="min-w-[90px] max-h-[36px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center"
-              >
-                일본어
-              </div>
-              <div
-                class="min-w-[65px] max-h-[36px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center"
-              >
-                영어
-              </div>
-
-              <img
-                class="w-[30px] cursor-pointer"
-                src=" @/assets/images/add.svg"
-                alt="설정추가"
-                @click="toggleOptionDropdown"
-              />
             </div>
+            <img
+              class="w-[30px] cursor-pointer"
+              src=" @/assets/images/add.svg"
+              alt="설정추가"
+              @click="toggleOptionDropdown"
+            />
           </div>
           <OptionSelector
             v-if="isOptionSelectorToggled"
             class="absolute z-50 top-[75px] start-[15px]"
+            :selectedOption="selectedOptions.options"
+            @add-option="addOption"
           />
         </div>
       </div>
@@ -124,6 +118,7 @@ const selectedOptions = ref({
   regionName: null,
   cities: [],
   extras: [],
+  options: [],
 });
 
 const toggleAreaDropdown = () => {
@@ -148,6 +143,21 @@ const addcity = (cityId) => {
     return;
   }
   selectedOptions.value.cities.push(cityId);
+};
+const addOption = (id, name) => {
+  const optionExists = selectedOptions.value.options.some(
+    (opt) => opt.id === id
+  );
+  if (optionExists) {
+    deleteOption(id);
+    return;
+  }
+  selectedOptions.value.options.push({ id, name });
+};
+const deleteOption = (id) => {
+  selectedOptions.value.options = selectedOptions.value.options.filter(
+    (opt) => opt.id !== id
+  );
 };
 watchEffect(() => {
   if (selectedOptions.value.region) {
