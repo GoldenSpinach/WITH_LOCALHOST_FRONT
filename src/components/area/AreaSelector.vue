@@ -55,10 +55,6 @@ const props = defineProps({
 
 const regions = ref(dRegion);
 const cities = ref(dCity);
-watch(props.selectedOption, () => {
-  console.log(props.selectedOption.region);
-  console.log(props.selectedOption.cities.includes(9));
-});
 const clickRegion = (regionId, regionName) => {
   emit("chooseArea", regionId, regionName);
 };
