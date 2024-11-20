@@ -8,8 +8,13 @@
         <div
           v-for="region in regions"
           :key="region.regionId"
-          class="border p-[5px] rounded-lg cursor-pointer hover:bg-blue-400 hover:text-white"
-          @click="clickRegion(region.regionId)"
+          :class="[
+            'border p-[5px] rounded-lg cursor-pointer',
+            selectedOption.region == region.regionId
+              ? 'bg-blue-400 text-white'
+              : 'hover:bg-blue-400 hover:text-white', // 선택된 경우
+          ]"
+          @click="clickRegion(region.regionId, region.regionName)"
         >
           {{ region.regionName }}
         </div>
@@ -22,7 +27,12 @@
         <div
           v-for="city in cities"
           :key="city.cityId"
-          class="border p-[5px] rounded-lg cursor-pointer hover:bg-blue-400 hover:text-white"
+          :class="[
+            'border p-[5px] rounded-lg cursor-pointe',
+            selectedOption.cities.includes(city.cityId)
+              ? 'bg-blue-400 text-white'
+              : 'hover:bg-blue-400 hover:text-white',
+          ]"
           @click="clickCity(city.cityId)"
         >
           {{ city.cityName }}
@@ -32,21 +42,28 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from "vue";
+<script setup>
+import { ref, watch } from "vue";
 import { dRegion, dCity } from "@/dummy";
-const emit = defineEmits<{
-  (event: "chooseArea", value: number): void;
-  (event: "chooseCity", value: number): void;
-}>();
+const emit = defineEmits(["chooseArea", "chooseCity"]);
+const props = defineProps({
+  selectedOption: {
+    type: Object,
+    default: () => ({ region: null, cities: [], extras: [] }),
+  },
+});
+
 const regions = ref(dRegion);
 const cities = ref(dCity);
-
-const clickRegion = (regionId: number) => {
-  emit("chooseArea", regionId);
+watch(props.selectedOption, () => {
+  console.log(props.selectedOption.region);
+  console.log(props.selectedOption.cities.includes(9));
+});
+const clickRegion = (regionId, regionName) => {
+  emit("chooseArea", regionId, regionName);
 };
-const clickCity = (cityId: number) => {
-  emit("chooseCity", cityId);
+const clickCity = (cityId, cityName) => {
+  emit("chooseCity", cityId, cityName);
 };
 </script>
 

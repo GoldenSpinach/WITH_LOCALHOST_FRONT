@@ -15,6 +15,8 @@
             placeholder="지역 검색"
             class="pe-4 pb-2 w-32 rounded-md focus:outline-none focus:border-blue-500"
             relative
+            readonly
+            :value="selectedOptions.regionName"
             @click="toggleAreaDropdown"
           />
         </div>
@@ -23,7 +25,7 @@
           class="absolute z-50 top-[75px] start-[35px]"
           @choose-area="addRegion"
           @choose-city="addcity"
-          @selectedOptions="selectedOptions"
+          :selectedOption="selectedOptions"
         />
         <div class="flex flex-col mt-[3px]">
           <label for="local" class="text-xs text-zinc-400 mb-[5px]">출발</label>
@@ -108,8 +110,8 @@
   </header>
 </template>
 
-<script setup lang="ts">
-import { onMounted, onUnmounted, ref, type Ref } from "vue";
+<script setup>
+import { onMounted, onUnmounted, ref, watchEffect } from "vue";
 import { RouterLink } from "vue-router";
 import AreaSelector from "@/components/area/AreaSelector.vue";
 import OptionSelector from "@/components/option/OptionSelector.vue";
@@ -117,12 +119,9 @@ const isLogin = ref(true);
 const isToggled = ref(false);
 const isAreaSelectorToggled = ref(false);
 const isOptionSelectorToggled = ref(false);
-const selectedOptions: Ref<{
-  region: number | null;
-  cities: number[];
-  extras: string[];
-}> = ref({
+const selectedOptions = ref({
   region: null,
+  regionName: null,
   cities: [],
   extras: [],
 });
@@ -136,15 +135,29 @@ const toggleOptionDropdown = () => {
 const toggleDropdown = () => {
   isToggled.value = !isToggled.value;
 };
-const addRegion = (regionId: number) => {
+const addRegion = (regionId, regionName) => {
   selectedOptions.value.region = regionId;
+  selectedOptions.value.regionName = regionName;
+  console.log(selectedOptions.value);
 };
-const addcity = (cityId: number) => {
+const addcity = (cityId) => {
+  if (selectedOptions.value.cities.includes(cityId)) {
+    selectedOptions.value.cities = selectedOptions.value.cities.filter(
+      (id) => id != cityId
+    );
+    return;
+  }
   selectedOptions.value.cities.push(cityId);
 };
+watchEffect(() => {
+  if (selectedOptions.value.region) {
+    selectedOptions.value.cities = [];
+    console.log("Region changed:", selectedOptions.value.region);
+  }
+});
 // 문서 클릭 이벤트 핸들러
-const handleClickOutside = (event: MouseEvent) => {
-  const target = event.target as HTMLElement;
+const handleClickOutside = (event) => {
+  const target = event.target;
 
   // 드롭다운 영역 내에서 클릭 시 아무 동작 안함
   if (target.closest(".relative") !== null) {

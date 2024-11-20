@@ -38,7 +38,7 @@
   </section>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { onMounted, onUnmounted, ref } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
 import defaultImage from "@/assets/images/default.png";
