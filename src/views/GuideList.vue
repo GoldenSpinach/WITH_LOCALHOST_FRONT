@@ -17,19 +17,21 @@
       <div class="flex">
         <div class="h-[calc(100vh-165px)] w-1/2 box-border p-[10px] overflow-y-auto">
           <div class="grid grid-cols-[repeat(auto-fit,minmax(300px,300px))] gap-[10px] ">
-            <div v-for="tour in tours" :key="tour.tourId" class="w-[300px] h-[500px] flex cursor-pointer">
-              <div class="flex flex-col w-full h-[480px] min-h-[480px] justify-center items-center">
-                <img class="rounded-md w-full h-full" :src="tour.mainImgUrl" />
-                <div class="w-full flex flex-col">
-                  <div class="flex items-center justify-start w-full">
-                    <img src="@/assets/images/star.svg" alt=""><span class="text-center">{{ tour.reviewAvg }}</span>
+            <template v-for="tour in tours" :key="tour.tourId">
+              <RouterLink :to="'/guide/' + tour.tourId" class="w-[300px] h-[500px] flex cursor-pointer">
+                <div class="flex flex-col w-full h-[480px] min-h-[480px] justify-center items-center">
+                  <img class="rounded-md w-full h-full" :src="tour.mainImgUrl" />
+                  <div class="w-full flex flex-col">
+                    <div class="flex items-center justify-start w-full">
+                      <img src="@/assets/images/star.svg" alt=""><span class="text-center">{{ tour.reviewAvg }}</span>
+                    </div>
+                    <span class="inline-block w-[300px] overflow-hidden whitespace-nowrap text-ellipsis">{{ tour.title
+                      }}</span>
+                    <span>&#8361; {{ tour.pay }} </span>
                   </div>
-                  <span class="inline-block w-[300px] overflow-hidden whitespace-nowrap text-ellipsis">{{ tour.title
-                    }}</span>
-                  <span>&#8361; {{ tour.pay }} </span>
                 </div>
-              </div>
-            </div>
+              </RouterLink>
+            </template>
           </div>
         </div>
         <div class="h-[calc(100vh-165px)] w-1/2">
@@ -46,6 +48,7 @@ import Map from "@/components/map/Map.vue";
 import { useOptionStore } from "../stores/optionStore";
 import { dTours } from "../dummy";
 import OptionSelector from "@/components/option/OptionSelector.vue";
+import { RouterLink } from "vue-router";
 
 const isOptionSelectorToggled = ref(false);
 const optionStore = useOptionStore();
