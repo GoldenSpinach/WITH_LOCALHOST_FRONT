@@ -44,7 +44,7 @@ import { Carousel, Slide } from "vue3-carousel";
 import defaultImage from "@/assets/images/default.png";
 
 import "vue3-carousel/dist/carousel.css";
-import { dList } from "@/dummy";
+import { dList } from "../dummy";
 
 const tours = ref(dList);
 </script>
