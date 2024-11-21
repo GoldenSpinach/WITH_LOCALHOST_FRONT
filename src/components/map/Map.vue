@@ -1,15 +1,10 @@
 <template>
-  <GoogleMap
-    api-key="YOUR_GOOGLE_MAPS_API_KEY"
-    style="width: 100%; height: 500px"
-    :center="center"
-    :zoom="15"
-  >
+  <GoogleMap :api-key="VITE_GOOGLE_MAP_KEY" style="width: 100%; height: 100%" :center="center" :zoom="15">
     <Marker :options="{ position: center }" />
   </GoogleMap>
 </template>
-<script>
-import { GoogleMap, Marker } from "vue3-google-map";
-const { VITE_MAP_API } = import.meta.env;
+<script setup>
+import { GoogleMap, Marker } from 'vue3-google-map'
+const { VITE_GOOGLE_MAP_KEY } = import.meta.env
+const center = { lat: 40.689247, lng: -74.044502 }
 </script>
-<style></style>
