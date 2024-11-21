@@ -1,7 +1,9 @@
 <template>
-  <div class="w-full flex justify-center items-center">
+  <div class="w-full h-screen flex justify-center items-center">
     <div class="border-t"></div>
-    <section class="w-5/6 h-[700px] border rounded-lg box-border p-[25px]">
+    <section
+      class="w-5/6 h-[700px] border rounded-lg box-border p-[25px] self-center"
+    >
       <div class="flex w-full h-full pt-[45px] box-border">
         <div class="w-1/4 flex flex-col items-center gap-[15px]">
           <img src="@/assets/images/default_profile.svg" alt="프로필사진" />

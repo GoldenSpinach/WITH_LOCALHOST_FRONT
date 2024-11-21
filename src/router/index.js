@@ -51,6 +51,12 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/tour/add",
+      name: "addTour",
+      component: () => import("@/views/AddTour.vue"),
+      meta: { requiresAuth: true },
+    },
   ],
 });
 

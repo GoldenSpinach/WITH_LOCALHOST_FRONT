@@ -42,7 +42,7 @@
           </div>
         </div>
       </div>
-      <RouterLink to="/mypage/tour/add">
+      <RouterLink to="/tour/add">
         <img
           class="w-1/2 box-border p-[20px] cursor-pointer h-[200px]"
           src="@/assets/images/add.svg"
