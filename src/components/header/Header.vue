@@ -85,7 +85,7 @@
         <img src="@/assets/images/default_profile_small.svg" alt="" />
       </div>
       <div
-        class="w-[150px] border border-zinc-300 rounded-lg absolute end-0 mt-[5px] shadow-xl"
+        class="w-[150px] border border-zinc-300 rounded-lg absolute end-0 mt-[5px] shadow-xl bg-white z-50"
         v-if="isToggled"
       >
         <ul class="flex flex-col" v-if="memberStore.isLogin">

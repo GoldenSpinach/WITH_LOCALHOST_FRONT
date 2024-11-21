@@ -30,6 +30,20 @@ const router = createRouter({
       name: "myPage",
       component: () => import("@/views/MyPage.vue"),
       meta: { requiresAuth: true },
+      children: [
+        {
+          path: "",
+          name: "myReservation",
+          component: () => import("@/views/MyReservation.vue"),
+          meta: { requiresAuth: true },
+        },
+        {
+          path: "review",
+          name: "myReview",
+          component: () => import("@/views/MyReview.vue"),
+          meta: { requiresAuth: true },
+        },
+      ],
     },
   ],
 });
@@ -46,4 +60,5 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
 export default router;
