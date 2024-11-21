@@ -1,6 +1,317 @@
-export const dCity = [];
-export const dRegion = [];
-export const dOption = [];
+export const dCity = [
+  {
+    cityId: 9,
+    cityName: "수원시",
+    regionId: 9,
+  },
+  {
+    cityId: 10,
+    cityName: "고양시",
+    regionId: 9,
+  },
+  {
+    cityId: 11,
+    cityName: "용인시",
+    regionId: 9,
+  },
+  {
+    cityId: 12,
+    cityName: "성남시",
+    regionId: 9,
+  },
+  {
+    cityId: 13,
+    cityName: "부천시",
+    regionId: 9,
+  },
+  {
+    cityId: 14,
+    cityName: "화성시",
+    regionId: 9,
+  },
+  {
+    cityId: 15,
+    cityName: "남양주시",
+    regionId: 9,
+  },
+  {
+    cityId: 16,
+    cityName: "안산시",
+    regionId: 9,
+  },
+  {
+    cityId: 17,
+    cityName: "안양시",
+    regionId: 9,
+  },
+  {
+    cityId: 18,
+    cityName: "평택시",
+    regionId: 9,
+  },
+  {
+    cityId: 19,
+    cityName: "의정부시",
+    regionId: 9,
+  },
+  {
+    cityId: 20,
+    cityName: "파주시",
+    regionId: 9,
+  },
+  {
+    cityId: 21,
+    cityName: "시흥시",
+    regionId: 9,
+  },
+  {
+    cityId: 22,
+    cityName: "김포시",
+    regionId: 9,
+  },
+  {
+    cityId: 23,
+    cityName: "광명시",
+    regionId: 9,
+  },
+  {
+    cityId: 24,
+    cityName: "광주시",
+    regionId: 9,
+  },
+  {
+    cityId: 25,
+    cityName: "군포시",
+    regionId: 9,
+  },
+  {
+    cityId: 26,
+    cityName: "오산시",
+    regionId: 9,
+  },
+  {
+    cityId: 27,
+    cityName: "이천시",
+    regionId: 9,
+  },
+  {
+    cityId: 28,
+    cityName: "하남시",
+    regionId: 9,
+  },
+  {
+    cityId: 29,
+    cityName: "안성시",
+    regionId: 9,
+  },
+  {
+    cityId: 30,
+    cityName: "양주시",
+    regionId: 9,
+  },
+  {
+    cityId: 31,
+    cityName: "구리시",
+    regionId: 9,
+  },
+  {
+    cityId: 32,
+    cityName: "포천시",
+    regionId: 9,
+  },
+  {
+    cityId: 33,
+    cityName: "의왕시",
+    regionId: 9,
+  },
+  {
+    cityId: 34,
+    cityName: "여주시",
+    regionId: 9,
+  },
+  {
+    cityId: 35,
+    cityName: "동두천시",
+    regionId: 9,
+  },
+  {
+    cityId: 36,
+    cityName: "과천시",
+    regionId: 9,
+  },
+];
+export const dRegion = [
+  {
+    regionId: 10,
+    regionName: "강원도",
+  },
+  {
+    regionId: 9,
+    regionName: "경기도",
+  },
+  {
+    regionId: 16,
+    regionName: "경상남도",
+  },
+  {
+    regionId: 15,
+    regionName: "경상북도",
+  },
+  {
+    regionId: 5,
+    regionName: "광주광역시",
+  },
+  {
+    regionId: 3,
+    regionName: "대구광역시",
+  },
+  {
+    regionId: 6,
+    regionName: "대전광역시",
+  },
+  {
+    regionId: 2,
+    regionName: "부산광역시",
+  },
+  {
+    regionId: 1,
+    regionName: "서울특별시",
+  },
+  {
+    regionId: 8,
+    regionName: "세종특별자치시",
+  },
+  {
+    regionId: 7,
+    regionName: "울산광역시",
+  },
+  {
+    regionId: 4,
+    regionName: "인천광역시",
+  },
+  {
+    regionId: 14,
+    regionName: "전라남도",
+  },
+  {
+    regionId: 13,
+    regionName: "전라북도",
+  },
+  {
+    regionId: 17,
+    regionName: "제주특별자치도",
+  },
+  {
+    regionId: 12,
+    regionName: "충청남도",
+  },
+  {
+    regionId: 11,
+    regionName: "충청북도",
+  },
+];
+export const dOption = [
+  {
+    categoryId: 1,
+    categoryName: "차량여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 2,
+    categoryName: "외국어 사용가능 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 3,
+    categoryName: "Wi-Fi 가능 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 4,
+    categoryName: "에어컨 유무",
+    categoryType: "O",
+  },
+  {
+    categoryId: 5,
+    categoryName: "음식 반입 가능 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 6,
+    categoryName: "주차 가능 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 7,
+    categoryName: "장애인 편의시설 유무",
+    categoryType: "O",
+  },
+  {
+    categoryId: 8,
+    categoryName: "반려동물 동반 가능 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 9,
+    categoryName: "야외 활동 가능 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 10,
+    categoryName: "지정 좌석 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 11,
+    categoryName: "사진 촬영 가능 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 12,
+    categoryName: "음악 제공 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 13,
+    categoryName: "무료 이용 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 14,
+    categoryName: "VIP 서비스 제공 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 15,
+    categoryName: "스포츠 장비 대여 가능 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 16,
+    categoryName: "가이드 포함 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 17,
+    categoryName: "고급 옵션 제공 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 18,
+    categoryName: "현장 결제 가능 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 19,
+    categoryName: "미리 예약 필요 여부",
+    categoryType: "O",
+  },
+  {
+    categoryId: 20,
+    categoryName: "단체 할인 가능 여부",
+    categoryType: "O",
+  },
+];
 export const dList = [
   {
     tourId: 1,

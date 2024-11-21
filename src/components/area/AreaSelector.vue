@@ -1,21 +1,14 @@
 <template>
-  <div
-    class="w-[450px] border border-zinc-300 rounded-3xl mt-[5px] shadow-xl p-[20px] bg-white"
-  >
+  <div class="w-[450px] border border-zinc-300 rounded-3xl mt-[5px] shadow-xl p-[20px] bg-white">
     <div>
       <span class="text-lg font-bold mb-[8px] inline-block"> 지역</span>
       <div class="flex flex-wrap gap-[12px]">
-        <div
-          v-for="region in regions"
-          :key="region.regionId"
-          :class="[
-            'border p-[5px] rounded-lg cursor-pointer',
-            selectedOption.region == region.regionId
-              ? 'bg-blue-400 text-white'
-              : 'hover:bg-blue-400 hover:text-white', // 선택된 경우
-          ]"
-          @click="clickRegion(region.regionId, region.regionName)"
-        >
+        <div v-for="region in regions" :key="region.regionId" :class="[
+          'border p-[5px] rounded-lg cursor-pointer',
+          selectedOption.region == region.regionId
+            ? 'bg-blue-400 text-white'
+            : 'hover:bg-blue-400 hover:text-white', // 선택된 경우
+        ]" @click="clickRegion(region.regionId, region.regionName)">
           {{ region.regionName }}
         </div>
       </div>
@@ -24,17 +17,12 @@
     <div>
       <span class="text-lg font-bold mb-[8px] inline-block">도시</span>
       <div class="flex flex-wrap gap-[12px]">
-        <div
-          v-for="city in cities"
-          :key="city.cityId"
-          :class="[
-            'border p-[5px] rounded-lg cursor-pointe',
-            selectedOption.cities.includes(city.cityId)
-              ? 'bg-blue-400 text-white'
-              : 'hover:bg-blue-400 hover:text-white',
-          ]"
-          @click="clickCity(city.cityId)"
-        >
+        <div v-for="city in cities" :key="city.cityId" :class="[
+          'border p-[5px] rounded-lg cursor-pointe',
+          selectedOption.cities.includes(city.cityId)
+            ? 'bg-blue-400 text-white'
+            : 'hover:bg-blue-400 hover:text-white',
+        ]" @click="clickCity(city.cityId)">
           {{ city.cityName }}
         </div>
       </div>
