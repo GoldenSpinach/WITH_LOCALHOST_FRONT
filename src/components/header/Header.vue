@@ -26,7 +26,7 @@
         </div>
         <div class="flex flex-col mt-[3px] relative w-3/6 ">
           <label for="local" class="text-xs text-zinc-400 mb-[3px]">추가 옵션</label>
-          <div class="flex gap-[6px] w-full">
+          <div class="flex gap-[6px] w-ful">
             <div class="flex gap-[6px] relative overflow-hidden">
               <div v-for="option in optionStore.selectedOptions" :key="option.id"
                 class="min-w-[100px] max-w-[200px] max-h-[36px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center whitespace-nowrap overflow-hidden text-ellipsis"

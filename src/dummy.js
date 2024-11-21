@@ -447,3 +447,178 @@ export const dPos = [
   { id: 9, lat: 40.689047, lng: -74.044302 }, // 중심 근처
   { id: 10, lat: 40.689747, lng: -74.044802 }, // 북서쪽
 ];
+
+export const dTours = [
+  {
+    tourId: 1,
+    title: "서울 시내 투어",
+    content: null,
+    peopleCnt: 10,
+    pay: 0,
+    notice: null,
+    meetLongitude: "126.9780",
+    meetLatitude: "37.5665",
+    meetAddress: "서울시 중구",
+    mainImgUrl: "http://example.com/img1.jpg",
+    guidName: "david1980",
+    reviewAvg: 4.5,
+    categorys: [
+      {
+        tourId: 0,
+        categoryId: 0,
+        categoryName: "여행",
+        categoryType: null,
+      },
+      {
+        tourId: 0,
+        categoryId: 0,
+        categoryName: "관광",
+        categoryType: null,
+      },
+    ],
+    options: [
+      {
+        tourId: 0,
+        categoryId: 0,
+        optionName: "차량여부",
+        optionType: null,
+      },
+      {
+        tourId: 0,
+        categoryId: 0,
+        optionName: "Wi-Fi 가능 여부",
+        optionType: null,
+      },
+    ],
+    activitys: [],
+  },
+  {
+    tourId: 2,
+    title: "강릉 해변 투어",
+    content: null,
+    peopleCnt: 15,
+    pay: 0,
+    notice: null,
+    meetLongitude: "128.8760",
+    meetLatitude: "37.7518",
+    meetAddress: "강릉시",
+    mainImgUrl: "http://example.com/img2.jpg",
+    guidName: "hansolo97",
+    reviewAvg: 4.3,
+    categorys: [
+      {
+        tourId: 0,
+        categoryId: 0,
+        categoryName: "먹방",
+        categoryType: null,
+      },
+      {
+        tourId: 0,
+        categoryId: 0,
+        categoryName: "바다 여행",
+        categoryType: null,
+      },
+    ],
+    options: [
+      {
+        tourId: 0,
+        categoryId: 0,
+        optionName: "음식 반입 가능 여부",
+        optionType: null,
+      },
+      {
+        tourId: 0,
+        categoryId: 0,
+        optionName: "반려동물 동반 가능 여부",
+        optionType: null,
+      },
+    ],
+    activitys: [],
+  },
+  {
+    tourId: 3,
+    title: "제주도 자연 탐방",
+    content: null,
+    peopleCnt: 8,
+    pay: 0,
+    notice: null,
+    meetLongitude: "126.5312",
+    meetLatitude: "33.4996",
+    meetAddress: "제주시",
+    mainImgUrl: "http://example.com/img3.jpg",
+    guidName: "johndoe91",
+    reviewAvg: 3.8,
+    categorys: [
+      {
+        tourId: 0,
+        categoryId: 0,
+        categoryName: "문화",
+        categoryType: null,
+      },
+      {
+        tourId: 0,
+        categoryId: 0,
+        categoryName: "자연",
+        categoryType: null,
+      },
+    ],
+    options: [
+      {
+        tourId: 0,
+        categoryId: 0,
+        optionName: "장애인 편의시설 유무",
+        optionType: null,
+      },
+      {
+        tourId: 0,
+        categoryId: 0,
+        optionName: "야외 활동 가능 여부",
+        optionType: null,
+      },
+    ],
+    activitys: [],
+  },
+  {
+    tourId: 4,
+    title: "부산 야경 투어",
+    content: null,
+    peopleCnt: 20,
+    pay: 0,
+    notice: null,
+    meetLongitude: "129.0756",
+    meetLatitude: "35.1796",
+    meetAddress: "부산시 해운대구",
+    mainImgUrl: "http://example.com/img4.jpg",
+    guidName: "minji123",
+    reviewAvg: 4.5,
+    categorys: [
+      {
+        tourId: 0,
+        categoryId: 0,
+        categoryName: "도심 여행",
+        categoryType: null,
+      },
+      {
+        tourId: 0,
+        categoryId: 0,
+        categoryName: "축제 참여",
+        categoryType: null,
+      },
+    ],
+    options: [
+      {
+        tourId: 0,
+        categoryId: 0,
+        optionName: "에어컨 유무",
+        optionType: null,
+      },
+      {
+        tourId: 0,
+        categoryId: 0,
+        optionName: "음악 제공 여부",
+        optionType: null,
+      },
+    ],
+    activitys: [],
+  },
+];

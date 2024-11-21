@@ -17,24 +17,23 @@
       <div class="flex">
         <div class="h-[calc(100vh-165px)] w-1/2 box-border p-[10px] overflow-y-auto">
           <div class="grid grid-cols-[repeat(auto-fit,minmax(300px,300px))] gap-[10px] ">
-            <div class="w-[300px] h-[500px] flex cursor-pointer">
+            <div v-for="tour in tours" :key="tour.tourId" class="w-[300px] h-[500px] flex cursor-pointer">
               <div class="flex flex-col w-full h-[480px] min-h-[480px] justify-center items-center">
-                <div class="rounded-md w-full h-full bg-black"></div>
+                <img class="rounded-md w-full h-full" :src="tour.mainImgUrl" />
                 <div class="w-full flex flex-col">
                   <div class="flex items-center justify-start w-full">
-                    <img src="@/assets/images/star.svg" alt=""><span class="text-center">4.5</span>
+                    <img src="@/assets/images/star.svg" alt=""><span class="text-center">{{ tour.reviewAvg }}</span>
                   </div>
-                  <span class="inline-block w-[300px] overflow-hidden whitespace-nowrap text-ellipsis">해병대의 산악구보해병대의
-                    산악구보해병대의 산악구보해병대의 산악구보해병대의 산악구보해병대의 산악구보</span>
-                  <span>&#8361; 58,000 </span>
+                  <span class="inline-block w-[300px] overflow-hidden whitespace-nowrap text-ellipsis">{{ tour.title
+                    }}</span>
+                  <span>&#8361; {{ tour.pay }} </span>
                 </div>
               </div>
             </div>
-            <!-- 반복되는 요소들 -->
           </div>
         </div>
         <div class="h-[calc(100vh-165px)] w-1/2">
-          <Map />
+          <Map :positions="positions" />
         </div>
       </div>
     </div>
@@ -42,18 +41,26 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch, watchEffect } from "vue";
 import Map from "@/components/map/Map.vue";
 import { useOptionStore } from "../stores/optionStore";
+import { dTours } from "../dummy";
 import OptionSelector from "@/components/option/OptionSelector.vue";
 
 const isOptionSelectorToggled = ref(false);
 const optionStore = useOptionStore();
-const isMounted = ref(false); // 마운트된 후 나타나게 하는 플래그
-
+const isMounted = ref(false);
+const tours = ref(dTours)
+const positions = ref([])
 const toggleOptionDropdown = () => {
   isOptionSelectorToggled.value = !isOptionSelectorToggled.value;
 };
+
+watchEffect(() => {
+  positions.value = tours.value.map(tour => {
+    return { lng: Number(tour.meetLongitude), lat: Number(tour.meetLatitude) }
+  });
+});
 
 const handleClickOutside = (event) => {
   const target = event.target;
