@@ -7,8 +7,8 @@
       'flex w-3/4 px-[50px] max-w-[1167px] h-[70px] items-center gap-4 p-4 rounded-full shadow-lg border border-gray-200 relative transition-all duration-500',
       isHome ? 'mt-[550px]' : 'mt-0',
     ]">
-      <div class="flex">
-        <div class="flex flex-col mt-[3px]">
+      <div class="flex w-full">
+        <div class="flex flex-col w-1/6 mt-[3px]">
           <label for="local" class="text-xs text-zinc-400 mb-[5px]">지역</label>
           <input type="text" id="local" placeholder="지역 검색"
             class="pe-4 pb-2 w-32 rounded-md focus:outline-none focus:border-blue-500" relative readonly
@@ -16,29 +16,30 @@
         </div>
         <AreaSelector v-if="isAreaSelectorToggled" class="absolute z-50 top-[75px] start-[35px]"
           @choose-area="addRegion" @choose-city="addcity" :selectedOption="selected" />
-        <div class="flex flex-col mt-[3px]">
+        <div class="flex flex-col mt-[3px] w-1/6 ">
           <label for="local" class="text-xs text-zinc-400 mb-[5px]">출발</label>
           <input type="date" class="pe-4 pb-2 rounded-md focus:outline-none focus:border-blue-500" />
         </div>
-        <div class="flex flex-col mt-[3px]">
+        <div class="flex flex-col mt-[3px] w-1/6 ">
           <label for="local" class="text-xs text-zinc-400 mb-[5px]">종료</label>
           <input type="date" class="pe-4 pb-2 rounded-md focus:outline-none focus:border-blue-500" />
         </div>
-        <div class="flex flex-col mt-[3px] relative">
+        <div class="flex flex-col mt-[3px] relative w-3/6 ">
           <label for="local" class="text-xs text-zinc-400 mb-[3px]">추가 옵션</label>
-          <div class="flex gap-[6px]">
-            <div class="flex gap-[6px] max-w-[340px] relative overflow-hidden">
+          <div class="flex gap-[6px] w-full">
+            <div class="flex gap-[6px] relative overflow-hidden">
               <div v-for="option in optionStore.selectedOptions" :key="option.id"
-                class="min-w-[100px] max-h-[36px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center"
+                class="min-w-[100px] max-w-[200px] max-h-[36px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center whitespace-nowrap overflow-hidden text-ellipsis"
                 @click="optionStore.deleteOption(option.id)">
                 {{ option.name }}
               </div>
             </div>
-            <img class="w-[30px] cursor-pointer" src=" @/assets/images/add.svg" alt="설정추가"
+            <img class="w-[30px] min-w-[30px] cursor-pointer" src=" @/assets/images/add.svg" alt="설정추가"
               @click="toggleOptionDropdown" />
           </div>
           <OptionSelector v-if="isOptionSelectorToggled" class="absolute z-50 top-[75px] start-[15px]" />
         </div>
+
       </div>
       <RouterLink to="/guide" class="ml-4 absolute end-[40px]">
         <img src="@/assets/images/search.svg" alt="검색" class="w-6 h-6" />
