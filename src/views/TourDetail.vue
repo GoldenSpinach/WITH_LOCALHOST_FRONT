@@ -1,7 +1,8 @@
 <template>
   <div class="w-full border-t"></div>
   <div class="w-full flex flex-col items-center h-screen mt-[50px]" v-if="detail">
-    <img class="w-[30px] self-start mb-[25px] ms-[2%] cursor-pointer" src="@/assets/images/back.svg" alt="" />
+    <img class="w-[30px] self-start mb-[25px] ms-[2%] cursor-pointer" src="@/assets/images/back.svg" alt="back"
+      @click="goBack" />
     <div class="w-full flex items-center justify-around mb-[20px]">
       <div class="w-[48%]">
         <div class="border-b mb-[15px] pb-[15px]">
@@ -111,14 +112,14 @@ import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import Map from "@/components/map/Map.vue";
 import { getTourDetail } from "@/api/tour";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const detail = ref(null);
 const positions = ref([]);
 const mapCenter = ref(null); // 지도의 중심을 지정하는 ref
 const selectedDate = ref(null);
 const route = useRoute();
-
+const router = useRouter();
 
 onMounted(async () => {
   const id = route.params.tourId;
@@ -137,6 +138,10 @@ onMounted(async () => {
 const selectActivity = (activity) => {
   mapCenter.value = { lat: activity.actLatitude, lng: activity.actLongitude };
 };
+
+const goBack = () => {
+  router.back();
+}
 </script>
 
 
