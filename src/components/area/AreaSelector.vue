@@ -7,7 +7,7 @@
           'border p-[5px] rounded-lg cursor-pointer',
           selectedOption.region == region.regionId
             ? 'bg-blue-400 text-white'
-            : 'hover:bg-blue-400 hover:text-white', // 선택된 경우
+            : 'hover:bg-blue-400 hover:text-white',
         ]" @click="clickRegion(region.regionId, region.regionName)">
           {{ region.regionName }}
         </div>
@@ -31,8 +31,8 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
-import { dRegion, dCity } from "@/dummy";
+import { onMounted, ref, watchEffect } from "vue";
+import { getRegion, getCities } from "@/api/region"
 const emit = defineEmits(["chooseArea", "chooseCity"]);
 const props = defineProps({
   selectedOption: {
@@ -41,8 +41,18 @@ const props = defineProps({
   },
 });
 
-const regions = ref(dRegion);
-const cities = ref(dCity);
+const regions = ref([]);
+const cities = ref([]);
+
+onMounted(async () => {
+  regions.value = await getRegion();
+})
+
+
+watchEffect(async () => {
+  if (props.selectedOption.region == null) return
+  cities.value = await getCities(props.selectedOption.region)
+})
 const clickRegion = (regionId, regionName) => {
   emit("chooseArea", regionId, regionName);
 };

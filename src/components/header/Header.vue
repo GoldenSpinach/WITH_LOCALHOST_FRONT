@@ -3,73 +3,41 @@
     <RouterLink to="/" class="w-[100px] h-[50px] bg-sky-500 rounded">
       <img class="w-[100px] h-[50px]" src="@/assets/images/logo.png" alt="" />
     </RouterLink>
-    <form
-      :class="[
-        'flex w-3/4 px-[50px] max-w-[1167px] h-[70px] items-center gap-4 p-4 rounded-full shadow-lg border border-gray-200 relative transition-all duration-500',
-        isHome ? 'mt-[550px]' : 'mt-0',
-      ]"
-    >
+    <form :class="[
+      'flex w-3/4 px-[50px] max-w-[1167px] h-[70px] items-center gap-4 p-4 rounded-full shadow-lg border border-gray-200 relative transition-all duration-500',
+      isHome ? 'mt-[550px]' : 'mt-0',
+    ]">
       <div class="flex w-full">
         <div class="flex flex-col w-1/6 mt-[3px]">
           <label for="local" class="text-xs text-zinc-400 mb-[5px]">지역</label>
-          <input
-            type="text"
-            id="local"
-            placeholder="지역 검색"
-            class="pe-4 pb-2 w-32 rounded-md focus:outline-none focus:border-blue-500"
-            relative
-            readonly
-            :value="selected.regionName"
-            @click="toggleAreaDropdown"
-          />
+          <input type="text" id="local" placeholder="지역 검색"
+            class="pe-4 pb-2 w-32 rounded-md focus:outline-none focus:border-blue-500" relative readonly
+            :value="selected.regionName" @click="toggleAreaDropdown" />
         </div>
-        <AreaSelector
-          v-if="isAreaSelectorToggled"
-          class="absolute z-50 top-[75px] start-[35px]"
-          @choose-area="addRegion"
-          @choose-city="addcity"
-          :selectedOption="selected"
-        />
+        <AreaSelector v-if="isAreaSelectorToggled" class="absolute z-50 top-[75px] start-[35px]"
+          @choose-area="addRegion" @choose-city="addcity" :selectedOption="selected" />
         <div class="flex flex-col mt-[3px] w-1/6">
           <label for="local" class="text-xs text-zinc-400 mb-[5px]">출발</label>
-          <input
-            type="date"
-            class="pe-4 pb-2 rounded-md focus:outline-none focus:border-blue-500"
-          />
+          <input type="date" class="pe-4 pb-2 rounded-md focus:outline-none focus:border-blue-500" />
         </div>
         <div class="flex flex-col mt-[3px] w-1/6">
           <label for="local" class="text-xs text-zinc-400 mb-[5px]">종료</label>
-          <input
-            type="date"
-            class="pe-4 pb-2 rounded-md focus:outline-none focus:border-blue-500"
-          />
+          <input type="date" class="pe-4 pb-2 rounded-md focus:outline-none focus:border-blue-500" />
         </div>
-        <div class="flex flex-col mt-[3px] relative w-3/6">
-          <label for="local" class="text-xs text-zinc-400 mb-[3px]"
-            >추가 옵션</label
-          >
+        <div class="flex flex-col mt-[3px] relative w-[47%]">
+          <label for="local" class="text-xs text-zinc-400 mb-[3px]">추가 옵션</label>
           <div class="flex gap-[6px] w-ful">
             <div class="flex gap-[6px] relative overflow-hidden">
-              <div
-                v-for="option in optionStore.selectedOptions"
-                :key="option.id"
-                class="min-w-[100px] max-w-[200px] max-h-[36px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center whitespace-nowrap overflow-hidden text-ellipsis"
-                @click="optionStore.deleteOption(option.id)"
-              >
+              <div v-for="option in optionStore.selectedOptions" :key="option.id"
+                class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center whitespace-nowrap overflow-hidden text-ellipsis"
+                @click="optionStore.deleteOption(option.id)">
                 {{ option.name }}
               </div>
             </div>
-            <img
-              class="w-[30px] min-w-[30px] cursor-pointer"
-              src=" @/assets/images/add.svg"
-              alt="설정추가"
-              @click="toggleOptionDropdown"
-            />
+            <img class="w-[30px] min-w-[30px] cursor-pointer" src=" @/assets/images/add.svg" alt="설정추가"
+              @click="toggleOptionDropdown" />
           </div>
-          <OptionSelector
-            v-if="isOptionSelectorToggled"
-            class="absolute z-50 top-[75px] start-[15px]"
-          />
+          <OptionSelector v-if="isOptionSelectorToggled" class="absolute z-50 top-[75px] start-[15px]" />
         </div>
       </div>
       <RouterLink to="/guide" class="ml-4 absolute end-[40px]">
@@ -77,23 +45,14 @@
       </RouterLink>
     </form>
     <div class="relative">
-      <div
-        class="flex gap-[15px] p-[10px] border border-zinc-300 rounded-full cursor-pointer"
-        @click="toggleDropdown"
-      >
+      <div class="flex gap-[15px] p-[10px] border border-zinc-300 rounded-full cursor-pointer" @click="toggleDropdown">
         <img src="@/assets/images/menu.svg" alt="메뉴" />
         <img src="@/assets/images/default_profile_small.svg" alt="" />
       </div>
-      <div
-        class="w-[150px] border border-zinc-300 rounded-lg absolute end-0 mt-[5px] shadow-xl bg-white z-50"
-        v-if="isToggled"
-      >
+      <div class="w-[150px] border border-zinc-300 rounded-lg absolute end-0 mt-[5px] shadow-xl bg-white z-50"
+        v-if="isToggled">
         <ul class="flex flex-col" v-if="memberStore.isLogin">
-          <RouterLink
-            to="/mypage"
-            class="hover:bg-slate-200 p-[10px] cursor-pointer"
-            >MyPage</RouterLink
-          >
+          <RouterLink to="/mypage" class="hover:bg-slate-200 p-[10px] cursor-pointer">MyPage</RouterLink>
           <li class="hover:bg-slate-200 p-[10px] cursor-pointer">Sign Out</li>
         </ul>
         <ul v-else>
@@ -156,30 +115,26 @@ const addcity = (cityId) => {
 watchEffect(() => {
   if (selected.value.region) {
     selected.value.cities = [];
-    // console.log("Region changed:", selectedOptions.value.region);
   }
 });
-// 문서 클릭 이벤트 핸들러
 const handleClickOutside = (event) => {
   const target = event.target;
 
-  // 드롭다운 영역 내에서 클릭 시 아무 동작 안함
+
   if (target.closest(".relative") !== null) {
     return;
   }
 
-  // 드롭다운 외부 클릭 시 드롭다운 닫기
   isToggled.value = false;
   isAreaSelectorToggled.value = false;
   isOptionSelectorToggled.value = false;
 };
 
-// 컴포넌트 마운트 시 이벤트 리스너 추가
 onMounted(() => {
   document.addEventListener("click", handleClickOutside);
 });
 
-// 컴포넌트 해제 시 이벤트 리스너 제거
+
 onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside);
 });
