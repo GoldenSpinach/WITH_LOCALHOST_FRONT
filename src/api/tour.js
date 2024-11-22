@@ -29,4 +29,14 @@ const getConditionTours = async (condition) => {
     return [];
   }
 };
-export { getCurrentTours, getTours, getConditionTours };
+
+const getTourDetail = async (id) => {
+  try {
+    const res = await client.get(`/tour/${id}`);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
+};
+export { getCurrentTours, getTours, getConditionTours, getTourDetail };
