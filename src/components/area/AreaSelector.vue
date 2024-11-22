@@ -31,8 +31,8 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-import { getRegion } from "@/api/region"
+import { onMounted, ref, watchEffect } from "vue";
+import { getRegion, getCities } from "@/api/region"
 const emit = defineEmits(["chooseArea", "chooseCity"]);
 const props = defineProps({
   selectedOption: {
@@ -46,6 +46,12 @@ const cities = ref([]);
 
 onMounted(async () => {
   regions.value = await getRegion();
+})
+
+
+watchEffect(async () => {
+  if (props.selectedOption.region == null) return
+  cities.value = await getCities(props.selectedOption.region)
 })
 const clickRegion = (regionId, regionName) => {
   emit("chooseArea", regionId, regionName);
