@@ -1,62 +1,32 @@
 <template>
   <transition name="fade" appear>
-    <div
-      class="border-t w-screen transition-opacity duration-1000"
-      v-if="isMounted"
-    >
+    <div class="border-t w-screen transition-opacity duration-1000" v-if="isMounted">
       <div class="flex gap-[6px] ps-[15px] py-[15px] border-b relative">
         <div class="flex gap-[6px] w-3/4">
-          <div
-            v-for="option in optionStore.selectedOptions"
-            :key="option.id"
+          <div v-for="option in optionStore.selectedOptions" :key="option.id"
             class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center whitespace-nowrap overflow-hidden text-ellipsis"
-            @click="optionStore.deleteOption(option.id)"
-          >
+            @click="optionStore.deleteOption(option.id)">
             {{ option.name }}
           </div>
-          <img
-            class="w-[30px] min-w-[30px] cursor-pointer position-sticky"
-            src=" @/assets/images/add.svg"
-            alt="설정추가"
-            @click="toggleOptionDropdown"
-          />
+          <img class="w-[30px] min-w-[30px] cursor-pointer position-sticky" src=" @/assets/images/add.svg" alt="설정추가"
+            @click="toggleOptionDropdown" />
         </div>
 
-        <OptionSelector
-          v-if="isOptionSelectorToggled"
-          class="absolute z-50 top-[55px] start-[15px]"
-        />
+        <OptionSelector v-if="isOptionSelectorToggled" class="absolute z-50 top-[55px] start-[15px]" />
       </div>
       <div class="flex">
-        <div
-          class="h-[calc(100vh-165px)] w-1/2 box-border p-[10px] overflow-y-auto"
-        >
-          <div
-            class="grid grid-cols-[repeat(auto-fit,minmax(300px,300px))] gap-[10px]"
-          >
+        <div class="h-[calc(100vh-165px)] w-1/2 box-border p-[10px] overflow-y-auto">
+          <div class="grid grid-cols-[repeat(auto-fit,minmax(300px,300px))] gap-[10px]">
             <template v-for="tour in tours" :key="tour.tourId">
-              <RouterLink
-                :to="'/guide/' + tour.tourId"
-                class="w-[300px] h-[500px] flex cursor-pointer"
-              >
-                <div
-                  class="flex flex-col w-full h-[480px] min-h-[480px] justify-center items-center"
-                >
-                  <img
-                    class="rounded-md w-full h-full"
-                    :src="tour.mainImgUrl"
-                  />
+              <RouterLink :to="'/guide/' + tour.tourId" class="w-[300px] h-[500px] flex cursor-pointer">
+                <div class="flex flex-col w-full h-[480px] min-h-[480px] justify-center items-center">
+                  <img class="rounded-md w-full h-full" :src="tour.mainImgUrl" />
                   <div class="w-full flex flex-col">
                     <div class="flex items-center justify-start w-full">
-                      <img src="@/assets/images/star.svg" alt="" /><span
-                        class="text-center"
-                        >{{ tour.reviewAvg }}</span
-                      >
+                      <img src="@/assets/images/star.svg" alt="" /><span class="text-center">{{ tour.reviewAvg }}</span>
                     </div>
-                    <span
-                      class="inline-block w-[300px] overflow-hidden whitespace-nowrap text-ellipsis"
-                      >{{ tour.title }}</span
-                    >
+                    <span class="inline-block w-[300px] overflow-hidden whitespace-nowrap text-ellipsis">{{ tour.title
+                      }}</span>
                     <span>&#8361; {{ tour.pay }} </span>
                   </div>
                 </div>
@@ -117,4 +87,14 @@ onUnmounted(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  @apply transition-opacity duration-1000;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  @apply opacity-0;
+}
+</style>
