@@ -41,14 +41,14 @@
     <div class="w-full flex items-center justify-around">
       <div class="flex w-[48%]">
         <div class="w-full flex flex-col gap-[20px]">
-          <div class="w-full">
+          <div class="w-full min-h-[300px]">
             <h2 class="text-3xl font-bold">소개</h2>
             <div class="my-[25px] border-b"></div>
             <article class="w-full rounded-lg box-border px-[15px] py-[25px]">
               {{ detail.content }}
             </article>
           </div>
-          <div class="w-full flex flex-wrap gap-[6px]">
+          <div class="w-full flex flex-wrap gap-[6px] min-h-[200px]">
             <div v-for="option in detail.options" :key="option.id"
               class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full text-center whitespace-nowrap overflow-hidden text-ellipsis">
               {{ option.optionName }}
@@ -57,7 +57,7 @@
           <div>
             <h2 class="text-3xl font-bold">리뷰</h2>
             <div class="my-[25px] border-b"></div>
-            <div class="flex flex-col gap-[8px] max-h-[700px] overflow-y-auto">
+            <div class="flex flex-col gap-[8px] max-h-[400px] overflow-y-auto">
               <div
                 class="w-full rounded-lg h-[50px] min-h-[50px] shadow-lg box-border ps-[15px] flex items-center text-ellipsis overflow-hidden"
                 v-for="(review, index) in detail.reviews" :key="review.index">
@@ -70,7 +70,7 @@
       <div class="flex flex-col items-center w-[40%]">
         <div>
           <Datepicker v-model="selectedDate" :inline="true" :allowed-dates="allowedDates"
-            style="--dp-cell-padding: 35px" />
+            :disabled-dates="disabledDates" style="--dp-cell-padding: 35px" />
         </div>
         <div class="w-full justify-around flex mt-[25px]">
           <button class="w-[35%] h-[45px] bg-blue-400 text-white rounded-lg">
@@ -82,22 +82,22 @@
         </div>
       </div>
     </div>
-    <div class="w-full flex items-center justify-around">
+    <div class="w-full flex items-center justify-around mt-[50px]">
       <div class="flex w-[48%]">
-        <div class="w-full">
+        <div class="w-full min-h-[400px]">
           <h2 class="text-3xl font-bold">호스트 소개</h2>
           <div class="my-[25px] border-b"></div>
           <article class="rounded-lg box-border px-[15px] py-[25px]">
-            {{ detail.content }}테스트 소개
+            {{ detail.content }}
           </article>
         </div>
       </div>
       <div class="flex w-[40%]">
-        <div class="w-full">
+        <div class="w-full min-h-[400px]">
           <h2 class="text-3xl font-bold">유의사항</h2>
           <div class="my-[25px] border-b"></div>
           <article class="rounded-lg box-border px-[15px] py-[25px]">
-            {{ detail.content }}유의사항 데스요
+            {{ detail.content }}
           </article>
         </div>
       </div>
@@ -119,12 +119,6 @@ const mapCenter = ref(null); // 지도의 중심을 지정하는 ref
 const selectedDate = ref(null);
 const route = useRoute();
 
-// 특정 날짜만 활성화하려면 배열에 해당 날짜들을 추가합니다.
-const allowedDates = ref([
-  new Date(2024, 10, 20), // 2024년 11월 20일
-  new Date(2024, 10, 25),
-  new Date(2024, 11, 5),
-]);
 
 onMounted(async () => {
   const id = route.params.tourId;
