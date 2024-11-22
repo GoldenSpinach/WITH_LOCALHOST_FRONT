@@ -20,14 +20,15 @@
             <template v-for="tour in tours" :key="tour.tourId">
               <RouterLink :to="'/guide/' + tour.tourId" class="w-[300px] h-[500px] flex cursor-pointer">
                 <div class="flex flex-col w-full h-[480px] min-h-[480px] justify-center items-center">
-                  <img class="rounded-md w-full h-full" :src="tour.mainImgUrl" />
-                  <div class="w-full flex flex-col">
-                    <div class="flex items-center justify-start w-full">
+                  <img class="rounded-md h-[420px]" :src="tour.mainImgUrl" alt="체험이미지" />
+                  <div class="w-full flex flex-col  ms-[15px]">
+                    <div class="flex items-center justify-start">
                       <img src="@/assets/images/star.svg" alt="" /><span class="text-center">{{ tour.reviewAvg }}</span>
                     </div>
-                    <span class="inline-block w-[300px] overflow-hidden whitespace-nowrap text-ellipsis">{{ tour.title
-                      }}</span>
-                    <span>&#8361; {{ tour.pay }} </span>
+                    <span class="inline-block w-[300px] overflow-hidden whitespace-nowrap text-ellipsis text-sm">{{
+                      tour.title
+                    }}</span>
+                    <span class="text-sm ms-[3px] text-slate-400">&#8361; {{ tour.pay }} </span>
                   </div>
                 </div>
               </RouterLink>
@@ -46,25 +47,37 @@
 import { onMounted, onUnmounted, ref, watch, watchEffect } from "vue";
 import Map from "@/components/map/Map.vue";
 import { useOptionStore } from "../stores/optionStore";
-import { dTours } from "../dummy";
 import OptionSelector from "@/components/option/OptionSelector.vue";
 import { RouterLink } from "vue-router";
+import { getTours } from "@/api/tour";
+import { getConditionTours } from "../api/tour";
 
 const isOptionSelectorToggled = ref(false);
 const optionStore = useOptionStore();
 const isMounted = ref(false);
-const tours = ref(dTours);
+const tours = ref([]);
 const positions = ref([]);
 const toggleOptionDropdown = () => {
   isOptionSelectorToggled.value = !isOptionSelectorToggled.value;
 };
 
 watchEffect(() => {
+  if (tours.value.length === 0) return;
   positions.value = tours.value.map((tour) => {
     return { lng: Number(tour.meetLongitude), lat: Number(tour.meetLatitude) };
   });
 });
 
+watch(optionStore, async () => {
+  const startDate = optionStore.start;
+  const endDate = optionStore.end;
+  const options = optionStore.selectedOptions.length !== 0 ? optionStore.options.map((option) => option) : null;
+  const regionId = optionStore.regionId;
+  const cities = optionStore.cities.length !== 0 ? optionStore.cities : null;
+  tours.value = await getConditionTours({
+    startDate, endDate, options, regionId, cities
+  })
+})
 const handleClickOutside = (event) => {
   const target = event.target;
 
@@ -76,10 +89,12 @@ const handleClickOutside = (event) => {
 };
 
 // 컴포넌트 마운트 시 이벤트 리스너 추가
-onMounted(() => {
+onMounted(async () => {
   document.addEventListener("click", handleClickOutside);
   isMounted.value = true; // 마운트 시 true로 설정하여 트랜지션이 발생하게 함
-  console.log(optionStore)
+  if (optionStore.regionId === null) {
+    tours.value = await getTours();
+  }
 });
 
 // 컴포넌트 해제 시 이벤트 리스너 제거
