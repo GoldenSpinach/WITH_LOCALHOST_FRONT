@@ -9,27 +9,16 @@
         </div>
         <!-- 캐러셀 그라데이션 효과 적용 -->
         <div class="relative w-[700px] overflow-hidden">
-          <Carousel
-            itemsToShow="3"
-            wrapAround="true"
-            :autoplay="2000"
-            :paginationEnabled="true"
-            transition="600"
-            class="relative z-0"
-          >
+          <Carousel itemsToShow="3" wrapAround="true" :autoplay="2000" :paginationEnabled="true" transition="600"
+            class="relative z-0">
             <Slide v-for="tour in tours" :key="tour.tourId">
-              <div
-                class="opacity-50 text-white hover:opacity-100 hover:text-slate-400 text-sm"
-              >
-                <img
-                  :src="defaultImage"
-                  :alt="tour.title"
-                  class="w-full h-auto rounded-sm"
-                />
+              <RouterLink :to="`/guide/${tour.id}`"
+                class="opacity-50 text-white hover:opacity-100 hover:text-slate-400 text-sm">
+                <img :src="tour.mainImgUrl" :alt="tour.title" class="w-full h-auto rounded-sm" />
                 <div class="flex justify-start ps-[15px]">
                   <span>{{ tour.title }}</span>
                 </div>
-              </div>
+              </RouterLink>
             </Slide>
           </Carousel>
         </div>
@@ -39,14 +28,18 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
-import defaultImage from "@/assets/images/default.png";
 
 import "vue3-carousel/dist/carousel.css";
-import { dList } from "../dummy";
+import { getCurrentTours } from "@/api/tour";
+import { RouterLink } from "vue-router";
 
-const tours = ref(dList);
+const tours = ref([]);
+
+onMounted(async () => {
+  tours.value = await getCurrentTours();
+})
 </script>
 
 <style></style>
