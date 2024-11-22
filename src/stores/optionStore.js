@@ -37,6 +37,7 @@ export const useOptionStore = defineStore("option", () => {
   const addRegion = (regionId, regionName) => {
     selectedRegionId.value = regionId;
     selectedRegionName.value = regionName;
+    selectedCities.value = [];
     // console.log(selectedOp.value);
   };
   const addCity = (cityId) => {
@@ -47,11 +48,6 @@ export const useOptionStore = defineStore("option", () => {
     selectedCities.value.push(cityId);
   };
 
-  watchEffect(() => {
-    if (selectedRegionId) {
-      selectedCities.value = [];
-    }
-  });
   return {
     options,
     setOptions,
