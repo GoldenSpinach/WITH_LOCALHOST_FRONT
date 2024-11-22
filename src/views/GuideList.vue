@@ -79,6 +79,7 @@ const handleClickOutside = (event) => {
 onMounted(() => {
   document.addEventListener("click", handleClickOutside);
   isMounted.value = true; // 마운트 시 true로 설정하여 트랜지션이 발생하게 함
+  console.log(optionStore)
 });
 
 // 컴포넌트 해제 시 이벤트 리스너 제거

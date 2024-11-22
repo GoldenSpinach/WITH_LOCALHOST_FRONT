@@ -5,7 +5,7 @@
       <div class="flex flex-wrap gap-[12px]">
         <div v-for="region in regions" :key="region.regionId" :class="[
           'border p-[5px] rounded-lg cursor-pointer',
-          selectedOption.region == region.regionId
+          optionStore.regionId == region.regionId
             ? 'bg-blue-400 text-white'
             : 'hover:bg-blue-400 hover:text-white',
         ]" @click="clickRegion(region.regionId, region.regionName)">
@@ -19,7 +19,7 @@
       <div class="flex flex-wrap gap-[12px]">
         <div v-for="city in cities" :key="city.cityId" :class="[
           'border p-[5px] rounded-lg cursor-pointe',
-          selectedOption.cities.includes(city.cityId)
+          optionStore.cities.includes(city.cityId)
             ? 'bg-blue-400 text-white'
             : 'hover:bg-blue-400 hover:text-white',
         ]" @click="clickCity(city.cityId)">
@@ -33,13 +33,8 @@
 <script setup>
 import { onMounted, ref, watchEffect } from "vue";
 import { getRegion, getCities } from "@/api/region"
-const emit = defineEmits(["chooseArea", "chooseCity"]);
-const props = defineProps({
-  selectedOption: {
-    type: Object,
-    default: () => ({ region: null, cities: [], extras: [] }),
-  },
-});
+import { useOptionStore } from "@/stores/optionStore";
+const optionStore = useOptionStore();
 
 const regions = ref([]);
 const cities = ref([]);
@@ -50,14 +45,14 @@ onMounted(async () => {
 
 
 watchEffect(async () => {
-  if (props.selectedOption.region == null) return
-  cities.value = await getCities(props.selectedOption.region)
+  if (optionStore.regionId == null) return
+  cities.value = await getCities(optionStore.regionId)
 })
 const clickRegion = (regionId, regionName) => {
-  emit("chooseArea", regionId, regionName);
+  optionStore.addRegion(regionId, regionName);
 };
-const clickCity = (cityId, cityName) => {
-  emit("chooseCity", cityId, cityName);
+const clickCity = (cityId) => {
+  optionStore.addCity(cityId);
 };
 </script>
 
