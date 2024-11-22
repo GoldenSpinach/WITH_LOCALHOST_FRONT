@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useMemberStore } from "../stores/member";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,8 +29,48 @@ const router = createRouter({
       path: "/mypage",
       name: "myPage",
       component: () => import("@/views/MyPage.vue"),
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: "",
+          name: "myReservation",
+          component: () => import("@/views/MyReservation.vue"),
+          meta: { requiresAuth: true },
+        },
+        {
+          path: "review",
+          name: "myReview",
+          component: () => import("@/views/MyReview.vue"),
+          meta: { requiresAuth: true },
+        },
+        {
+          path: "tour",
+          name: "myTour",
+          component: () => import("@/views/MyTours.vue"),
+          meta: { requiresAuth: true },
+        },
+      ],
+    },
+    {
+      path: "/tour/add",
+      name: "addTour",
+      component: () => import("@/views/AddTour.vue"),
+      meta: { requiresAuth: true },
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const memberStore = useMemberStore();
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (!memberStore.isLogin) {
+      next({ name: "home" });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;
