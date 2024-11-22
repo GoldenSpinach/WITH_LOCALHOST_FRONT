@@ -1,5 +1,5 @@
 <template>
-  <section class="flex flex-col items-center justify-center h-screen">
+  <section class="flex flex-col items-center justify-center h-[calc(100vh-100px)]">
     <div class="flex flex-col gap-48 justify-center items-center">
       <div class="flex items-center gap-24 relative">
         <div class="text-7xl flex flex-col gap-[15px] font-bold">
