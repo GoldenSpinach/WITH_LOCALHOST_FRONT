@@ -24,12 +24,12 @@
           <label for="local" class="text-xs text-zinc-400 mb-[5px]">종료</label>
           <input type="date" class="pe-4 pb-2 rounded-md focus:outline-none focus:border-blue-500" />
         </div>
-        <div class="flex flex-col mt-[3px] relative w-3/6">
+        <div class="flex flex-col mt-[3px] relative w-[47%]">
           <label for="local" class="text-xs text-zinc-400 mb-[3px]">추가 옵션</label>
           <div class="flex gap-[6px] w-ful">
             <div class="flex gap-[6px] relative overflow-hidden">
               <div v-for="option in optionStore.selectedOptions" :key="option.id"
-                class="min-w-[100px] max-w-[200px] max-h-[36px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center whitespace-nowrap overflow-hidden text-ellipsis"
+                class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center whitespace-nowrap overflow-hidden text-ellipsis"
                 @click="optionStore.deleteOption(option.id)">
                 {{ option.name }}
               </div>
