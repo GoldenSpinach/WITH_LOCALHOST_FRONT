@@ -139,7 +139,7 @@ const clickDelete = async () => {
 const clickUpdate = async () => {
   console.log("수정", reviewInfo.value);
   const res = await updateReview({
-    reservator: "minji123",
+    reservater: "minji123",
     ...reviewInfo.value,
   });
   changeMode();
