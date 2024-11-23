@@ -84,7 +84,7 @@
                 v-model="info.pay"
               />
             </div>
-            <ScheduleEditor v-model:activitys="info.activitys" />
+            <ScheduleEditor v-model:activitys="info.activities" />
             <div class="flex flex-col w-[90%]">
               <label class="text-2xl mb-[10px]" for="title">소요 시간</label>
               <input
@@ -175,16 +175,19 @@ import { useTourOptionStore } from "@/stores/tourOptionStore";
 import { Loader } from "@googlemaps/js-api-loader";
 import TourAreaSelector from "@/components/tourAreaSelector/TourAreaSelector.vue";
 import { addTour } from "../api/tour";
+import { useRouter } from "vue-router";
+
 const { VITE_GOOGLE_MAP_KEY } = import.meta.env;
 const isOptionSelectorToggled = ref(false);
 const isAreaSelectorToggled = ref(false);
 const optionStore = useTourOptionStore();
+const router = useRouter();
 const info = ref({
   title: null,
   categorys: [],
   options: [],
   pay: null,
-  activitys: [],
+  activities: [],
   tourContent: null,
   notice: null,
   meetLatitude: null,
@@ -194,54 +197,77 @@ const info = ref({
   regionId: null,
   cityId: null,
   needDate: 0,
+  guidName: "minji123", // 임시로 설정
 });
-
-/**
- * 가이드네임
- * 투어
- * - 타이틀/peoplecnt(1)/가격/유의사항/meetadd, lat, lng/이미지/cityId, regionId, needDate, tourContent
- *
- * 옵션
- * - 카테고리 id
- *
- * 카테고리
- * - 카테고리 id
- *
- * act
- * - categoryId, actname, actcontent, actadd, lat, lng, img,
- *
- */
 
 const handleClickOutside = (event) => {
   const target = event.target;
   if (target.closest(".relative") !== null) {
     return;
   }
-
   isOptionSelectorToggled.value = false;
 };
 
 const onFileUpload = (event) => {
-  info.value.mainImg = Array.from(event.target.files);
+  info.value.mainImg = Array.from(event.target.files)[0];
 };
 
 const clickAdd = async () => {
+  console.log(optionStore.selectedOptions);
+
   optionStore.selectedOptions.forEach((option) => {
     if (option.type === "C") {
-      info.value.categorys.push(option.id);
+      info.value.categorys.push({ categoryId: option.id });
     } else {
-      info.value.options.push(option.id);
+      info.value.options.push({ categoryId: option.id });
     }
   });
+
   info.value.regionId = optionStore.regionId;
-  info.value.cityId = optionStore.cities;
-  // console.log(info.value);
-  // console.log(optionStore.selectedOptions);
-  // console.log(optionStore.regionId);
-  // console.log(optionStore.cities);
-  console.log(info);
-  await addTour(info.value);
+  info.value.cityId =
+    optionStore.cities.length > 0 ? optionStore.cities[0].id : null;
+
+  // FormData 생성
+  const formData = new FormData();
+
+  // 파일 추가
+  if (info.value.mainImg) {
+    formData.append("mainImg", info.value.mainImg);
+  }
+
+  // 다른 모든 데이터를 FormData에 추가
+  formData.append(
+    "tourdto",
+    new Blob(
+      [
+        JSON.stringify({
+          ...info.value,
+          activities: info.value.activities.map(({ img, ...rest }) => rest), // 이미지 필드 제외
+        }),
+      ],
+      { type: "application/json" }
+    )
+  );
+
+  // activities에서 이미지 분리해서 추가
+  if (info.value.activities && info.value.activities.length > 0) {
+    info.value.activities.forEach((activity, index) => {
+      if (activity.image) {
+        formData.append(`activityImg[${index}]`, activity.img);
+      }
+    });
+  }
+
+  // 서버로 FormData 전송
+  try {
+    console.log(formData);
+    await addTour(formData);
+    router.push("/mypage");
+  } catch (error) {
+    console.error("Error while adding tour:", error);
+  }
 };
+
 const autocompleteInput = ref(null);
 
 onMounted(() => {
@@ -264,7 +290,7 @@ onMounted(() => {
       if (place && place.formatted_address) {
         // 선택한 주소 정보 업데이트
         info.value.meetAddress = place.formatted_address;
-        console.log(place.formatted_address);
+
         // 위도, 경도 정보가 있으면 업데이트
         if (place.geometry && place.geometry.location) {
           info.value.meetLatitude = place.geometry.location.lat();

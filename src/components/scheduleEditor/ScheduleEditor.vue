@@ -27,7 +27,7 @@
             class="border px-[25px] py-[15px]"
             type="text"
             id="act-title"
-            v-model="scheduleInfo.title"
+            v-model="scheduleInfo.actName"
           />
         </div>
         <div class="w-full flex flex-col gap-[10px]">
@@ -36,7 +36,7 @@
             class="border px-[25px] py-[15px]"
             type="text"
             id="act-description"
-            v-model="scheduleInfo.description"
+            v-model="scheduleInfo.actContents"
           />
         </div>
         <div class="flex flex-col w-[90%] relative">
@@ -47,7 +47,7 @@
               @click="isOptionSelectorToggled = true"
               class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center whitespace-nowrap overflow-hidden text-ellipsis"
             >
-              {{ scheduleInfo.categoryName }}
+              {{ scheduleInfo.categoryId }}
             </div>
             <img
               v-else
@@ -73,7 +73,6 @@
             class="w-full p-2 border rounded"
           />
         </div>
-
         <div class="w-full flex flex-col gap-[10px]">
           <div class="flex justify-between">
             <label
@@ -115,22 +114,22 @@ const { VITE_GOOGLE_MAP_KEY } = import.meta.env;
 const sid = ref(0); // 새로운 활동의 ID 생성용
 const isOptionSelectorToggled = ref(false);
 const scheduleInfo = ref({
-  title: null,
-  description: null,
-  image: null,
-  address: null,
-  latitude: null,
-  longitude: null,
+  actName: null,
+  actContents: null,
+  img: null,
+  actAddress: null,
+  actLatitude: null,
+  actLongitude: null,
   categoryId: null,
-  categoryName: null,
+  //   categoryName: null,
 });
 
 const addSchedule = () => {
   if (
-    scheduleInfo.value.title === null ||
-    scheduleInfo.value.description === null ||
-    scheduleInfo.value.image === null ||
-    scheduleInfo.value.address === null
+    !scheduleInfo.value.actName ||
+    !scheduleInfo.value.actContents ||
+    !scheduleInfo.value.img ||
+    !scheduleInfo.value.actAddress
   ) {
     alert("이름, 설명, 사진, 주소는 필수입니다.");
     return;
@@ -147,21 +146,20 @@ const addSchedule = () => {
 
   // 필드 초기화
   scheduleInfo.value = {
-    title: null,
-    description: null,
-    image: null,
-    address: null,
-    latitude: null,
-    longitude: null,
+    actName: null,
+    actContents: null,
+    img: null,
+    actAddress: null,
+    actLatitude: null,
+    actLongitude: null,
     categoryId: null,
-    categoryName: null,
   };
   autocompleteInput.value.value = "";
 };
 
 const onFileUpload = (event) => {
-  scheduleInfo.value.image = Array.from(event.target.files);
-  console.log(scheduleInfo.value.image);
+  scheduleInfo.value.img = Array.from(event.target.files)[0];
+  console.log(scheduleInfo.value.img);
 };
 
 const deleteSchedule = (id) => {
@@ -199,12 +197,12 @@ onMounted(() => {
       const place = autocomplete.getPlace();
       if (place && place.formatted_address) {
         // 선택한 주소 정보 업데이트
-        scheduleInfo.value.address = place.formatted_address;
+        scheduleInfo.value.actAddress = place.formatted_address;
 
         // 위도, 경도 정보가 있으면 업데이트
         if (place.geometry && place.geometry.location) {
-          scheduleInfo.value.latitude = place.geometry.location.lat();
-          scheduleInfo.value.longitude = place.geometry.location.lng();
+          scheduleInfo.value.actLatitude = place.geometry.location.lat();
+          scheduleInfo.value.actLongitude = place.geometry.location.lng();
         }
       }
     });
