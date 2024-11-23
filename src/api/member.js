@@ -13,7 +13,7 @@ const getReviews = async (memberId) => {
 // 메소드 수정 필요
 const deleteReview = async (reviewId) => {
   try {
-    const res = await client.delete(`review/${reviewId}`);
+    const res = await client.post(`review/delete?reviewId=${reviewId}`);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -21,18 +21,10 @@ const deleteReview = async (reviewId) => {
   }
 };
 
-const updateReview = async (
-  reservator,
-  reservationId,
-  reviewContent,
-  reviewScore
-) => {
+const updateReview = async (reservator) => {
   try {
-    const res = await client.post(`review/reviewList`, {
-      reservator,
-      reservationId,
-      reviewContent,
-      reviewScore,
+    const res = await client.post(`review/modify`, {
+      ...reservator,
     });
     return res.data;
   } catch (err) {

@@ -18,7 +18,7 @@
           <div class="w-5/6">
             <ul class="flex flex-col gap-[15px]">
               <RouterLink to="/mypage">예약 내역</RouterLink>
-              <RouterLink to="/mypage/review">내가 쓴 리뷰</RouterLink>
+              <!-- <RouterLink to="/mypage/review">내가 쓴 리뷰</RouterLink> -->
               <RouterLink to="/mypage/tour">패키지 관리</RouterLink>
             </ul>
           </div>
