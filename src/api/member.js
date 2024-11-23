@@ -21,4 +21,24 @@ const deleteReview = async (reviewId) => {
   }
 };
 
-export { getReviews, deleteReview };
+const updateReview = async (
+  reservator,
+  reservationId,
+  reviewContent,
+  reviewScore
+) => {
+  try {
+    const res = await client.post(`review/reviewList`, {
+      reservator,
+      reservationId,
+      reviewContent,
+      reviewScore,
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
+
+export { getReviews, deleteReview, updateReview };

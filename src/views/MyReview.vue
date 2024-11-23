@@ -4,8 +4,6 @@
     <div class="border w-full my-[15px]"></div>
     <div class="w-full h-[505px] overflow-y-auto flex flex-col gap-[15px]">
       <div
-        v-for="(review, index) in reviews"
-        :key="index"
         class="border w-full min-h-[120px] box-border px-[15px] py-[5px] flex flex-col"
       >
         <div class="flex justify-between">
@@ -16,7 +14,7 @@
             />
             <span class="text-xl">유저아이디를 불러와야해</span>
           </div>
-          <span class="text-sm text-slate-400">2022.02.22</span>
+          <span class="text-sm text-slate-400">{{}}</span>
         </div>
         <div
           v-if="!isUpdateMode"
@@ -68,7 +66,7 @@
 </template>
 <script setup>
 import { onMounted, ref } from "vue";
-import { getReviews, deleteReview } from "@/api/member";
+import { getReviews, deleteReview, updateReview } from "@/api/member";
 
 const reviews = ref([]);
 const isUpdateMode = ref(false);
@@ -84,7 +82,7 @@ const clickDelete = async (reviewId) => {
 };
 const clickUpdate = async (reviewId) => {
   console.log("수정", reviewId);
-  // const res = await deleteReview(reviewId);
+  const res = await updateReview(reviewId);
   changeMode();
 };
 const changeMode = () => {
