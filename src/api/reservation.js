@@ -42,9 +42,23 @@ const getWaitings = async (guideId) => {
   }
 };
 
+const confirmReservation = async (reservationId, type) => {
+  try {
+    const res = await client.put(`/reservation/modify`, {
+      reservationId,
+      reservationStatus: type,
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 export {
   getGuestReservations,
   getHostReservations,
   determineReservation,
   getWaitings,
+  confirmReservation,
 };

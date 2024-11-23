@@ -19,8 +19,8 @@
           >
         </div>
         <div class="flex items-end gap-[15px]">
-          <button>승인</button>
-          <button>취소</button>
+          <button @click="clickAccept(guest.reservationId)">승인</button>
+          <button @click="clickReject(guest.reservationId)">취소</button>
         </div>
       </div>
     </div>
@@ -28,7 +28,7 @@
 </template>
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
-import { getWaitings } from "@/api/reservation";
+import { getWaitings, confirmReservation } from "@/api/reservation";
 
 const props = defineProps({
   tourId: String,
@@ -37,20 +37,32 @@ const props = defineProps({
 const waitings = ref([]);
 const filteredWatings = ref([]);
 
-watch(
-  () => props.tourId,
-  () => {
-    console.log(props.tourId);
-    filteredWatings.value = waitings.value.filter(
-      (guest) => guest.tourId === props.tourId
-    );
-  },
-  { immediate: true }
-);
+const updateFilteredWaitings = () => {
+  filteredWatings.value = waitings.value.filter(
+    (guest) => guest.tourId === props.tourId && guest.reservationStatus === "P"
+  );
+};
+
+// Props나 waitings가 변경될 때마다 자동으로 filteredWatings를 업데이트
+watch([() => props.tourId, () => waitings.value], updateFilteredWaitings, {
+  immediate: true,
+});
 
 onMounted(async () => {
   const id = "minji123";
   waitings.value = await getWaitings(id);
 });
+
+const clickAccept = async (reservationId) => {
+  const id = "minji123";
+  console.log(reservationId);
+  const res = await confirmReservation(reservationId, "A");
+  waitings.value = await getWaitings(id);
+};
+const clickReject = async (reservationId) => {
+  const id = "minji123";
+  const res = await confirmReservation(reservationId, "C");
+  waitings.value = await getWaitings(id);
+};
 </script>
 <style></style>
