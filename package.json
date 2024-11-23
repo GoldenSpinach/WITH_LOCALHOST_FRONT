@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.8",
     "@jambonn/vue-carousel": "^0.1.1",
     "@vuepic/vue-datepicker": "^10.0.0",
     "axios": "^1.7.7",

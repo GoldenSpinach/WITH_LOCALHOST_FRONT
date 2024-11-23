@@ -49,10 +49,25 @@ const getMyTours = async (id) => {
     return [];
   }
 };
+
+const addTour = async (tour) => {
+  try {
+    const res = await client.post("/tour/create", tour, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
+};
 export {
   getCurrentTours,
   getTours,
   getConditionTours,
   getTourDetail,
   getMyTours,
+  addTour,
 };
