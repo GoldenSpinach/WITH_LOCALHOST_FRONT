@@ -12,17 +12,18 @@
           <label for="local" class="text-xs text-zinc-400 mb-[5px]">지역</label>
           <input type="text" id="local" placeholder="지역 검색"
             class="pe-4 pb-2 w-32 rounded-md focus:outline-none focus:border-blue-500" relative readonly
-            :value="selected.regionName" @click="toggleAreaDropdown" />
+            :value="optionStore.regionName" @click="toggleAreaDropdown" />
         </div>
-        <AreaSelector v-if="isAreaSelectorToggled" class="absolute z-50 top-[75px] start-[35px]"
-          @choose-area="addRegion" @choose-city="addcity" :selectedOption="selected" />
+        <AreaSelector v-if="isAreaSelectorToggled" class="absolute z-50 top-[75px] start-[35px]" />
         <div class="flex flex-col mt-[3px] w-1/6">
           <label for="local" class="text-xs text-zinc-400 mb-[5px]">출발</label>
-          <input type="date" class="pe-4 pb-2 rounded-md focus:outline-none focus:border-blue-500" />
+          <input type="date" class="pe-4 pb-2 rounded-md focus:outline-none focus:border-blue-500"
+            v-model="optionStore.startDate" />
         </div>
         <div class="flex flex-col mt-[3px] w-1/6">
           <label for="local" class="text-xs text-zinc-400 mb-[5px]">종료</label>
-          <input type="date" class="pe-4 pb-2 rounded-md focus:outline-none focus:border-blue-500" />
+          <input type="date" class="pe-4 pb-2 rounded-md focus:outline-none focus:border-blue-500"
+            v-model="optionStore.endDate" />
         </div>
         <div class="flex flex-col mt-[3px] relative w-[47%]">
           <label for="local" class="text-xs text-zinc-400 mb-[3px]">추가 옵션</label>
@@ -78,12 +79,6 @@ const isAreaSelectorToggled = ref(false);
 const isOptionSelectorToggled = ref(false);
 const isHome = ref(false);
 const optionStore = useOptionStore();
-const selected = ref({
-  region: null,
-  regionName: null,
-  cities: [],
-  extras: [],
-});
 const route = useRoute();
 
 watchEffect(() => {
@@ -99,28 +94,9 @@ const toggleOptionDropdown = () => {
 const toggleDropdown = () => {
   isToggled.value = !isToggled.value;
 };
-const addRegion = (regionId, regionName) => {
-  selected.value.region = regionId;
-  selected.value.regionName = regionName;
-  // console.log(selectedOp.value);
-};
-const addcity = (cityId) => {
-  if (selected.value.cities.includes(cityId)) {
-    selected.value.cities = selected.value.cities.filter((id) => id != cityId);
-    return;
-  }
-  selected.value.cities.push(cityId);
-};
 
-watchEffect(() => {
-  if (selected.value.region) {
-    selected.value.cities = [];
-  }
-});
 const handleClickOutside = (event) => {
   const target = event.target;
-
-
   if (target.closest(".relative") !== null) {
     return;
   }
