@@ -33,4 +33,18 @@ const determineReservation = async (reservationId, type) => {
   }
 };
 
-export { getGuestReservations, getHostReservations, determineReservation };
+const getWaitings = async (guideId) => {
+  try {
+    const res = await client.get(`/reservation/guidList?guidId=${guideId}`);
+    return res.data;
+  } catch (err) {
+    return [];
+  }
+};
+
+export {
+  getGuestReservations,
+  getHostReservations,
+  determineReservation,
+  getWaitings,
+};

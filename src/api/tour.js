@@ -39,4 +39,20 @@ const getTourDetail = async (id) => {
     return {};
   }
 };
-export { getCurrentTours, getTours, getConditionTours, getTourDetail };
+
+const getMyTours = async (id) => {
+  try {
+    const res = await client.get(`/tour/mytour?userId=${id}`);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
+export {
+  getCurrentTours,
+  getTours,
+  getConditionTours,
+  getTourDetail,
+  getMyTours,
+};
