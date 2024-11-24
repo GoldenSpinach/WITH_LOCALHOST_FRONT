@@ -30,7 +30,7 @@
 
 <script setup>
 import { onMounted, ref, defineEmits, defineProps } from "vue";
-import { getCategories } from "@/api/region";
+import { getActivities } from "@/api/region";
 
 const props = defineProps({
   seletedCategory: String,
@@ -46,7 +46,7 @@ const select = (id, name) => {
 };
 
 onMounted(async () => {
-  categories.value = await getCategories();
+  categories.value = await getActivities();
 });
 </script>
 

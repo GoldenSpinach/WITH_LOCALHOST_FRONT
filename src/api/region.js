@@ -40,4 +40,14 @@ const getCategories = async () => {
   }
 };
 
-export { getRegion, getCities, getCategories, getOptions };
+const getActivities = async () => {
+  try {
+    const res = await client.get("/lookup/category?type=A");
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
+
+export { getRegion, getCities, getCategories, getOptions, getActivities };
