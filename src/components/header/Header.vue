@@ -11,11 +11,13 @@
     >
       <div class="flex w-full">
         <div class="flex flex-col w-1/6 mt-[3px]">
-          <label for="local" class="text-xs text-zinc-400 mb-[5px]">지역</label>
+          <label for="local" class="text-xs text-zinc-400 mb-[5px]">
+            {{ t("지역") }}
+          </label>
           <input
             type="text"
             id="local"
-            placeholder="지역 검색"
+            :placeholder="t('지역 검색')"
             class="pe-4 pb-2 w-32 rounded-md focus:outline-none focus:border-blue-500"
             relative
             readonly
@@ -28,7 +30,9 @@
           class="absolute z-50 top-[75px] start-[35px]"
         />
         <div class="flex flex-col mt-[3px] w-1/6">
-          <label for="local" class="text-xs text-zinc-400 mb-[5px]">출발</label>
+          <label for="local" class="text-xs text-zinc-400 mb-[5px]">
+            {{ t("출발") }}
+          </label>
           <input
             type="date"
             class="pe-4 pb-2 rounded-md focus:outline-none focus:border-blue-500"
@@ -36,7 +40,9 @@
           />
         </div>
         <div class="flex flex-col mt-[3px] w-1/6">
-          <label for="local" class="text-xs text-zinc-400 mb-[5px]">종료</label>
+          <label for="local" class="text-xs text-zinc-400 mb-[5px]">
+            {{ t("종료") }}
+          </label>
           <input
             type="date"
             class="pe-4 pb-2 rounded-md focus:outline-none focus:border-blue-500"
@@ -44,9 +50,9 @@
           />
         </div>
         <div class="flex flex-col mt-[3px] relative w-[47%]">
-          <label for="local" class="text-xs text-zinc-400 mb-[3px]"
-            >추가 옵션</label
-          >
+          <label for="local" class="text-xs text-zinc-400 mb-[3px]">
+            {{ t("추가옵션") }}
+          </label>
           <div class="flex gap-[6px] w-full">
             <div class="flex gap-[6px] relative overflow-hidden">
               <div
@@ -72,7 +78,11 @@
         </div>
       </div>
       <RouterLink to="/guide" class="ml-4 absolute end-[40px] block">
-        <img src="@/assets/images/search.svg" alt="검색" class="w-6 h-6" />
+        <img
+          src="@/assets/images/search.svg"
+          :alt="t('검색')"
+          class="w-6 h-6"
+        />
       </RouterLink>
     </form>
     <div class="relative">
@@ -80,8 +90,11 @@
         class="flex gap-[15px] p-[10px] border border-zinc-300 rounded-full cursor-pointer"
         @click="toggleDropdown"
       >
-        <img src="@/assets/images/menu.svg" alt="메뉴" />
-        <img src="@/assets/images/default_profile_small.svg" alt="" />
+        <img src="@/assets/images/menu.svg" :alt="t('메뉴')" />
+        <img
+          src="@/assets/images/default_profile_small.svg"
+          :alt="t('프로필')"
+        />
       </div>
       <div
         class="w-[150px] border border-zinc-300 rounded-lg absolute end-0 mt-[5px] shadow-xl bg-white z-50"
@@ -91,27 +104,33 @@
           <RouterLink
             to="/mypage"
             class="hover:bg-slate-200 p-[10px] cursor-pointer block"
-            >MyPage</RouterLink
+            >{{ t("프로필") }}</RouterLink
           >
           <li class="hover:bg-slate-200 p-[10px] cursor-pointer block">
-            Sign Out
+            {{ t("로그아웃") }}
           </li>
         </ul>
         <ul class="flex flex-col" v-else>
           <RouterLink
             to="/signin"
             class="hover:bg-slate-200 p-[10px] cursor-pointer"
-            >Sign in</RouterLink
+            >{{ t("로그인") }}</RouterLink
           >
           <RouterLink
             to="/register"
             class="hover:bg-slate-200 p-[10px] cursor-pointer"
-            >Join</RouterLink
+            >{{ t("회원가입") }}</RouterLink
           >
         </ul>
       </div>
     </div>
   </header>
+  <div>
+    <button @click="setLanguage('ko')">한국어</button>
+    <button @click="setLanguage('en')">English</button>
+    <button @click="setLanguage('ja')">日本語</button>
+    <button @click="setLanguage('zh-CN')">中文(简体)</button>
+  </div>
 </template>
 
 <script setup>
@@ -121,6 +140,7 @@ import AreaSelector from "@/components/area/AreaSelector.vue";
 import OptionSelector from "@/components/option/OptionSelector.vue";
 import { useOptionStore } from "@/stores/optionStore";
 import { useMemberStore } from "@/stores/member";
+import { useI18n } from "vue-i18n";
 
 const memberStore = useMemberStore();
 const isToggled = ref(false);
@@ -129,7 +149,11 @@ const isOptionSelectorToggled = ref(false);
 const isHome = ref(false);
 const optionStore = useOptionStore();
 const route = useRoute();
+const { t, locale } = useI18n(); // Composition API 방식
 
+const setLanguage = (lang) => {
+  locale.value = lang; // 언어 변경
+};
 watchEffect(() => {
   isHome.value = route.path === "/";
 });

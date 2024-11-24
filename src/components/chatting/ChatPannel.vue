@@ -18,7 +18,7 @@
               {{ formatTime(message.msgSendTime) }}
             </span>
             <span
-              class="block ps-[15px] pe-[15px] bg-white text-lg rounded-lg max-w-[70%] break-words"
+              class="block ps-[15px] pe-[15px] bg-white text-xl rounded-lg max-w-[70%] break-words py-[7px]"
             >
               {{ message.msgContent }}
             </span>
@@ -29,7 +29,7 @@
         <div v-else class="w-full text-start flex flex-col items-start">
           <div class="flex items-end justify-start gap-[5px] w-full">
             <span
-              class="block ps-[15px] pe-[15px] bg-blue-300 text-lg rounded-lg max-w-[70%] break-words"
+              class="block ps-[15px] pe-[15px] bg-blue-300 text-xl rounded-lg max-w-[70%] break-words py-[7px]"
             >
               {{ message.msgContent }}
             </span>
