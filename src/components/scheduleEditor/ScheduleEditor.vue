@@ -11,7 +11,7 @@
           v-for="schedule in activitys"
           :key="schedule.id"
         >
-          <span>{{ schedule.title }}</span>
+          <span>{{ schedule.actName }}</span>
           <img
             class="w-[20px] cursor-pointer"
             src="@/assets/images/trashcan.svg"
@@ -85,6 +85,7 @@
               type="file"
               id="act-image"
               accept="image/*"
+              ref="fileInputRef"
               @change="onFileUpload"
             />
             <button
@@ -112,6 +113,7 @@ const emit = defineEmits(["update:activitys"]);
 
 const { VITE_GOOGLE_MAP_KEY } = import.meta.env;
 const sid = ref(0); // 새로운 활동의 ID 생성용
+const fileInputRef = ref(null);
 const isOptionSelectorToggled = ref(false);
 const scheduleInfo = ref({
   actName: null,
@@ -125,6 +127,7 @@ const scheduleInfo = ref({
 });
 
 const addSchedule = () => {
+  console.log(scheduleInfo.value);
   if (
     !scheduleInfo.value.actName ||
     !scheduleInfo.value.actContents ||
@@ -145,6 +148,7 @@ const addSchedule = () => {
   ]);
 
   // 필드 초기화
+  fileInputRef.value.value = "";
   scheduleInfo.value = {
     actName: null,
     actContents: null,
