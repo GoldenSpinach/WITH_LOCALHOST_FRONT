@@ -1,18 +1,26 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import ko from "@/assets/language/ko.json"
-import en from "@/assets/language/en.json"
-import "@/assets/main.css"
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import ko from "@/assets/language/ko.json";
+import en from "@/assets/language/en.json";
+import "@/assets/main.css";
 
-import App from './App.vue'
-import router from './router'
+import App from "./App.vue";
+import router from "./router";
 
- 
+const app = createApp(App);
+// Service Worker 등록
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("/firebase-messaging-sw.js")
+    .then((registration) => {
+      console.log("Service Worker 등록 성공:", registration);
+    })
+    .catch((error) => {
+      console.error("Service Worker 등록 실패:", error);
+    });
+}
 
-const app = createApp(App)
+app.use(createPinia());
+app.use(router);
 
-
-app.use(createPinia())
-app.use(router)
-
-app.mount('#app')
+app.mount("#app");
