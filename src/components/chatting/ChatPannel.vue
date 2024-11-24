@@ -11,22 +11,32 @@
         <!-- 보낸 메시지 -->
         <div
           v-if="message.sendId === sender"
-          class="w-full text-end flex justify-end"
+          class="w-full text-end flex flex-col items-end"
         >
-          <span
-            class="block ps-[15px] pe-[15px] bg-white text-lg rounded-lg max-w-[50%] break-words"
-          >
-            {{ message.msgContent }}
-          </span>
+          <div class="flex items-end justify-end gap-[5px] w-full">
+            <span class="text-xs text-gray-500 mt-1">
+              {{ formatTime(message.msgSendTime) }}
+            </span>
+            <span
+              class="block ps-[15px] pe-[15px] bg-white text-lg rounded-lg max-w-[70%] break-words"
+            >
+              {{ message.msgContent }}
+            </span>
+          </div>
         </div>
 
         <!-- 받은 메시지 -->
-        <div v-else class="w-full text-start flex justify-start">
-          <span
-            class="block ps-[15px] pe-[15px] bg-blue-300 text-lg rounded-lg max-w-[50%] break-words"
-          >
-            {{ message.msgContent }}
-          </span>
+        <div v-else class="w-full text-start flex flex-col items-start">
+          <div class="flex items-end justify-start gap-[5px] w-full">
+            <span
+              class="block ps-[15px] pe-[15px] bg-blue-300 text-lg rounded-lg max-w-[70%] break-words"
+            >
+              {{ message.msgContent }}
+            </span>
+            <span class="text-xs text-gray-500 mt-1">
+              {{ formatTime(message.msgSendTime) }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -71,6 +81,12 @@ const scrollToBottom = () => {
   if (messageContainer.value) {
     messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
   }
+};
+
+// 시간 형식을 시:분만 반환하도록 가공
+const formatTime = (time) => {
+  if (!time) return "";
+  return time.split(":").slice(0, 2).join(":"); // "시:분" 형태로 변환
 };
 
 const sendMessage = () => {
