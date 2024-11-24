@@ -27,7 +27,7 @@ const sendTokenToServer = async (token) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       userId: "minji123",
-      //   fcmToken: token,
+      fcmToken: token,
     }),
   });
 };

@@ -96,8 +96,16 @@
           <li class="hover:bg-slate-200 p-[10px] cursor-pointer">Sign Out</li>
         </ul>
         <ul v-else>
-          <li class="hover:bg-slate-200 p-[10px] cursor-pointer">Sign in</li>
-          <li class="hover:bg-slate-200 p-[10px] cursor-pointer">Join</li>
+          <RouterLink
+            to="/signin"
+            class="hover:bg-slate-200 p-[10px] cursor-pointer"
+            >Sign in</RouterLink
+          >
+          <RouterLink
+            to="/join"
+            class="hover:bg-slate-200 p-[10px] cursor-pointer"
+            >Join</RouterLink
+          >
         </ul>
       </div>
     </div>

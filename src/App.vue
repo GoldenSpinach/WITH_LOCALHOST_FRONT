@@ -5,9 +5,9 @@ import Header from "@/components/header/Header.vue";
 import ChatButton from "./components/chatting/ChatButton.vue";
 import { requestNotificationPermission } from "@/api/fcm";
 
-onMounted(() => {
-  requestNotificationPermission();
-});
+// onMounted(() => {
+//   requestNotificationPermission();
+// });
 </script>
 
 <template>

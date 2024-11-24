@@ -3,23 +3,25 @@
   <button @click="initializeWebSocket">vasdfasdfasdf</button>
   <div
     v-if="isChatBoxToggled"
-    class="w-3/4 max-w-[1150px] h-[1000px] bg-slate-100 rounded-md fixed shadow-2xl end-[25px] bottom-[100px] z-50 flex"
+    class="w-3/4 max-w-[1150px] h-[1000px] bg-slate-200 rounded-md fixed shadow-2xl end-[25px] bottom-[100px] z-50 flex"
   >
     <div class="w-1/4 h-full">
-      <span class="text-xl">채팅 목록</span>
+      <span class="block text-xl ps-[15px] pt-[15px]">채팅</span>
       <div
         v-for="(room, idx) in rooms"
         :key="room.chatRoomId"
         @click="selectRoom(room.chatRoomId, idx)"
         class="flex flex-col gap-[10px] p-[15px] cursor-pointer hover:bg-slate-300"
       >
-        <span class="text-2xl">{{
+        <span class="block text-2xl w-full truncate">{{
           room.chatGuidId === userId ? room.chatGuestId : room.chatGuidId
         }}</span>
-        <span class="ms-[5px]">{{ room.lastMessage }}</span>
+        <span class="ms-[5px] truncate w-full block">{{
+          room.lastMessage
+        }}</span>
       </div>
     </div>
-
+    <div class="h-full border-black w-1px"></div>
     <ChatPannel
       :roomId="roomId"
       :chatLogs="chattings"
@@ -76,10 +78,16 @@ const subscribeToRoom = (roomId) => {
       chattings.value[roomId] = [];
     }
     chattings.value[roomId].push(receivedMessage);
-    // 방 목록의 최근 메시지 업데이트
-    const room = rooms.value.find((room) => room.roomId === roomId);
-    if (room) {
-      room.lastMessage = receivedMessage.content;
+    // 방 목록의 최근 메시지 업데이트 (반응형)
+    const roomIndex = rooms.value.findIndex(
+      (room) => room.chatRoomId === roomId
+    );
+    if (roomIndex !== -1) {
+      // Vue의 반응형 배열 메서드 사용
+      rooms.value[roomIndex] = {
+        ...rooms.value[roomIndex],
+        lastMessage: receivedMessage.msgContent, // 최근 메시지 업데이트
+      };
     }
   });
 };

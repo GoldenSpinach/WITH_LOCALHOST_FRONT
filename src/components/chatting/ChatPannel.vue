@@ -1,21 +1,30 @@
 <template>
-  <div class="w-3/4 h-full flex flex-col justify-end border-s">
+  <div
+    class="w-3/4 h-full p-[20px] border-gray-900 flex flex-col justify-end rounded-xl"
+  >
     <!-- 메시지 표시 영역 -->
-    <div class="flex-grow p-4 overflow-y-auto">
+    <div
+      ref="messageContainer"
+      class="flex-grow p-4 overflow-y-auto flex flex-col gap-[15px]"
+    >
       <div v-for="message in msgs" :key="message.msgId">
         <!-- 보낸 메시지 -->
         <div
           v-if="message.sendId === sender"
-          class="w-content text-end flex justify-end"
+          class="w-full text-end flex justify-end"
         >
-          <span class="ps-[15px] pe-[15px] bg-blue-200 text-lg rounded-lg">
+          <span
+            class="block ps-[15px] pe-[15px] bg-white text-lg rounded-lg max-w-[50%] break-words"
+          >
             {{ message.msgContent }}
           </span>
         </div>
 
         <!-- 받은 메시지 -->
-        <div v-else class="w-content text-start flex justify-start">
-          <span class="ps-[15px] pe-[15px] bg-gray-200 text-lg rounded-lg">
+        <div v-else class="w-full text-start flex justify-start">
+          <span
+            class="block ps-[15px] pe-[15px] bg-blue-300 text-lg rounded-lg max-w-[50%] break-words"
+          >
             {{ message.msgContent }}
           </span>
         </div>
@@ -29,6 +38,7 @@
         type="text"
         v-model="newMsg"
         placeholder="메시지를 입력하세요"
+        @keyup.enter="sendMessage"
       />
       <img
         class="w-[10%] cursor-pointer"
@@ -41,7 +51,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from "vue";
+import { ref, watch, onMounted, nextTick } from "vue";
 import { stompClient } from "@/api/chat";
 import { getChatLogs } from "@/api/chat";
 
@@ -54,6 +64,14 @@ const props = defineProps({
 
 const msgs = ref([]);
 const newMsg = ref("");
+const messageContainer = ref(null); // 메시지 컨테이너를 참조할 ref
+
+// 메시지 추가 후 스크롤을 맨 아래로 이동하는 함수
+const scrollToBottom = () => {
+  if (messageContainer.value) {
+    messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
+  }
+};
 
 const sendMessage = () => {
   if (!newMsg.value.trim()) return;
@@ -82,6 +100,7 @@ const sendMessage = () => {
   // 전송 후 입력 필드 초기화
   newMsg.value = "";
 };
+
 watch(
   () => props.roomId,
   async () => {
@@ -89,6 +108,7 @@ watch(
     if (props.roomId !== null) {
       msgs.value = await getChatLogs(props.roomId);
       console.log(msgs.value);
+      nextTick(() => scrollToBottom()); // 메시지 로드 후 스크롤 이동
     }
   }
 );
@@ -100,11 +120,15 @@ watch(
     if (props.chatLogs[props.roomId]) {
       const sendMsg = props.chatLogs[props.roomId];
       console.log(sendMsg);
-      msgs.value = [...msgs.value, sendMsg[0]];
+      msgs.value = [...msgs.value, sendMsg[sendMsg.length - 1]];
       console.log(msgs.value);
+      nextTick(() => scrollToBottom()); // 메시지 추가 후 스크롤 이동
     }
   },
   { deep: true } // 객체 내부 속성 변경까지 감지
 );
+
+onMounted(() => {
+  nextTick(() => scrollToBottom()); // 컴포넌트 로드 시 스크롤 이동
+});
 </script>
-<style lang=""></style>

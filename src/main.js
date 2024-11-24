@@ -6,7 +6,7 @@ import "@/assets/main.css";
 
 import App from "./App.vue";
 import router from "./router";
-
+const { VITE_KAKAO_KEY } = import.meta.env;
 const app = createApp(App);
 // Service Worker 등록
 if ("serviceWorker" in navigator) {
@@ -22,5 +22,6 @@ if ("serviceWorker" in navigator) {
 
 app.use(createPinia());
 app.use(router);
+window.Kakao.init(VITE_KAKAO_KEY);
 
 app.mount("#app");
