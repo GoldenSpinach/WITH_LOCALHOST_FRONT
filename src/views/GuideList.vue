@@ -17,7 +17,7 @@
           <img
             class="w-[30px] min-w-[30px] cursor-pointer position-sticky"
             src=" @/assets/images/add.svg"
-            alt="설정추가"
+            :alt="t('설정추가')"
             @click="toggleOptionDropdown"
           />
         </div>
@@ -45,14 +45,14 @@
                   <img
                     class="rounded-md h-[420px]"
                     :src="tour.mainImgUrl"
-                    alt="체험이미지"
+                    :alt="t('체험이미지')"
                   />
                   <div class="w-full flex flex-col ms-[15px]">
                     <div class="flex items-center justify-start">
-                      <img src="@/assets/images/star.svg" alt="" /><span
-                        class="text-center"
-                        >{{ tour.reviewAvg }}</span
-                      >
+                      <img
+                        src="@/assets/images/star.svg"
+                        :alt="t('별점')"
+                      /><span class="text-center">{{ tour.reviewAvg }}</span>
                     </div>
                     <span
                       class="inline-block w-[300px] overflow-hidden whitespace-nowrap text-ellipsis text-sm"
@@ -83,7 +83,9 @@ import OptionSelector from "@/components/option/OptionSelector.vue";
 import { RouterLink } from "vue-router";
 import { getTours } from "@/api/tour";
 import { getConditionTours } from "../api/tour";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n(); // 다국어 번역 함수
 const isOptionSelectorToggled = ref(false);
 const optionStore = useOptionStore();
 const isMounted = ref(false);

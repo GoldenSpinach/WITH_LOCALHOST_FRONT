@@ -3,18 +3,18 @@
     <div
       class="w-full max-w-lg mx-auto p-6 border rounded-md shadow-md bg-white"
     >
-      <h2 class="text-2xl font-bold mb-6">회원가입</h2>
+      <h2 class="text-2xl font-bold mb-6">{{ t("회원가입") }}</h2>
       <form @submit.prevent="handleSubmit">
         <!-- 이메일 입력 -->
         <div class="mb-4">
-          <label for="email" class="block text-sm font-medium mb-1"
-            >이메일</label
-          >
+          <label for="email" class="block text-sm font-medium mb-1">
+            {{ t("이메일") }}
+          </label>
           <input
             type="email"
             id="email"
             v-model="form.email"
-            placeholder="이메일을 입력하세요"
+            :placeholder="t('이메일을 입력하세요')"
             class="w-full p-2 border rounded"
             required
           />
@@ -22,14 +22,14 @@
 
         <!-- 전화번호 입력 -->
         <div class="mb-4">
-          <label for="phoneNumber" class="block text-sm font-medium mb-1"
-            >전화번호</label
-          >
+          <label for="phoneNumber" class="block text-sm font-medium mb-1">
+            {{ t("전화번호") }}
+          </label>
           <input
             type="tel"
             id="phoneNumber"
             v-model="form.phoneNumber"
-            placeholder="전화번호를 입력하세요 (예: 010-1234-5678)"
+            :placeholder="t('전화번호를 입력하세요 (예: 010-1234-5678)')"
             class="w-full p-2 border rounded"
             required
           />
@@ -37,7 +37,7 @@
 
         <!-- 성별 선택 -->
         <div class="mb-4">
-          <label class="block text-sm font-medium mb-1">성별</label>
+          <label class="block text-sm font-medium mb-1">{{ t("성별") }}</label>
           <div class="flex gap-4">
             <label class="flex items-center">
               <input
@@ -46,7 +46,7 @@
                 v-model="form.gender"
                 class="mr-2"
               />
-              남성
+              {{ t("남성") }}
             </label>
             <label class="flex items-center">
               <input
@@ -55,16 +55,16 @@
                 v-model="form.gender"
                 class="mr-2"
               />
-              여성
+              {{ t("여성") }}
             </label>
           </div>
         </div>
 
         <!-- 생년월일 입력 -->
         <div class="mb-4">
-          <label for="birthDate" class="block text-sm font-medium mb-1"
-            >생년월일</label
-          >
+          <label for="birthDate" class="block text-sm font-medium mb-1">
+            {{ t("생년월일") }}
+          </label>
           <input
             type="date"
             id="birthDate"
@@ -80,7 +80,7 @@
             type="submit"
             class="w-full p-3 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
-            회원가입
+            {{ t("회원가입") }}
           </button>
         </div>
       </form>
@@ -90,6 +90,9 @@
 
 <script setup>
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n(); // 다국어 번역 함수
 
 const form = ref({
   email: "",
@@ -101,10 +104,10 @@ const form = ref({
 const handleSubmit = () => {
   // 폼 제출 처리 로직
   if (validateForm()) {
-    console.log("회원가입 정보:", form.value);
-    alert("회원가입이 완료되었습니다!");
+    console.log(t("회원가입 정보:"), form.value);
+    alert(t("회원가입이 완료되었습니다!"));
   } else {
-    alert("모든 필드를 올바르게 입력해주세요.");
+    alert(t("모든 필드를 올바르게 입력해주세요."));
   }
 };
 
@@ -118,7 +121,7 @@ const isValidEmail = (email) => {
 const validateForm = () => {
   // 이메일 유효성 검사 추가
   if (!isValidEmail(form.value.email)) {
-    alert("올바른 이메일 형식을 입력해주세요.");
+    alert(t("올바른 이메일 형식을 입력해주세요."));
     return false;
   }
   return (
