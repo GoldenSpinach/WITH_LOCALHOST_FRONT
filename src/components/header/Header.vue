@@ -71,7 +71,7 @@
           />
         </div>
       </div>
-      <RouterLink to="/guide" class="ml-4 absolute end-[40px]">
+      <RouterLink to="/guide" class="ml-4 absolute end-[40px] block">
         <img src="@/assets/images/search.svg" alt="검색" class="w-6 h-6" />
       </RouterLink>
     </form>
@@ -90,19 +90,21 @@
         <ul class="flex flex-col" v-if="memberStore.isLogin">
           <RouterLink
             to="/mypage"
-            class="hover:bg-slate-200 p-[10px] cursor-pointer"
+            class="hover:bg-slate-200 p-[10px] cursor-pointer block"
             >MyPage</RouterLink
           >
-          <li class="hover:bg-slate-200 p-[10px] cursor-pointer">Sign Out</li>
+          <li class="hover:bg-slate-200 p-[10px] cursor-pointer block">
+            Sign Out
+          </li>
         </ul>
-        <ul v-else>
+        <ul class="flex flex-col" v-else>
           <RouterLink
             to="/signin"
             class="hover:bg-slate-200 p-[10px] cursor-pointer"
             >Sign in</RouterLink
           >
           <RouterLink
-            to="/join"
+            to="/register"
             class="hover:bg-slate-200 p-[10px] cursor-pointer"
             >Join</RouterLink
           >

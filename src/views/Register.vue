@@ -5,7 +5,7 @@
     <div
       class="border w-[400px] h-[500px] rounded-xl shadow-xl flex flex-col gap-[20px] justify-center items-center bg-white"
     >
-      <span class="text-2xl">카카오톡으로 편하게 로그인하세요!</span>
+      <span class="text-2xl">카카오톡으로 편하게 회원가입하세요!</span>
       <img
         src="@/assets/images/kakao_login.png"
         class="cursor-pointer"

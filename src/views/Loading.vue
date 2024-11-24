@@ -7,7 +7,9 @@
 <script setup>
 import { onMounted } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 const { VITE_API_BASE } = import.meta.env;
+const router = useRouter();
 // 카카오 로그인 처리 함수
 const sendCodeToServer = () => {
   // URL에서 `code` 추출
@@ -19,7 +21,12 @@ const sendCodeToServer = () => {
       .post(VITE_API_BASE + "/user/kakao", { code })
       .then((response) => {
         console.log("서버 응답:", response.data);
-        // 서버 응답 처리 (예: 토큰 저장, 페이지 이동 등)
+        if (response.data.isMember) {
+          router.push("/");
+        } else {
+          alert("회원정보가 없어 회원가입 페이지로 이동합니다");
+          router.push("/join");
+        }
       })
       .catch((error) => {
         console.error("인증 코드 전송 실패:", error);

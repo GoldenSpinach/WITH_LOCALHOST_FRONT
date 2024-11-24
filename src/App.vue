@@ -11,12 +11,14 @@ import { requestNotificationPermission } from "@/api/fcm";
 </script>
 
 <template>
-  <Header />
-  <button @click="requestNotificationPermission">
-    oerqhguoqheorgoieqrogoerq
-  </button>
-  <ChatButton />
-  <RouterView />
+  <div class="bg-neutral-50">
+    <Header />
+    <button @click="requestNotificationPermission">
+      oerqhguoqheorgoieqrogoerq
+    </button>
+    <ChatButton />
+    <RouterView />
+  </div>
 </template>
 
 <style scoped></style>

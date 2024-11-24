@@ -1,74 +1,90 @@
 <template>
-  <div class="w-full max-w-lg mx-auto p-6 border rounded-md shadow-md">
-    <h2 class="text-2xl font-bold mb-6">회원가입</h2>
-    <form @submit.prevent="handleSubmit">
-      <!-- 이메일 입력 -->
-      <div class="mb-4">
-        <label for="email" class="block text-sm font-medium mb-1">이메일</label>
-        <input
-          type="email"
-          id="email"
-          v-model="form.email"
-          placeholder="이메일을 입력하세요"
-          class="w-full p-2 border rounded"
-          required
-        />
-      </div>
-
-      <!-- 전화번호 입력 -->
-      <div class="mb-4">
-        <label for="phoneNumber" class="block text-sm font-medium mb-1"
-          >전화번호</label
-        >
-        <input
-          type="tel"
-          id="phoneNumber"
-          v-model="form.phoneNumber"
-          placeholder="전화번호를 입력하세요 (예: 010-1234-5678)"
-          class="w-full p-2 border rounded"
-          required
-        />
-      </div>
-
-      <!-- 성별 선택 -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-1">성별</label>
-        <div class="flex gap-4">
-          <label class="flex items-center">
-            <input type="radio" value="M" v-model="form.gender" class="mr-2" />
-            남성
-          </label>
-          <label class="flex items-center">
-            <input type="radio" value="F" v-model="form.gender" class="mr-2" />
-            여성
-          </label>
+  <div class="w-full h-[calc(100vh-101px)] flex items-center">
+    <div
+      class="w-full max-w-lg mx-auto p-6 border rounded-md shadow-md bg-white"
+    >
+      <h2 class="text-2xl font-bold mb-6">회원가입</h2>
+      <form @submit.prevent="handleSubmit">
+        <!-- 이메일 입력 -->
+        <div class="mb-4">
+          <label for="email" class="block text-sm font-medium mb-1"
+            >이메일</label
+          >
+          <input
+            type="email"
+            id="email"
+            v-model="form.email"
+            placeholder="이메일을 입력하세요"
+            class="w-full p-2 border rounded"
+            required
+          />
         </div>
-      </div>
 
-      <!-- 생년월일 입력 -->
-      <div class="mb-4">
-        <label for="birthDate" class="block text-sm font-medium mb-1"
-          >생년월일</label
-        >
-        <input
-          type="date"
-          id="birthDate"
-          v-model="form.birthDate"
-          class="w-full p-2 border rounded"
-          required
-        />
-      </div>
+        <!-- 전화번호 입력 -->
+        <div class="mb-4">
+          <label for="phoneNumber" class="block text-sm font-medium mb-1"
+            >전화번호</label
+          >
+          <input
+            type="tel"
+            id="phoneNumber"
+            v-model="form.phoneNumber"
+            placeholder="전화번호를 입력하세요 (예: 010-1234-5678)"
+            class="w-full p-2 border rounded"
+            required
+          />
+        </div>
 
-      <!-- 제출 버튼 -->
-      <div class="mt-6">
-        <button
-          type="submit"
-          class="w-full p-3 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          회원가입
-        </button>
-      </div>
-    </form>
+        <!-- 성별 선택 -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">성별</label>
+          <div class="flex gap-4">
+            <label class="flex items-center">
+              <input
+                type="radio"
+                value="M"
+                v-model="form.gender"
+                class="mr-2"
+              />
+              남성
+            </label>
+            <label class="flex items-center">
+              <input
+                type="radio"
+                value="F"
+                v-model="form.gender"
+                class="mr-2"
+              />
+              여성
+            </label>
+          </div>
+        </div>
+
+        <!-- 생년월일 입력 -->
+        <div class="mb-4">
+          <label for="birthDate" class="block text-sm font-medium mb-1"
+            >생년월일</label
+          >
+          <input
+            type="date"
+            id="birthDate"
+            v-model="form.birthDate"
+            class="w-full p-2 border rounded"
+            required
+          />
+        </div>
+
+        <!-- 제출 버튼 -->
+        <div class="mt-6">
+          <button
+            type="submit"
+            class="w-full p-3 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            회원가입
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -92,8 +108,19 @@ const handleSubmit = () => {
   }
 };
 
+// 이메일 유효성 검사 함수
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 정규표현식
+  return emailRegex.test(email);
+};
+
 // 간단한 유효성 검사 함수
 const validateForm = () => {
+  // 이메일 유효성 검사 추가
+  if (!isValidEmail(form.value.email)) {
+    alert("올바른 이메일 형식을 입력해주세요.");
+    return false;
+  }
   return (
     form.value.email &&
     form.value.phoneNumber &&
