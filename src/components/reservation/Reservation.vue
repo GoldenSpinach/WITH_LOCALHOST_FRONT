@@ -44,7 +44,7 @@
     </div>
     <div class="w-1/2 pt-[30px] ps-[15px]">
       <span class="text-lg">내 리뷰</span>
-      <div class="w-full border h-[170px] round">
+      <div class="w-full border h-[170px] rounded-md">
         <template v-if="reviewInfo">
           <div
             class="w-full h-[170px] box-border px-[15px] py-[5px] flex flex-col"
@@ -78,44 +78,68 @@
                   class="w-[30px] cursor-pointer"
                   src="@/assets/images/trashcan.svg"
                   alt=""
-                  @click="clickDelete(reservation.myReview.reservationId)"
+                  @click="clickDelete()"
                 />
               </template>
               <template v-else>
                 <div class="flex items-center justify-start w-full gap-[5px]">
-                  <button
-                    class="px-[15px]"
-                    @click="clickUpdate(reservation.myReview.reservationId)"
-                  >
-                    완료
-                  </button>
+                  <button class="px-[15px]" @click="clickUpdate()">완료</button>
                   <button class="px-[15px]" @click="changeMode()">취소</button>
                 </div>
               </template>
             </div>
           </div>
         </template>
-        <template v-else
-          ><div
+        <template v-else>
+          <div
+            v-if="!isNewReviewMode"
             class="text-xl h-full text-slate-400 flex items-center justify-center"
           >
             <span>아직 리뷰를 작성하지 않았어요</span>
-          </div></template
-        >
+            <button
+              @click="startNewReview()"
+              class="ml-[10px] px-[15px] py-[5px] bg-blue-400 text-white rounded-md"
+            >
+              리뷰 작성
+            </button>
+          </div>
+          <div
+            v-if="isNewReviewMode"
+            class="flex flex-col gap-[10px] mt-[15px]"
+          >
+            <textarea
+              v-model="newReviewContent"
+              class="w-full border h-[100px] rounded-md px-[15px] py-[10px] resize-none"
+              placeholder="리뷰 내용을 입력하세요"
+            ></textarea>
+            <div class="flex items-center justify-start w-full gap-[5px]">
+              <button
+                class="px-[15px] bg-blue-400 text-white rounded-md"
+                @click="submitNewReview()"
+              >
+                리뷰 제출
+              </button>
+              <button class="px-[15px]" @click="cancelNewReview()">취소</button>
+            </div>
+          </div>
+        </template>
       </div>
     </div>
   </div>
 </template>
+
 <script setup>
-import { onMounted, ref, watch, watchEffect } from "vue";
+import { ref, watch } from "vue";
 import { deleteReview, updateReview } from "@/api/member";
+
 const props = defineProps({
   reservation: Object,
 });
 
-const reviews = ref([]);
 const isUpdateMode = ref(false);
+const isNewReviewMode = ref(false);
 const reviewInfo = ref(null);
+const newReviewContent = ref("");
 
 watch(
   () => props.reservation,
@@ -134,18 +158,48 @@ watch(
 );
 
 const clickDelete = async () => {
-  const res = await deleteReview(props.reservation.reservationId);
+  await deleteReview(props.reservation.reservationId);
+  reviewInfo.value = null; // 리뷰 삭제 후, 리뷰 정보 초기화
 };
+
 const clickUpdate = async () => {
-  console.log("수정", reviewInfo.value);
-  const res = await updateReview({
+  await updateReview({
     reservater: "minji123",
     ...reviewInfo.value,
   });
   changeMode();
 };
+
 const changeMode = () => {
   isUpdateMode.value = !isUpdateMode.value;
 };
+
+// 새로운 리뷰 작성 시작
+const startNewReview = () => {
+  isNewReviewMode.value = true;
+};
+
+// 새로운 리뷰 제출
+const submitNewReview = async () => {
+  // await createReview({
+  //   reservationId: props.reservation.reservationId,
+  //   reviewContent: newReviewContent.value,
+  //   reviewScore: 5, // 기본 점수 예시 (사용자 입력을 받을 수도 있음)
+  // });
+  // reviewInfo.value = {
+  //   reservationId: props.reservation.reservationId,
+  //   reviewContent: newReviewContent.value,
+  //   reviewScore: 5,
+  // };
+  isNewReviewMode.value = false;
+  newReviewContent.value = "";
+};
+
+// 새로운 리뷰 작성 취소
+const cancelNewReview = () => {
+  isNewReviewMode.value = false;
+  newReviewContent.value = "";
+};
 </script>
+
 <style></style>
