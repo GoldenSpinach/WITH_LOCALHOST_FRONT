@@ -34,11 +34,11 @@ const updateReview = async (reservator) => {
   }
 };
 
-const join = async (info) => {
+const join = async (info, id) => {
   try {
     const res = await accessClient.post("/user/join", {
       ...info,
-      userId: "minji123",
+      userId: id,
     });
     return res.data;
   } catch (err) {
@@ -47,4 +47,13 @@ const join = async (info) => {
   }
 };
 
-export { getReviews, deleteReview, updateReview, join };
+const getMe = async () => {
+  try {
+    const res = await accessClient.get("/user/info");
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
+};
+export { getReviews, deleteReview, updateReview, join, getMe };

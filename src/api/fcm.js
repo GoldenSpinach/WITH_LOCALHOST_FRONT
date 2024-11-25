@@ -1,7 +1,7 @@
 import { getToken, onMessage } from "firebase/messaging";
-// import { messaging } from "../../firebase";
+import { messaging } from "../../firebase";
 const { VITE_PUBLIC_VAPID } = import.meta.env;
-const requestNotificationPermission = async () => {
+const requestNotificationPermission = async (id) => {
   try {
     const currentToken = await getToken(messaging, {
       vapidKey: VITE_PUBLIC_VAPID,
@@ -9,7 +9,7 @@ const requestNotificationPermission = async () => {
     if (currentToken) {
       console.log("FCM 등록 토큰:", currentToken);
       // 서버에 등록 토큰을 저장
-      await sendTokenToServer(currentToken);
+      await sendTokenToServer(currentToken, id);
     } else {
       console.log("푸시 알림 권한을 허용해주세요.");
     }
@@ -18,7 +18,7 @@ const requestNotificationPermission = async () => {
   }
 };
 
-const sendTokenToServer = async (token) => {
+const sendTokenToServer = async (token, id) => {
   // 토큰을 서버로 전송하여 저장
   const { VITE_API_BASE } = import.meta.env;
   console.log("dddddaksdjfgh;aehfgohoa;erhgo;aefhogh");
@@ -26,7 +26,7 @@ const sendTokenToServer = async (token) => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      userId: "minji123",
+      userId: id,
       fcmToken: token,
     }),
   });
@@ -43,4 +43,4 @@ onMessage(messaging, (payload) => {
   }
 });
 
-// export { requestNotificationPermission };
+export { requestNotificationPermission };

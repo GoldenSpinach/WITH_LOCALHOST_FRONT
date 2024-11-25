@@ -38,11 +38,14 @@ accessClient.interceptors.request.use(
 // 응답 인터셉터 추가 (필요 시)
 accessClient.interceptors.response.use(
   (response) => {
-    // 성공적인 응답 처리
-    return response;
+    if (response.data && response.data.accessToken) {
+      // 받은 액세스 토큰을 LocalStorage에 저장
+      localStorage.setItem("accessToken", response.data.accessToken);
+    }
+    return response; // 원래 응답을 그대로 반환
   },
   (error) => {
-    // 에러 응답 처리
+    // 응답에서 오류가 발생했을 때 수행할 작업
     return Promise.reject(error);
   }
 );

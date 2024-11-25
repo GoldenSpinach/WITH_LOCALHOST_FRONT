@@ -8,10 +8,13 @@
 import { onMounted } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
+import { useMemberStore } from "../stores/member";
+import { requestNotificationPermission } from "../api/fcm";
 const { VITE_API_BASE } = import.meta.env;
 const router = useRouter();
+const memberStore = useMemberStore();
 // 카카오 로그인 처리 함수
-const sendCodeToServer = () => {
+const sendCodeToServer = async () => {
   // URL에서 `code` 추출
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get("code");
@@ -19,17 +22,26 @@ const sendCodeToServer = () => {
     // 서버로 인증 코드 전송
     axios
       .post(VITE_API_BASE + "/user/kakao", { code })
-      .then((response) => {
+      .then(async (response) => {
         console.log("서버 응답:", response.data);
-        localStorage.setItem("accessToken", response.data.access_token)
+        localStorage.setItem("accessToken", response.data.accessToken);
         if (response.data.isMember) {
+          const info = {
+            email: response.data.email,
+            id: response.data.id,
+            nickName: response.data.nickName,
+            profileImg: response.data.profileImage,
+          };
+          memberStore.setInfo(info);
+          memberStore.setMember(info.id);
+          await requestNotificationPermission(info.id);
           router.push("/");
         } else {
           alert("회원정보가 없어 회원가입 페이지로 이동합니다");
           router.push({
             path: "/join",
             query: {
-              email: response.data.user_info.kakao_account.email,
+              email: response.data.email,
             },
           });
         }
