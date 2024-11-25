@@ -19,8 +19,7 @@
     <ChatPannel :roomId="roomId" :chatLogs="chattings" :receiver="receiver" :sender="sender" />
   </div>
   <div class="fixed bottom-[15px] right-[15px] cursor-pointer">
-    <img class="w-[75px] cursor-pointer" src="@/assets/images/chat.svg" alt="채팅"
-      @click="isChatBoxToggled = !isChatBoxToggled" />
+    <img class="w-[75px] cursor-pointer" src="@/assets/images/chat.svg" alt="채팅" @click="toggleChatbox" />
   </div>
 </template>
 <script setup>
@@ -77,6 +76,14 @@ const subscribeToRoom = (roomId) => {
   });
 };
 
+const toggleChatbox = async () => {
+  if (isChatBoxToggled.value) {
+    stompClient.deactivate();
+  } else {
+    await initializeWebSocket(roomId.value);
+  }
+  isChatBoxToggled.value = !isChatBoxToggled.value
+}
 const selectRoom = (id, idx) => {
   roomId.value = id;
   receiver.value = rooms.value[idx].chatGuidId !== userId ? rooms.value[idx].chatGuestId : rooms.value[idx].chatGuidId;
