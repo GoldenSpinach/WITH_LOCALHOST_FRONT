@@ -1,4 +1,5 @@
-import { client } from "@/api/client";
+import { client, accessClient } from "@/api/client";
+import { TrackOpTypes } from "vue";
 
 const getReviews = async (memberId) => {
   try {
@@ -33,4 +34,17 @@ const updateReview = async (reservator) => {
   }
 };
 
-export { getReviews, deleteReview, updateReview };
+const join = async (info) => {
+  try {
+    const res = await accessClient.post("/user/join", {
+      ...info,
+      userId: "minji123",
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
+};
+
+export { getReviews, deleteReview, updateReview, join };

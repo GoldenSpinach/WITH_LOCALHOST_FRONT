@@ -21,11 +21,17 @@ const sendCodeToServer = () => {
       .post(VITE_API_BASE + "/user/kakao", { code })
       .then((response) => {
         console.log("서버 응답:", response.data);
+        localStorage.setItem("accessToken", response.data.access_token)
         if (response.data.isMember) {
           router.push("/");
         } else {
           alert("회원정보가 없어 회원가입 페이지로 이동합니다");
-          router.push("/join");
+          router.push({
+            path: "/join",
+            query: {
+              email: response.data.user_info.kakao_account.email,
+            },
+          });
         }
       })
       .catch((error) => {
