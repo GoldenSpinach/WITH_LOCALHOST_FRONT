@@ -1,19 +1,11 @@
 <template>
-  <div
-    class="w-full h-[calc(100vh-101px)] flex justify-center items-center border"
-  >
+  <div class="w-full h-[calc(100vh-101px)] flex justify-center items-center border">
     <div
-      class="border w-[400px] h-[500px] rounded-xl shadow-xl flex flex-col gap-[20px] justify-center items-center bg-white"
-    >
-      <span class="text-2xl text-center text-balance">{{
+      class="border w-[700px] h-[500px] rounded-xl shadow-xl flex flex-col gap-[50px] justify-center items-center bg-white">
+      <span class="text-2xl text-center ">{{
         t("카카오톡으로 편하게 로그인하세요!")
       }}</span>
-      <img
-        src="@/assets/images/kakao_login.png"
-        class="cursor-pointer"
-        :alt="t('로그인')"
-        @click="kakaoLogin"
-      />
+      <img src="@/assets/images/kakao_login.png" class="cursor-pointer" :alt="t('로그인')" @click="kakaoLogin" />
     </div>
   </div>
 </template>
