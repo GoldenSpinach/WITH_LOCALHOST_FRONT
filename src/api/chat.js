@@ -1,5 +1,5 @@
 import { Client } from "@stomp/stompjs";
-import { client } from "@/api/client";
+import { accessClient } from "@/api/client";
 const { VITE_CHAT_BASE } = import.meta.env;
 
 const stompClient = new Client({
@@ -8,7 +8,7 @@ const stompClient = new Client({
 
 const getChatRooms = async (memberId) => {
   try {
-    const res = await client.get(`/chat/chatroomList?userId=${memberId}`);
+    const res = await accessClient.get(`/chat/chatroomList?userId=${memberId}`);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -18,7 +18,7 @@ const getChatRooms = async (memberId) => {
 
 const getChatLogs = async (roomId) => {
   try {
-    const res = await client.get(`/chat/chatList?chatRoomId=${roomId}`);
+    const res = await accessClient.get(`/chat/chatList?chatRoomId=${roomId}`);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -28,7 +28,7 @@ const getChatLogs = async (roomId) => {
 
 const openChatRoom = async (guidId, guestId) => {
   try {
-    const res = await client.post(`/chat/createchatroom`, {
+    const res = await accessClient.post(`/chat/createchatroom`, {
       chatGuidId: guidId,
       chatGuestId: guestId,
     });

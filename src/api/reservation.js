@@ -1,8 +1,10 @@
-import { client } from "@/api/client";
+import { accessClient } from "@/api/client";
 
 const getGuestReservations = async (guestId) => {
   try {
-    const res = await client.get(`/reservation/guestList?guestId=${guestId}`);
+    const res = await accessClient.get(
+      `/reservation/guestList?guestId=${guestId}`
+    );
     return res.data;
   } catch (err) {
     console.log(err);
@@ -12,7 +14,7 @@ const getGuestReservations = async (guestId) => {
 
 const getHostReservations = async (hostId) => {
   try {
-    const res = await client.get(`/reservation/guidList/${hostId}`);
+    const res = await accessClient.get(`/reservation/guidList/${hostId}`);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -22,7 +24,7 @@ const getHostReservations = async (hostId) => {
 
 const determineReservation = async (reservationId, type) => {
   try {
-    const res = await client.put(`/reservation/modify`, {
+    const res = await accessClient.put(`/reservation/modify`, {
       reservationId,
       reservation_type: type,
     });
@@ -35,7 +37,9 @@ const determineReservation = async (reservationId, type) => {
 
 const getWaitings = async (guideId) => {
   try {
-    const res = await client.get(`/reservation/guidList?guidId=${guideId}`);
+    const res = await accessClient.get(
+      `/reservation/guidList?guidId=${guideId}`
+    );
     return res.data;
   } catch (err) {
     return [];
@@ -44,7 +48,7 @@ const getWaitings = async (guideId) => {
 
 const confirmReservation = async (reservationId, type) => {
   try {
-    const res = await client.put(`/reservation/modify`, {
+    const res = await accessClient.put(`/reservation/modify`, {
       reservationId,
       reservationStatus: type,
     });
@@ -57,7 +61,7 @@ const confirmReservation = async (reservationId, type) => {
 
 const makeReservation = async (info) => {
   try {
-    const res = await client.post(`/reservation/makeReservation`, info);
+    const res = await accessClient.post(`/reservation/makeReservation`, info);
     return res.data;
   } catch (err) {
     console.log(err);

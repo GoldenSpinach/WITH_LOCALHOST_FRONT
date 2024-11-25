@@ -1,7 +1,14 @@
 <template>
   <div class="w-full border-t"></div>
-  <div class="w-full flex flex-col items-center h-screen mt-[50px]" v-if="detail">
-    <img class="w-[30px] self-start mb-[25px] ms-[2%] cursor-pointer" src="@/assets/images/back.svg" alt="Back" />
+  <div
+    class="w-full flex flex-col items-center h-screen mt-[50px]"
+    v-if="detail"
+  >
+    <img
+      class="w-[30px] self-start mb-[25px] ms-[2%] cursor-pointer"
+      src="@/assets/images/back.svg"
+      alt="Back"
+    />
     <div class="w-full flex items-center justify-around mb-[20px]">
       <div class="w-[48%]">
         <div class="border-b mb-[15px] pb-[15px]">
@@ -20,7 +27,10 @@
             <div class="flex flex-col gap-[8px] max-h-[700px] overflow-y-auto">
               <div
                 class="w-full border rounded-lg h-[50px] min-h-[50px] shadow-lg box-border ps-[15px] flex items-center text-ellipsis overflow-hidden cursor-pointer"
-                v-for="activity in detail.activities" :key="activity.actId" @click="selectActivity(activity)">
+                v-for="activity in detail.activities"
+                :key="activity.actId"
+                @click="selectActivity(activity)"
+              >
                 {{ activity.actName }}
               </div>
             </div>
@@ -51,8 +61,11 @@
             </article>
           </div>
           <div class="w-full flex flex-wrap gap-[6px] min-h-[200px]">
-            <div v-for="option in detail.options" :key="option.id"
-              class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full text-center whitespace-nowrap overflow-hidden text-ellipsis">
+            <div
+              v-for="option in detail.options"
+              :key="option.id"
+              class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full text-center whitespace-nowrap overflow-hidden text-ellipsis"
+            >
               {{ option.optionName }}
             </div>
           </div>
@@ -62,7 +75,9 @@
             <div class="flex flex-col gap-[8px] max-h-[400px] overflow-y-auto">
               <div
                 class="w-full rounded-lg h-[50px] min-h-[50px] shadow-lg box-border ps-[15px] flex items-center text-ellipsis overflow-hidden"
-                v-for="(review, index) in detail.reviews" :key="index">
+                v-for="(review, index) in detail.reviews"
+                :key="index"
+              >
                 {{ review.reviewContent }}
               </div>
             </div>
@@ -71,14 +86,26 @@
       </div>
       <div class="flex flex-col items-center w-[40%]">
         <div>
-          <Datepicker v-model="selectedDate" :inline="true" :disabled-dates="disabledDates"
-            :range="{ autoRange: detail.needDate - 1 }" auto-apply style="--dp-cell-padding: 35px" />
+          <Datepicker
+            v-model="selectedDate"
+            :inline="true"
+            :disabled-dates="disabledDates"
+            :range="{ autoRange: detail.needDate - 1 }"
+            auto-apply
+            style="--dp-cell-padding: 35px"
+          />
         </div>
         <div class="w-full justify-around flex mt-[25px]">
-          <button class="w-[35%] h-[45px] bg-blue-400 text-white rounded-lg" @click="sendReservation">
+          <button
+            class="w-[35%] h-[45px] bg-blue-400 text-white rounded-lg"
+            @click="sendReservation"
+          >
             {{ t("예약하기") }}
           </button>
-          <button @click="sendChat" class="w-[35%] h-[45px] bg-blue-400 text-white rounded-lg">
+          <button
+            @click="sendChat"
+            class="w-[35%] h-[45px] bg-blue-400 text-white rounded-lg"
+          >
             {{ t("문의하기") }}
           </button>
         </div>
@@ -151,7 +178,9 @@ onMounted(async () => {
       const endDate = new Date(reservation.endDate);
 
       const adjustedStartDate = new Date(startDate); // 시작일 복사
-      adjustedStartDate.setDate(startDate.getDate() - detail.value.needDate - 1); // 시작일에서 needDate 만큼 뺀 날짜 계산
+      adjustedStartDate.setDate(
+        startDate.getDate() - detail.value.needDate - 1
+      ); // 시작일에서 needDate 만큼 뺀 날짜 계산
 
       // adjustedStartDate부터 endDate까지의 날짜를 disabledDates에 추가
       for (
@@ -174,9 +203,9 @@ const selectActivity = (activity) => {
 const sendChat = async () => {
   const guest = memberStore.memberId;
   const guide = detail.value.guidName;
-  await openChatRoom(guide, guest)
+  await openChatRoom(guide, guest);
   chatStore.toggleChat();
-}
+};
 
 const sendReservation = async () => {
   const info = {
@@ -185,13 +214,14 @@ const sendReservation = async () => {
     startDate: selectedDate.value[0],
     endDate: selectedDate.value[selectedDate.value.length - 1],
     reservationPeople: 1,
-    reservationPay: detail.value.pay
-  }
-  console.log(info)
-  console.log(selectedDate.value)
+    reservationPay: detail.value.pay,
+  };
+  console.log(info);
+  console.log(selectedDate.value);
   const data = await makeReservation(info);
-  console.log(data)
-}
+  console.log(data);
+  alert("예약신청완료!");
+};
 </script>
 
 <style></style>
