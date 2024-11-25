@@ -1,28 +1,30 @@
 <template>
   <div
-    class="w-[450px] border border-zinc-300 rounded-3xl mt-[5px] shadow-xl p-[20px] bg-white"
+    class="w-[450px] border border-zinc-300 rounded-3xl mt-[5px] shadow-xl p-6 bg-white"
   >
     <div>
-      <div class="border-b w-full mb-[15px] flex">
+      <div class="border-b w-full mb-6 flex">
         <span
-          class="text-lg font-semibold inline-block px-[5px] pb-[10px] rounded-t-md me-[20px] cursor-pointer text-center bg-blue-400 text-white"
+          class="text-lg font-semibold inline-block px-4 pb-3 rounded-t-md me-6 cursor-pointer text-center bg-blue-400 text-white"
         >
           {{ t("활동유형") }}
         </span>
       </div>
-      <div class="flex flex-wrap gap-[12px]">
+      <div class="flex flex-wrap gap-4">
         <div
           v-for="category in categories"
           :key="category.categoryId"
           :class="[
-            'border p-[5px] rounded-lg cursor-pointer',
-            seletedCategory === category.categoryId
-              ? 'bg-blue-400 text-white'
-              : 'hover:bg-blue-400 hover:text-white',
+            'border p-4 rounded-lg cursor-pointer transition-all',
+            seletedCategory.includes(category.categoryId)
+              ? 'bg-blue-400 text-white border-blue-400 shadow-md'
+              : 'border-gray-300 hover:bg-blue-50 hover:text-blue-500 hover:shadow-sm',
           ]"
-          @click="select(category.categoryId, category.categoryName)"
+          @click="toggleCategory(category.categoryId, category.categoryName)"
         >
-          {{ category.categoryName }}
+          <span class="flex items-center gap-2">
+            <span>{{ category.categoryName }}</span>
+          </span>
         </div>
       </div>
     </div>

@@ -2,6 +2,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .primary-bg {
+    @apply bg-primary-blue hover:bg-blue-600 text-white;
+  }
+  .secondary-bg {
+    @apply bg-neutral-gray;
+  }
+  .neutral-bg {
+    @apply bg-white;
+  }
+  .primary-text {
+    @apply text-primary-blue;
+  }
+  .neutral-text {
+    @apply text-gray-600;
+  }
+  .highlight-text {
+    @apply text-yellow-500;
+  }
+  .gap-custom-md {
+    gap: 15px;
+  }
+  .padding-custom-lg {
+    padding: 20px;
+  }
+  .section-title {
+    @apply text-2xl font-semibold;
+  }
+  .body-text {
+    @apply text-base font-normal;
+  }
+}
 * {
   padding: 0;
   margin: 0;

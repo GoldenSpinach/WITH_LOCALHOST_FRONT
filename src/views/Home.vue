@@ -73,7 +73,7 @@ onMounted(async () => {
     memberStore.setInfo(info);
   }
   if (memberStore.isLogin && memberStore.memberInfo.birth === null) {
-    alert("회원가입을 완료해주세요");
+    toast("회원가입을 완료해주세요");
     router.push("/join");
   }
   tours.value = await getCurrentTours();

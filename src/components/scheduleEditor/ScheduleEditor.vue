@@ -110,6 +110,7 @@ import { ref, onMounted, defineEmits, defineProps } from "vue";
 import { Loader } from "@googlemaps/js-api-loader";
 import ActOptionSelector from "../actOptionSelector/ActOptionSelector.vue";
 import { useI18n } from "vue-i18n";
+import { toast } from "vue3-toastify";
 
 const props = defineProps({
   activitys: Array,
@@ -139,7 +140,7 @@ const addSchedule = () => {
     !scheduleInfo.value.img ||
     !scheduleInfo.value.actAddress
   ) {
-    alert(t("이름, 설명, 사진, 주소는 필수입니다."));
+    toast(t("이름, 설명, 사진, 주소는 필수입니다."));
     return;
   }
 

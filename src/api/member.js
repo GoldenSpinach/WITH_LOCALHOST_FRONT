@@ -1,12 +1,14 @@
 import { client, accessClient } from "@/api/client";
 import { TrackOpTypes } from "vue";
-
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 const getReviews = async (memberId) => {
   try {
     const res = await accessClient.get(`/review/${memberId}`);
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return [];
   }
 };
@@ -18,6 +20,7 @@ const deleteReview = async (reviewId) => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return [];
   }
 };
@@ -30,6 +33,7 @@ const updateReview = async (reservator) => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return [];
   }
 };
@@ -43,6 +47,7 @@ const join = async (info, id) => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return {};
   }
 };
@@ -53,6 +58,7 @@ const getMe = async () => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return {};
   }
 };
@@ -62,6 +68,7 @@ const logout = async () => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return {};
   }
 };

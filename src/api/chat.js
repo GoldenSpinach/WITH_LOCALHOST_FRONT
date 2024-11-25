@@ -1,5 +1,7 @@
 import { Client } from "@stomp/stompjs";
 import { accessClient } from "@/api/client";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 const { VITE_CHAT_BASE } = import.meta.env;
 
 const stompClient = new Client({
@@ -11,7 +13,7 @@ const getChatRooms = async (memberId) => {
     const res = await accessClient.get(`/chat/chatroomList?userId=${memberId}`);
     return res.data;
   } catch (err) {
-    console.log(err);
+    toast("다시 시도해주세요");
     return [];
   }
 };
@@ -21,7 +23,7 @@ const getChatLogs = async (roomId) => {
     const res = await accessClient.get(`/chat/chatList?chatRoomId=${roomId}`);
     return res.data;
   } catch (err) {
-    console.log(err);
+    toast("다시 시도해주세요");
     return [];
   }
 };
@@ -34,7 +36,7 @@ const openChatRoom = async (guidId, guestId) => {
     });
     return res.data;
   } catch (err) {
-    console.log(err);
+    toast("다시 시도해주세요");
     return [];
   }
 };

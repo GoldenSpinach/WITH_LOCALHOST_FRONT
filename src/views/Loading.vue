@@ -10,6 +10,7 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import { useMemberStore } from "../stores/member";
 import { requestNotificationPermission } from "../api/fcm";
+import { toast } from "vue3-toastify";
 const { VITE_API_BASE } = import.meta.env;
 const router = useRouter();
 const memberStore = useMemberStore();
@@ -37,7 +38,7 @@ const sendCodeToServer = async () => {
           await requestNotificationPermission(info.id);
           router.push("/");
         } else {
-          alert("회원정보가 없어 회원가입 페이지로 이동합니다");
+          toast("회원정보가 없어 회원가입 페이지로 이동합니다");
           router.push({
             path: "/join",
             query: {

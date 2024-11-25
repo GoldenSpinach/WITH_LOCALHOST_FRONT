@@ -1,11 +1,13 @@
 import { client } from "@/api/client";
-
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 const getRegion = async () => {
   try {
     const res = await client.get("/lookup/region");
     return res.data;
   } catch (e) {
     console.log(e);
+    toast("에러!");
     return [];
   }
 };
@@ -16,6 +18,7 @@ const getCities = async (regionId) => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return [];
   }
 };
@@ -26,6 +29,7 @@ const getOptions = async () => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return [];
   }
 };
@@ -36,6 +40,7 @@ const getCategories = async () => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return [];
   }
 };
@@ -46,6 +51,7 @@ const getActivities = async () => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return [];
   }
 };

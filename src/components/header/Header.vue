@@ -1,129 +1,155 @@
 <template>
-  <header class="flex h-[100px] items-center justify-between px-[40px]">
-    <RouterLink to="/" class="w-[100px] h-[50px] bg-sky-500 rounded">
-      <img class="w-[100px] h-[50px]" src="@/assets/images/logo.png" alt="" />
+  <header
+    class="flex h-[80px] items-center justify-between px-8 bg-white shadow-md border-b border-gray-200"
+  >
+    <!-- 로고 -->
+    <RouterLink to="/" class="flex items-center">
+      <img
+        class="w-[120px] h-auto"
+        src="@/assets/images/logo.png"
+        alt="서비스 로고"
+      />
     </RouterLink>
+
+    <!-- 검색창 -->
     <form
       :class="[
-        'flex w-3/4 px-[50px] max-w-[1167px] h-[70px] items-center gap-4 p-4 rounded-full shadow-lg border border-gray-200 relative transition-all duration-500',
-        isHome ? 'mt-[550px]' : 'mt-0',
+        'flex items-center w-full max-w-[800px] h-[60px] rounded-full border border-gray-300 shadow-sm px-6 bg-white transition-all duration-500',
+        isHome ? 'mt-[900px]' : 'mt-0',
       ]"
+      @submit.prevent
     >
-      <div class="flex w-full">
-        <div class="flex flex-col w-1/6 mt-[3px]">
-          <label for="local" class="text-xs text-zinc-400 mb-[5px]">
-            {{ t("지역") }}
-          </label>
+      <div class="flex items-center gap-6 w-full">
+        <!-- 지역 선택 -->
+        <div class="flex flex-col w-[25%] relative">
+          <label class="text-xs text-gray-500 mb-1">{{ t("지역") }}</label>
           <input
             type="text"
-            id="local"
-            :placeholder="t('지역 검색')"
-            class="pe-4 pb-2 w-32 rounded-md focus:outline-none focus:border-blue-500"
-            relative
+            class="w-full text-sm font-light bg-transparent focus:outline-none cursor-pointer border-b border-transparent focus:border-blue-500 pb-1"
             readonly
-            :value="optionStore.regionName"
+            :value="optionStore.regionName || t('지역 검색')"
             @click="toggleAreaDropdown"
           />
+          <AreaSelector
+            v-if="isAreaSelectorToggled"
+            class="absolute z-50 top-[60px] left-0 w-[300%] border border-gray-200 bg-white shadow-md rounded-lg"
+          />
         </div>
-        <AreaSelector
-          v-if="isAreaSelectorToggled"
-          class="absolute z-50 top-[75px] start-[35px]"
-        />
-        <div class="flex flex-col mt-[3px] w-1/6">
-          <label for="local" class="text-xs text-zinc-400 mb-[5px]">
-            {{ t("출발") }}
-          </label>
+
+        <!-- 출발 날짜 -->
+        <div class="flex flex-col w-[25%]">
+          <label for="startDate" class="text-xs text-gray-500 mb-1">{{
+            t("출발")
+          }}</label>
           <input
             type="date"
-            class="pe-4 pb-2 rounded-md focus:outline-none focus:border-blue-500"
+            id="startDate"
+            class="w-full text-sm font-light bg-transparent focus:outline-none border-b border-transparent focus:border-blue-500 pb-1"
             v-model="optionStore.startDate"
           />
         </div>
-        <div class="flex flex-col mt-[3px] w-1/6">
-          <label for="local" class="text-xs text-zinc-400 mb-[5px]">
-            {{ t("종료") }}
-          </label>
+
+        <!-- 종료 날짜 -->
+        <div class="flex flex-col w-[25%]">
+          <label for="endDate" class="text-xs text-gray-500 mb-1">{{
+            t("종료")
+          }}</label>
           <input
             type="date"
-            class="pe-4 pb-2 rounded-md focus:outline-none focus:border-blue-500"
+            id="endDate"
+            class="w-full text-sm font-light bg-transparent focus:outline-none border-b border-transparent focus:border-blue-500 pb-1"
             v-model="optionStore.endDate"
           />
         </div>
-        <div class="flex flex-col mt-[3px] relative w-[47%]">
-          <label for="local" class="text-xs text-zinc-400 mb-[3px]">
-            {{ t("추가옵션") }}
-          </label>
-          <div class="flex gap-[6px] w-full">
-            <div class="flex gap-[6px] relative overflow-hidden">
+
+        <!-- 추가 옵션 -->
+        <div class="flex flex-col w-[25%] relative">
+          <label class="text-xs text-gray-500 mb-1">{{ t("추가옵션") }}</label>
+          <div class="flex gap-2 items-center">
+            <div class="flex items-center gap-2 overflow-hidden">
               <div
                 v-for="option in optionStore.selectedOptions"
                 :key="option.id"
-                class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center whitespace-nowrap overflow-hidden text-ellipsis"
+                class="text-xs bg-blue-500 text-white px-3 py-1 rounded-full cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis"
                 @click="optionStore.deleteOption(option.id)"
               >
                 {{ option.name }}
               </div>
             </div>
             <img
-              class="w-[30px] min-w-[30px] cursor-pointer"
-              src=" @/assets/images/add.svg"
-              alt="설정추가"
+              src="@/assets/images/add.svg"
+              alt="옵션 추가"
+              class="w-[24px] cursor-pointer"
               @click="toggleOptionDropdown"
             />
           </div>
           <OptionSelector
             v-if="isOptionSelectorToggled"
-            class="absolute z-50 top-[75px] start-[15px]"
+            class="absolute z-50 top-[60px] left-0 w-[300%] border border-gray-200 bg-white shadow-md rounded-lg"
           />
         </div>
       </div>
-      <RouterLink to="/guide" class="ml-4 absolute end-[40px] block">
+
+      <!-- 검색 버튼 -->
+      <button
+        type="submit"
+        class="ml-4 bg-blue-500 text-white rounded-full p-3 flex items-center justify-center hover:bg-blue-600 transition-all duration-300"
+        @click="clickSearch"
+      >
         <img
           src="@/assets/images/search.svg"
           :alt="t('검색')"
-          class="w-6 h-6"
+          class="w-4 h-4"
         />
-      </RouterLink>
+      </button>
     </form>
+
+    <!-- 사용자 메뉴 -->
     <div class="relative">
       <div
-        class="flex gap-[15px] p-[10px] border border-zinc-300 rounded-full cursor-pointer"
+        class="flex items-center gap-3 px-4 py-2 border border-gray-300 rounded-full cursor-pointer hover:shadow-md transition-shadow duration-300"
         @click="toggleDropdown"
       >
         <img src="@/assets/images/menu.svg" :alt="t('메뉴')" />
         <img
           src="@/assets/images/default_profile_small.svg"
           :alt="t('프로필')"
+          class="w-8 h-8 rounded-full"
         />
       </div>
       <div
-        class="w-[150px] border border-zinc-300 rounded-lg absolute end-0 mt-[5px] shadow-xl bg-white z-50"
         v-if="isToggled"
+        class="w-[200px] border border-gray-300 rounded-lg absolute right-0 mt-2 shadow-xl bg-white z-50"
       >
-        <ul class="flex flex-col" v-if="memberStore.isLogin">
-          <RouterLink
-            to="/mypage"
-            class="hover:bg-slate-200 p-[10px] cursor-pointer block"
-            >{{ t("프로필") }}</RouterLink
-          >
-          <li
-            class="hover:bg-slate-200 p-[10px] cursor-pointer block"
-            @click="userLogout"
-          >
-            {{ t("로그아웃") }}
-          </li>
-        </ul>
-        <ul class="flex flex-col" v-else>
-          <RouterLink
-            to="/signin"
-            class="hover:bg-slate-200 p-[10px] cursor-pointer"
-            >{{ t("로그인") }}</RouterLink
-          >
-          <RouterLink
-            to="/register"
-            class="hover:bg-slate-200 p-[10px] cursor-pointer"
-            >{{ t("회원가입") }}</RouterLink
-          >
+        <ul class="flex flex-col">
+          <template v-if="memberStore.isLogin">
+            <RouterLink
+              to="/mypage"
+              class="hover:bg-gray-100 p-3 cursor-pointer block"
+            >
+              {{ t("프로필") }}
+            </RouterLink>
+            <li
+              class="hover:bg-gray-100 p-3 cursor-pointer block"
+              @click="userLogout"
+            >
+              {{ t("로그아웃") }}
+            </li>
+          </template>
+          <template v-else>
+            <RouterLink
+              to="/signin"
+              class="hover:bg-gray-100 p-3 cursor-pointer block"
+            >
+              {{ t("로그인") }}
+            </RouterLink>
+            <RouterLink
+              to="/register"
+              class="hover:bg-gray-100 p-3 cursor-pointer block"
+            >
+              {{ t("회원가입") }}
+            </RouterLink>
+          </template>
         </ul>
       </div>
     </div>
@@ -189,6 +215,11 @@ const userLogout = async () => {
   toggleDropdown();
   router.push("/");
 };
+
+const clickSearch = () => {
+  router.push("/guide");
+};
+
 onMounted(() => {
   document.addEventListener("click", handleClickOutside);
 });

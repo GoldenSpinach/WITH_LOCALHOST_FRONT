@@ -147,6 +147,7 @@ import { useChatStore } from "../stores/chatStore";
 import { openChatRoom } from "../api/chat";
 import { makeReservation } from "../api/reservation";
 import { translateWithChatGPT } from "@/api/translate"; // 번역 함수
+import { toast } from "vue3-toastify";
 
 const { t } = useI18n(); // 다국어 번역 함수
 const detail = ref(null);
@@ -243,7 +244,7 @@ const sendReservation = async () => {
   console.log(selectedDate.value);
   const data = await makeReservation(info);
   console.log(data);
-  alert("예약신청완료!");
+  toast("예약신청완료!");
 };
 </script>
 

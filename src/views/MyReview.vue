@@ -107,6 +107,7 @@ import {
   submitReview,
 } from "@/api/member";
 import { translateWithChatGPT } from "@/api/translate"; // 번역 함수 추가
+import { toast } from "vue3-toastify";
 
 const reviews = ref([]);
 const isUpdateMode = ref(false);
@@ -162,7 +163,7 @@ const clickSubmit = async () => {
     newReviewScore.value < 0 ||
     newReviewScore.value > 5
   ) {
-    alert("리뷰 내용과 유효한 평점을 입력하세요.");
+    toast("리뷰 내용과 유효한 평점을 입력하세요.");
     return;
   }
 

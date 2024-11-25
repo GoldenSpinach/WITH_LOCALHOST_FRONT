@@ -1,79 +1,81 @@
 <template>
+  <!-- 채팅 버튼 -->
+  <div class="fixed bottom-[15px] right-[15px]">
+    <div
+      class="relative primary-bg w-[70px] h-[70px] rounded-full flex items-center justify-center shadow-md hover:bg-blue-600"
+      @click="isChatBoxToggled = !isChatBoxToggled"
+    >
+      <img class="w-[35px]" src="@/assets/images/chat.svg" alt="채팅" />
+      <span
+        v-if="rooms.some((room) => room.hasNewMessage)"
+        class="absolute top-[-5px] right-[-5px] bg-red-500 text-white text-xs rounded-full w-[20px] h-[20px] flex items-center justify-center"
+      >
+        !
+      </span>
+    </div>
+  </div>
+
+  <!-- 채팅 패널 -->
   <div
     v-if="isChatBoxToggled"
-    class="w-3/4 max-w-[1150px] h-[1000px] bg-slate-200 rounded-md fixed shadow-2xl end-[25px] bottom-[100px] z-50 flex"
+    class="w-3/4 max-w-[1150px] h-[700px] bg-neutral-bg rounded-lg fixed shadow-2xl end-[25px] bottom-[100px] z-50 flex overflow-hidden"
   >
-    <div class="w-1/4 h-full">
-      <span class="block text-xl ps-[15px] pt-[15px]">채팅</span>
+    <!-- 방 목록 -->
+    <div class="w-1/4 h-full bg-white border-r panel-divider">
+      <span class="section-title primary-text p-4 border-b">채팅 목록</span>
       <div
         v-for="(room, idx) in rooms"
         :key="room.chatRoomId"
         @click="selectRoom(room.chatRoomId, idx)"
-        class="flex flex-col gap-[10px] p-[15px] cursor-pointer hover:bg-slate-300"
+        class="flex flex-col gap-md px-4 py-3 cursor-pointer hover:bg-gray-100"
       >
-        <span class="block text-2xl w-full truncate">{{
-          room.chatGuidId === userId ? room.chatGuestId : room.chatGuidId
-        }}</span>
-        <span class="ms-[5px] truncate w-full block">{{
-          room.lastMessage
-        }}</span>
+        <div class="flex items-center gap-md">
+          <img
+            class="w-[40px] h-[40px] rounded-full bg-gray-200"
+            :src="room.profileImage || '/default-profile.png'"
+            alt="프로필 이미지"
+          />
+          <div class="truncate">
+            <span class="block text-lg font-semibold neutral-text truncate">
+              {{
+                room.chatGuidId === userId ? room.chatGuestId : room.chatGuidId
+              }}
+            </span>
+            <span class="body-text neutral-text truncate">
+              {{ room.lastMessage }}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="h-full border-black w-1px"></div>
+
+    <!-- 채팅 패널 구역 -->
     <ChatPannel
+      class="w-3/4 h-full bg-white"
       :roomId="roomId"
       :chatLogs="chattings"
       :receiver="receiver"
       :sender="sender"
     />
   </div>
-  <div class="fixed bottom-[15px] right-[15px] cursor-pointer">
-    <img
-      class="w-[75px] cursor-pointer"
-      src="@/assets/images/chat.svg"
-      alt="채팅"
-      @click="isChatBoxToggled = !isChatBoxToggled"
-    />
-  </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import ChatPannel from "@/components/chatting/ChatPannel.vue";
 import { getChatRooms } from "@/api/chat";
 import { stompClient } from "../../api/chat";
-import { useChatStore } from "../../stores/chatStore";
-import { useMemberStore } from "../../stores/member";
-import { translateWithChatGPT } from "@/api/translate"; // 번역 함수 추가
-
 const roomId = ref(null);
 const rooms = ref([]);
 const chattings = ref({});
 const sender = ref("");
 const receiver = ref("");
-const chatStore = useChatStore();
-const memberStore = useMemberStore();
+const isChatBoxToggled = ref(false);
 const userId = ref("");
-
-// 채팅방 데이터 번역 함수
-const translateRooms = async (rooms) => {
-  for (const room of rooms) {
-    room.chatGuidId = await translateWithChatGPT(room.chatGuidId); // 가이드 ID 번역
-    room.chatGuestId = await translateWithChatGPT(room.chatGuestId); // 게스트 ID 번역
-    if (room.lastMessage) {
-      room.lastMessage = await translateWithChatGPT(room.lastMessage); // 최근 메시지 번역
-    }
-  }
-};
-
 const initializeWebSocket = async () => {
   stompClient.connectHeaders = {
-    userId: memberStore.memberId, // 헤더에 사용자 ID 추가
+    userId: userId.value, // 헤더에 사용자 ID 추가
   };
-  rooms.value = await getChatRooms(memberStore.memberId);
-
-  // 번역된 채팅방 데이터 적용
-  await translateRooms(rooms.value);
-
+  rooms.value = await getChatRooms(userId.value);
   stompClient.onConnect = () => {
     console.log("WebSocket 연결 성공");
 
@@ -97,7 +99,6 @@ const subscribeToRoom = (roomId) => {
       chattings.value[roomId] = [];
     }
     chattings.value[roomId].push(receivedMessage);
-
     // 방 목록의 최근 메시지 업데이트 (반응형)
     const roomIndex = rooms.value.findIndex(
       (room) => room.chatRoomId === roomId
@@ -112,28 +113,37 @@ const subscribeToRoom = (roomId) => {
   });
 };
 
-const toggleChatbox = async () => {
-  if (chatStore.isChatBoxToggled) {
-    stompClient.deactivate();
-  } else {
-    await initializeWebSocket();
-  }
-  chatStore.toggleChat();
-};
-
 const selectRoom = (id, idx) => {
   roomId.value = id;
-  receiver.value =
-    rooms.value[idx].chatGuidId === memberStore.memberId
-      ? rooms.value[idx].chatGuestId
-      : rooms.value[idx].chatGuidId;
-  sender.value =
-    rooms.value[idx].chatGuidId !== memberStore.memberId
-      ? rooms.value[idx].chatGuestId
-      : rooms.value[idx].chatGuidId;
-  console.log("유저아이디: ", sender.value);
-  console.log("보내는아이디: ", receiver.value);
+  const ID = userId.value;
+  if (rooms.value[idx].chatGuidId !== ID) {
+    sender.value = ID;
+    receiver.value = rooms.value[idx].chatGuidId;
+  } else {
+    receiver.value = ID;
+    sender.value = rooms.value[idx].chatGuidId;
+  }
 };
-</script>
 
-<style></style>
+onMounted(async () => {
+  const id = userId.value;
+  rooms.value = await getChatRooms(id);
+  rooms.value.forEach((room) => (chattings.value[room.chatRoomId] = []));
+  // initializeWebSocket();
+});
+</script>
+<style>
+/* 새 메시지 뱃지 스타일 */
+span.badge {
+  animation: bounce 1s infinite;
+}
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(-3px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+}
+</style>

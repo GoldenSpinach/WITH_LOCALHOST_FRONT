@@ -1,5 +1,6 @@
 import { accessClient } from "@/api/client";
-
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 const getGuestReservations = async (guestId) => {
   try {
     const res = await accessClient.get(
@@ -8,6 +9,7 @@ const getGuestReservations = async (guestId) => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return [];
   }
 };
@@ -18,6 +20,7 @@ const getHostReservations = async (hostId) => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return [];
   }
 };
@@ -31,6 +34,7 @@ const determineReservation = async (reservationId, type) => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return [];
   }
 };
@@ -42,6 +46,7 @@ const getWaitings = async (guideId) => {
     );
     return res.data;
   } catch (err) {
+    toast("에러!");
     return [];
   }
 };
@@ -55,6 +60,7 @@ const confirmReservation = async (reservationId, type) => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return null;
   }
 };
@@ -65,6 +71,7 @@ const makeReservation = async (info) => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return null;
   }
 };

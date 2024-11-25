@@ -1,51 +1,52 @@
 <template>
   <div
-    class="w-[450px] border border-zinc-300 rounded-3xl mt-[5px] shadow-xl p-[20px] bg-white"
+    class="w-[450px] border border-zinc-300 rounded-3xl mt-5 shadow-xl p-6 bg-white"
   >
     <div>
-      <span class="text-lg font-bold mb-[8px] inline-block">{{
-        t("지역")
-      }}</span>
-      <div class="flex flex-wrap gap-[12px]">
+      <span class="text-lg font-bold mb-4 inline-block">{{ t("지역") }}</span>
+      <div class="flex flex-wrap gap-3">
         <div
           v-for="region in regions"
           :key="region.regionId"
           :class="[
-            'border p-[5px] rounded-lg cursor-pointer',
+            'border p-3 rounded-lg cursor-pointer transition-all duration-200',
             optionStore.regionId == region.regionId
-              ? 'bg-blue-400 text-white'
-              : 'hover:bg-blue-400 hover:text-white',
+              ? 'bg-blue-400 text-white border-blue-400'
+              : 'border-gray-300 hover:bg-blue-50 hover:text-blue-500',
           ]"
           @click="clickRegion(region.regionId, region.regionName)"
         >
-          {{ region.regionName }}
+          <span class="flex items-center gap-1">
+            <span>{{ region.regionName }}</span>
+          </span>
         </div>
       </div>
     </div>
-    <div class="w-full border my-[25px]"></div>
+
+    <div class="w-full border-t my-5 border-gray-300"></div>
+
     <div>
-      <span class="text-lg font-bold mb-[8px] inline-block">{{
-        t("도시")
-      }}</span>
-      <div class="flex flex-wrap gap-[12px]">
+      <span class="text-lg font-bold mb-4 inline-block">{{ t("도시") }}</span>
+      <div class="flex flex-wrap gap-3">
         <div
           v-for="city in cities"
           :key="city.cityId"
           :class="[
-            'border p-[5px] rounded-lg cursor-pointer',
+            'border p-3 rounded-lg cursor-pointer transition-all duration-200',
             optionStore.cities.some((c) => c.id == city.cityId)
-              ? 'bg-blue-400 text-white'
-              : 'hover:bg-blue-400 hover:text-white',
+              ? 'bg-blue-400 text-white border-blue-400'
+              : 'border-gray-300 hover:bg-blue-50 hover:text-blue-500',
           ]"
           @click="clickCity(city.cityId, city.cityName)"
         >
-          {{ city.cityName }}
+          <span class="flex items-center gap-1">
+            <span>{{ city.cityName }}</span>
+          </span>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script setup>
 import { onMounted, ref, watchEffect } from "vue";
 import { getRegion, getCities } from "@/api/region";
@@ -96,4 +97,9 @@ const clickCity = (cityId, name) => {
 };
 </script>
 
-<style></style>
+<style>
+.material-icons {
+  font-size: 16px;
+  vertical-align: middle;
+}
+</style>

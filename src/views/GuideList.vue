@@ -5,7 +5,7 @@
       v-if="isMounted"
     >
       <div class="flex gap-[6px] ps-[15px] py-[15px] border-b relative">
-        <div class="flex gap-[6px] w-3/4">
+        <div class="flex gap-[6px] w-full flex-wrap">
           <div
             v-for="option in optionStore.selectedOptions"
             :key="option.id"

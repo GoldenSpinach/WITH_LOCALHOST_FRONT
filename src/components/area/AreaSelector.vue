@@ -1,45 +1,51 @@
 <template>
   <div
-    class="w-[450px] border border-zinc-300 rounded-3xl mt-[5px] shadow-xl p-[20px] bg-white"
+    class="w-[450px] border border-zinc-300 rounded-3xl mt-5 shadow-xl p-6 bg-white"
   >
     <div>
-      <span class="text-lg font-bold mb-[8px] inline-block">{{
+      <span class="text-xl font-semibold mb-4 inline-block">{{
         t("지역")
       }}</span>
-      <div class="flex flex-wrap gap-[12px]">
+      <div class="flex flex-wrap gap-3">
         <div
           v-for="region in regions"
           :key="region.regionId"
           :class="[
-            'border p-[5px] rounded-lg cursor-pointer',
+            'border p-3 rounded-lg cursor-pointer transition-all duration-200',
             optionStore.regionId == region.regionId
-              ? 'bg-blue-400 text-white'
-              : 'hover:bg-blue-400 hover:text-white',
+              ? 'bg-blue-400 text-white border-blue-400'
+              : 'border-gray-300 hover:bg-blue-50 hover:text-blue-500',
           ]"
           @click="clickRegion(region.regionId, region.regionName)"
         >
-          {{ region.regionName }}
+          <span class="flex items-center gap-1">
+            <span>{{ region.regionName }}</span>
+          </span>
         </div>
       </div>
     </div>
-    <div class="w-full border my-[25px]"></div>
+
+    <div class="w-full border-t my-5 border-gray-200"></div>
+
     <div>
-      <span class="text-lg font-bold mb-[8px] inline-block">{{
+      <span class="text-xl font-semibold mb-4 inline-block">{{
         t("도시")
       }}</span>
-      <div class="flex flex-wrap gap-[12px]">
+      <div class="flex flex-wrap gap-3">
         <div
           v-for="city in cities"
           :key="city.cityId"
           :class="[
-            'border p-[5px] rounded-lg cursor-pointer',
+            'border p-3 rounded-lg cursor-pointer transition-all duration-200',
             optionStore.cities.includes(city.cityId)
-              ? 'bg-blue-400 text-white'
-              : 'hover:bg-blue-400 hover:text-white',
+              ? 'bg-blue-400 text-white border-blue-400'
+              : 'border-gray-300 hover:bg-blue-50 hover:text-blue-500',
           ]"
           @click="clickCity(city.cityId)"
         >
-          {{ city.cityName }}
+          <span class="flex items-center gap-1">
+            <span>{{ city.cityName }}</span>
+          </span>
         </div>
       </div>
     </div>
@@ -90,4 +96,9 @@ const clickCity = (cityId) => {
 };
 </script>
 
-<style></style>
+<style scoped>
+.material-icons {
+  font-size: 16px;
+  vertical-align: middle;
+}
+</style>

@@ -1,5 +1,7 @@
 import { getToken, onMessage } from "firebase/messaging";
 import { messaging } from "../../firebase";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 const { VITE_PUBLIC_VAPID } = import.meta.env;
 const requestNotificationPermission = async (id) => {
   try {
@@ -12,10 +14,10 @@ const requestNotificationPermission = async (id) => {
       const accessToken = localStorage.getItem("accessToken");
       await sendTokenToServer(currentToken, id, accessToken);
     } else {
-      console.log("푸시 알림 권한을 허용해주세요.");
+      toast("푸시 알림 권한을 허용해주세요.");
     }
   } catch (error) {
-    console.error("FCM 등록 토큰 가져오기 실패:", error);
+    toast("FCM 등록 토큰 가져오기 실패:");
   }
 };
 

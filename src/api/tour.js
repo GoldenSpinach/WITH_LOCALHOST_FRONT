@@ -1,4 +1,6 @@
 import { client } from "@/api/client";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 const getCurrentTours = async () => {
   try {
@@ -6,6 +8,7 @@ const getCurrentTours = async () => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return [];
   }
 };
@@ -16,6 +19,7 @@ const getTours = async () => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return [];
   }
 };
@@ -26,6 +30,7 @@ const getConditionTours = async (condition) => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return [];
   }
 };
@@ -36,6 +41,7 @@ const getTourDetail = async (id) => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return {};
   }
 };
@@ -46,6 +52,7 @@ const getMyTours = async (id) => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return [];
   }
 };
@@ -60,6 +67,7 @@ const addTour = async (tour) => {
     return res.data;
   } catch (err) {
     console.log(err);
+    toast("에러!");
     return {};
   }
 };
