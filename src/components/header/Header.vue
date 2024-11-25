@@ -106,7 +106,10 @@
             class="hover:bg-slate-200 p-[10px] cursor-pointer block"
             >{{ t("프로필") }}</RouterLink
           >
-          <li class="hover:bg-slate-200 p-[10px] cursor-pointer block">
+          <li
+            class="hover:bg-slate-200 p-[10px] cursor-pointer block"
+            @click="userLogout"
+          >
             {{ t("로그아웃") }}
           </li>
         </ul>
@@ -135,12 +138,13 @@
 
 <script setup>
 import { onMounted, onUnmounted, ref, watchEffect } from "vue";
-import { RouterLink, useRoute } from "vue-router";
+import { RouterLink, useRoute, useRouter } from "vue-router";
 import AreaSelector from "@/components/area/AreaSelector.vue";
 import OptionSelector from "@/components/option/OptionSelector.vue";
 import { useOptionStore } from "@/stores/optionStore";
 import { useMemberStore } from "@/stores/member";
 import { useI18n } from "vue-i18n";
+import { logout } from "../../api/member";
 
 const memberStore = useMemberStore();
 const isToggled = ref(false);
@@ -149,6 +153,7 @@ const isOptionSelectorToggled = ref(false);
 const isHome = ref(false);
 const optionStore = useOptionStore();
 const route = useRoute();
+const router = useRouter();
 const { t, locale } = useI18n(); // Composition API 방식
 
 const setLanguage = (lang) => {
@@ -178,7 +183,12 @@ const handleClickOutside = (event) => {
   isAreaSelectorToggled.value = false;
   isOptionSelectorToggled.value = false;
 };
-
+const userLogout = async () => {
+  const data = await logout();
+  localStorage.removeItem("accessToken");
+  toggleDropdown();
+  router.push("/");
+};
 onMounted(() => {
   document.addEventListener("click", handleClickOutside);
 });

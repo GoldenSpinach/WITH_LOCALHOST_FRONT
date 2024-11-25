@@ -9,7 +9,8 @@ const requestNotificationPermission = async (id) => {
     if (currentToken) {
       console.log("FCM 등록 토큰:", currentToken);
       // 서버에 등록 토큰을 저장
-      await sendTokenToServer(currentToken, id);
+      const accessToken = localStorage.getItem("accessToken");
+      await sendTokenToServer(currentToken, id, accessToken);
     } else {
       console.log("푸시 알림 권한을 허용해주세요.");
     }
@@ -18,13 +19,16 @@ const requestNotificationPermission = async (id) => {
   }
 };
 
-const sendTokenToServer = async (token, id) => {
+const sendTokenToServer = async (token, id, accessToken) => {
   // 토큰을 서버로 전송하여 저장
   const { VITE_API_BASE } = import.meta.env;
   console.log("dddddaksdjfgh;aehfgohoa;erhgo;aefhogh");
   await fetch(VITE_API_BASE + "/user/fcmtoken", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
     body: JSON.stringify({
       userId: id,
       fcmToken: token,

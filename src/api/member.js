@@ -56,4 +56,13 @@ const getMe = async () => {
     return {};
   }
 };
-export { getReviews, deleteReview, updateReview, join, getMe };
+const logout = async () => {
+  try {
+    const res = await accessClient.post("/user/logout");
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
+};
+export { getReviews, deleteReview, updateReview, join, getMe, logout };
