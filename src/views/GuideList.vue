@@ -84,6 +84,7 @@ import { RouterLink } from "vue-router";
 import { getTours } from "@/api/tour";
 import { getConditionTours } from "../api/tour";
 import { useI18n } from "vue-i18n";
+import { translateWithChatGPT } from "@/api/translate"; // 번역 함수 추가
 
 const { t } = useI18n(); // 다국어 번역 함수
 const isOptionSelectorToggled = ref(false);
@@ -93,6 +94,12 @@ const tours = ref([]);
 const positions = ref([]);
 const toggleOptionDropdown = () => {
   isOptionSelectorToggled.value = !isOptionSelectorToggled.value;
+};
+
+const translateTours = async (tours) => {
+  for (const tour of tours) {
+    tour.title = await translateWithChatGPT(tour.title); // 제목 번역
+  }
 };
 
 watchEffect(() => {
@@ -111,14 +118,20 @@ watch(optionStore, async () => {
       : null;
   const regionId = optionStore.regionId;
   const cities = optionStore.cities.length !== 0 ? optionStore.cities : null;
-  tours.value = await getConditionTours({
+
+  // 조건에 따라 투어 가져오기
+  const fetchedTours = await getConditionTours({
     startDate,
     endDate,
     options,
     regionId,
     cities,
   });
+
+  await translateTours(fetchedTours); // 투어 데이터 번역
+  tours.value = fetchedTours; // 번역 완료 후 업데이트
 });
+
 const handleClickOutside = (event) => {
   const target = event.target;
 
@@ -134,7 +147,9 @@ onMounted(async () => {
   document.addEventListener("click", handleClickOutside);
   isMounted.value = true; // 마운트 시 true로 설정하여 트랜지션이 발생하게 함
   if (optionStore.regionId === null) {
-    tours.value = await getTours();
+    const fetchedTours = await getTours();
+    await translateTours(fetchedTours); // 투어 데이터 번역
+    tours.value = fetchedTours; // 번역 완료 후 업데이트
   }
 });
 

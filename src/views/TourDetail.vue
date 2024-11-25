@@ -146,6 +146,8 @@ import { useMemberStore } from "../stores/member";
 import { useChatStore } from "../stores/chatStore";
 import { openChatRoom } from "../api/chat";
 import { makeReservation } from "../api/reservation";
+import { translateWithChatGPT } from "@/api/translate"; // 번역 함수
+
 const { t } = useI18n(); // 다국어 번역 함수
 const detail = ref(null);
 const positions = ref([]);
@@ -154,11 +156,32 @@ const selectedDate = ref(null);
 const route = useRoute();
 const chatStore = useChatStore();
 const disabledDates = ref([]);
-
 const memberStore = useMemberStore();
+
 onMounted(async () => {
   const id = route.params.tourId;
   detail.value = await getTourDetail(id);
+
+  // 번역 작업
+  if (detail.value) {
+    detail.value.title = await translateWithChatGPT(detail.value.title);
+    detail.value.content = await translateWithChatGPT(detail.value.content);
+
+    // 활동 목록 번역
+    for (const activity of detail.value.activities) {
+      activity.actName = await translateWithChatGPT(activity.actName);
+    }
+
+    // 옵션 번역
+    for (const option of detail.value.options) {
+      option.optionName = await translateWithChatGPT(option.optionName);
+    }
+
+    // 리뷰 번역
+    for (const review of detail.value.reviews) {
+      review.reviewContent = await translateWithChatGPT(review.reviewContent);
+    }
+  }
 
   // 활동 위치 좌표 설정
   positions.value = detail.value.activities.map((activity) => ({

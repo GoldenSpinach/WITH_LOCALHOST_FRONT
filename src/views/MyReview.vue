@@ -106,6 +106,7 @@ import {
   updateReview,
   submitReview,
 } from "@/api/member";
+import { translateWithChatGPT } from "@/api/translate"; // 번역 함수 추가
 
 const reviews = ref([]);
 const isUpdateMode = ref(false);
@@ -114,20 +115,42 @@ const isUpdateMode = ref(false);
 const newReviewContent = ref("");
 const newReviewScore = ref(0);
 
+// 리뷰 번역 함수
+const translateReviews = async (reviews) => {
+  for (const review of reviews) {
+    review.reviewContent = await translateWithChatGPT(review.reviewContent); // 리뷰 내용 번역
+    review.userId = await translateWithChatGPT(review.userId); // 사용자 ID 번역 (닉네임 등일 경우)
+  }
+};
+
 onMounted(async () => {
-  const tmp = "minji123";
-  reviews.value = await getReviews(tmp);
+  const userId = "minji123"; // 실제 사용자 ID
+  reviews.value = await getReviews(userId);
+  await translateReviews(reviews.value); // 로드된 리뷰 번역
 });
 
 const clickDelete = async (reviewId) => {
   console.log("삭제", reviewId);
-  // const res = await deleteReview(reviewId);
+  await deleteReview(reviewId);
+  reviews.value = reviews.value.filter(
+    (review) => review.reservationId !== reviewId
+  );
 };
+
 const clickUpdate = async (reviewId) => {
   console.log("수정", reviewId);
-  const res = await updateReview(reviewId);
+  const updatedReview = reviews.value.find(
+    (review) => review.reservationId === reviewId
+  );
+  if (updatedReview) {
+    await updateReview(reviewId, {
+      content: updatedReview.reviewContent,
+      score: updatedReview.reviewScore,
+    });
+  }
   changeMode();
 };
+
 const changeMode = () => {
   isUpdateMode.value = !isUpdateMode.value;
 };
@@ -147,12 +170,15 @@ const clickSubmit = async () => {
     content: newReviewContent.value,
     score: newReviewScore.value,
     userId: "minji123", // 실제 사용자 ID로 대체
+    date: new Date().toISOString(), // 현재 날짜 추가
   };
 
   await submitReview(newReview);
   reviews.value.push(newReview);
+
   newReviewContent.value = "";
   newReviewScore.value = 0;
 };
 </script>
+
 <style></style>

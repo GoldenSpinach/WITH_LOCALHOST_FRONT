@@ -9,7 +9,6 @@
           <span class="inline-block text-blue-500">{{ t("환영합니다2") }}</span>
           <span class="inline-block">{{ t("환영합니다3") }}</span>
         </div>
-        <!-- 캐러셀 그라데이션 효과 적용 -->
         <div class="relative w-[700px] overflow-hidden">
           <Carousel
             :itemsToShow="3"
@@ -51,6 +50,7 @@ import { RouterLink, useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useMemberStore } from "../stores/member";
 import { getMe } from "../api/member";
+import { translateWithChatGPT } from "../api/translate";
 
 const { t } = useI18n();
 const tours = ref([]);
@@ -77,7 +77,11 @@ onMounted(async () => {
     router.push("/join");
   }
   tours.value = await getCurrentTours();
-  console.log(tours.val);
+  tours.value.forEach(async (tour, idx) => {
+    console.log(tour.title);
+    tours.value[idx].title = await translateWithChatGPT(tour.title);
+  });
+  console.log(tours.value);
 });
 </script>
 

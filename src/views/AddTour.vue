@@ -7,31 +7,31 @@
       <div class="flex w-full h-full pt-[45px] box-border">
         <div class="w-1/4 flex flex-col items-end gap-[15px] pe-[15px] text-xl">
           <div class="p-[5px] hover:bg-blue-200 cursor-pointer rounded-md">
-            제목
+            {{ t("제목") }}
           </div>
           <div class="p-[5px] hover:bg-blue-200 cursor-pointer rounded-md">
-            카테고리
+            {{ t("카테고리") }}
           </div>
           <div class="p-[5px] hover:bg-blue-200 cursor-pointer rounded-md">
-            옵션
+            {{ t("옵션") }}
           </div>
           <div class="p-[5px] hover:bg-blue-200 cursor-pointer rounded-md">
-            가격
+            {{ t("가격") }}
           </div>
           <div class="p-[5px] hover:bg-blue-200 cursor-pointer rounded-md">
-            일정
+            {{ t("일정") }}
           </div>
           <div class="p-[5px] hover:bg-blue-200 cursor-pointer rounded-md">
-            설명
+            {{ t("설명") }}
           </div>
           <div class="p-[5px] hover:bg-blue-200 cursor-pointer rounded-md">
-            유의사항
+            {{ t("유의사항") }}
           </div>
           <button
             class="block w-2/3 bg-blue-400 rounded-md text-white hover:bg-blue-500 text-2xl"
             @click="clickAdd"
           >
-            패키지 등록
+            {{ t("패키지 등록") }}
           </button>
         </div>
         <div class="h-full border-s me-[25px]"></div>
@@ -40,7 +40,9 @@
             class="flex flex-col items-center h-full overflow-y-auto gap-[15px] w-full max-w-[100%]"
           >
             <div class="flex flex-col w-[90%]">
-              <label class="text-2xl mb-[10px]" for="title">제목</label>
+              <label class="text-2xl mb-[10px]" for="title">
+                {{ t("제목") }}
+              </label>
               <input
                 class="border px-[25px] py-[15px] rounded-md"
                 type="text"
@@ -48,9 +50,9 @@
               />
             </div>
             <div class="flex flex-col w-[90%] relative">
-              <label class="text-2xl mb-[10px]" for="title"
-                >편의 & 활동유형</label
-              >
+              <label class="text-2xl mb-[10px]" for="title">
+                {{ t("편의 & 활동유형") }}
+              </label>
               <div class="flex gap-[6px] max-w-[90%]">
                 <div
                   class="flex gap-[6px] max-w-[90%] relative overflow-hidden"
@@ -67,7 +69,7 @@
                 <img
                   class="w-[30px] min-w-[30px] cursor-pointer"
                   src=" @/assets/images/add.svg"
-                  alt="설정추가"
+                  :alt="t('설정추가')"
                   @click="isOptionSelectorToggled = true"
                 />
               </div>
@@ -77,7 +79,9 @@
               />
             </div>
             <div class="flex flex-col w-[90%]">
-              <label class="text-2xl mb-[10px]" for="title">가격</label>
+              <label class="text-2xl mb-[10px]" for="title">
+                {{ t("가격") }}
+              </label>
               <input
                 class="border px-[5px] py-[15px] rounded-md"
                 type="number"
@@ -86,7 +90,9 @@
             </div>
             <ScheduleEditor v-model:activitys="info.activities" />
             <div class="flex flex-col w-[90%]">
-              <label class="text-2xl mb-[10px]" for="title">소요 시간</label>
+              <label class="text-2xl mb-[10px]" for="title">
+                {{ t("소요 시간") }}
+              </label>
               <input
                 class="border px-[5px] py-[15px] rounded-md"
                 type="number"
@@ -94,7 +100,9 @@
               />
             </div>
             <div class="flex flex-col w-[90%]">
-              <label class="text-2xl mb-[10px]" for="title">패키지 설명</label>
+              <label class="text-2xl mb-[10px]" for="title">
+                {{ t("패키지 설명") }}
+              </label>
               <input
                 class="border px-[25px] py-[15px] rounded-md"
                 type="text"
@@ -102,7 +110,9 @@
               />
             </div>
             <div class="flex flex-col w-[90%]">
-              <label class="text-2xl mb-[10px]" for="title">유의사항</label>
+              <label class="text-2xl mb-[10px]" for="title">
+                {{ t("유의사항") }}
+              </label>
               <input
                 class="border px-[25px] py-[15px] rounded-md"
                 type="text"
@@ -110,7 +120,9 @@
               />
             </div>
             <div class="flex flex-col w-[90%] relative">
-              <label class="text-2xl mb-[10px]" for="title">가이드 지역</label>
+              <label class="text-2xl mb-[10px]" for="title">
+                {{ t("가이드 지역") }}
+              </label>
               <div class="flex gap-[6px] max-w-[90%]">
                 <div
                   class="flex gap-[6px] max-w-[90%] relative overflow-hidden"
@@ -127,7 +139,7 @@
                 <img
                   class="w-[30px] min-w-[30px] cursor-pointer"
                   src=" @/assets/images/add.svg"
-                  alt="지역추가"
+                  :alt="t('지역추가')"
                   @click="isAreaSelectorToggled = !isAreaSelectorToggled"
                 />
               </div>
@@ -137,11 +149,13 @@
               />
             </div>
             <div class="flex flex-col w-[90%]">
-              <label class="text-2xl mb-[10px]" for="title">시작지점</label>
+              <label class="text-2xl mb-[10px]" for="title">
+                {{ t("시작지점") }}
+              </label>
               <input
                 ref="autocompleteInput"
                 type="text"
-                placeholder="시작지점을 입력해주세요(이곳이 검색기준이 됩니다)"
+                :placeholder="t('시작지점을 입력해주세요')"
                 class="w-full p-2 border rounded"
               />
             </div>
@@ -149,9 +163,10 @@
               <label
                 class="text-2xl cursor-pointer flex items-center"
                 for="tour-image"
-                >대표 이미지(클릭)
-                <img src="@/assets/images/file.svg" alt="사진업로드"
-              /></label>
+              >
+                {{ t("대표 이미지") }}
+                <img src="@/assets/images/file.svg" :alt="t('사진업로드')" />
+              </label>
               <input
                 class="hidden"
                 type="file"
@@ -176,6 +191,9 @@ import { Loader } from "@googlemaps/js-api-loader";
 import TourAreaSelector from "@/components/tourAreaSelector/TourAreaSelector.vue";
 import { addTour } from "../api/tour";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n(); // 다국어 번역 함수
 
 const { VITE_GOOGLE_MAP_KEY } = import.meta.env;
 const isOptionSelectorToggled = ref(false);

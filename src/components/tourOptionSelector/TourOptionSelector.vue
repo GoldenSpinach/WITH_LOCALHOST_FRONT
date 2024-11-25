@@ -10,16 +10,18 @@
             selectorMenu === 'OPTION' ? 'bg-blue-400 text-white' : '',
           ]"
           @click="selectorMenu = 'OPTION'"
-          >편의</span
         >
+          {{ t("편의") }}
+        </span>
         <span
           :class="[
             'text-lg font-semibold inline-block px-[5px] pb-[10px] rounded-t-md me-[20px] cursor-pointer text-center',
             selectorMenu === 'CATEGORY' ? 'bg-blue-400 text-white' : '',
           ]"
           @click="selectorMenu = 'CATEGORY'"
-          >활동유형</span
         >
+          {{ t("활동유형") }}
+        </span>
       </div>
       <div class="flex flex-wrap gap-[12px]">
         <template v-if="selectorMenu === 'OPTION'">
@@ -29,7 +31,7 @@
             :class="[
               'border p-[5px] rounded-lg cursor-pointer',
               tourOptionStore.selectedOptions.some(
-                (opt) => opt.id == option.categoryId
+                (opt) => opt.id === option.categoryId
               )
                 ? 'bg-blue-400 text-white'
                 : 'hover:bg-blue-400 hover:text-white',
@@ -52,7 +54,7 @@
             :class="[
               'border p-[5px] rounded-lg cursor-pointer',
               tourOptionStore.selectedOptions.some(
-                (opt) => opt.id == category.categoryId
+                (opt) => opt.id === category.categoryId
               )
                 ? 'bg-blue-400 text-white'
                 : 'hover:bg-blue-400 hover:text-white',
@@ -77,15 +79,30 @@
 import { onMounted, ref } from "vue";
 import { getOptions, getCategories } from "@/api/region";
 import { useTourOptionStore } from "../../stores/tourOptionStore";
+import { translateWithChatGPT } from "@/api/translate";
+import { useI18n } from "vue-i18n";
+
 const tourOptionStore = useTourOptionStore();
 const options = ref([]);
 const categories = ref([]);
-// OPTION = 편의 / CATEGORY = 활동유형
 const selectorMenu = ref("OPTION");
+
+const { t } = useI18n();
+
+// 데이터 번역
+const translateData = async (data, field) => {
+  for (const item of data) {
+    item[field] = await translateWithChatGPT(item[field]);
+  }
+};
 
 onMounted(async () => {
   options.value = await getOptions();
   categories.value = await getCategories();
+
+  // 번역 처리
+  await translateData(options.value, "categoryName");
+  await translateData(categories.value, "categoryName");
 });
 </script>
 

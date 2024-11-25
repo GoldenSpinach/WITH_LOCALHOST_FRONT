@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col w-[90%]">
-    <span class="text-2xl">일정</span>
+    <span class="text-2xl">{{ t("일정") }}</span>
     <div class="w-full border-t my-[15px]"></div>
     <div class="flex w-full justify-between">
       <div
@@ -15,14 +15,14 @@
           <img
             class="w-[20px] cursor-pointer"
             src="@/assets/images/trashcan.svg"
-            alt="일정 삭제"
+            :alt="t('일정 삭제')"
             @click="deleteSchedule(schedule.id)"
           />
         </div>
       </div>
       <div class="w-[45%] flex flex-col gap-[20px]">
         <div class="w-full flex flex-col gap-[10px]">
-          <label class="text-xl" for="act-title">일정 이름</label>
+          <label class="text-xl" for="act-title">{{ t("일정 이름") }}</label>
           <input
             class="border px-[25px] py-[15px]"
             type="text"
@@ -31,7 +31,7 @@
           />
         </div>
         <div class="w-full flex flex-col gap-[10px]">
-          <label class="text-xl" for="act-description">설명</label>
+          <label class="text-xl" for="act-description">{{ t("설명") }}</label>
           <input
             class="border px-[25px] py-[15px]"
             type="text"
@@ -40,7 +40,9 @@
           />
         </div>
         <div class="flex flex-col w-[90%] relative">
-          <label class="text-xl mb-[10px]" for="title">활동유형</label>
+          <label class="text-xl mb-[10px]" for="title">{{
+            t("활동 유형")
+          }}</label>
           <div class="flex gap-[6px] max-w-[90%] relative">
             <div
               v-if="scheduleInfo.categoryId !== null"
@@ -53,7 +55,7 @@
               v-else
               class="w-[30px] min-w-[30px] cursor-pointer"
               src="@/assets/images/add.svg"
-              alt="설정추가"
+              :alt="t('설정 추가')"
               @click="isOptionSelectorToggled = true"
             />
           </div>
@@ -69,7 +71,7 @@
           <input
             ref="autocompleteInput"
             type="text"
-            placeholder="일정이 시작되는 주소를 입력해주세요"
+            :placeholder="t('일정 시작 주소 입력')"
             class="w-full p-2 border rounded"
           />
         </div>
@@ -78,8 +80,10 @@
             <label
               class="text-sm cursor-pointer flex items-center"
               for="act-image"
-              >사진 업로드 <img src="@/assets/images/file.svg" alt="사진업로드"
-            /></label>
+            >
+              {{ t("사진 업로드") }}
+              <img src="@/assets/images/file.svg" :alt="t('사진 업로드')" />
+            </label>
             <input
               class="hidden"
               type="file"
@@ -92,7 +96,7 @@
               class="w-1/3 bg-blue-400 rounded-md text-white hover:bg-blue-500 h-[40px]"
               @click="addSchedule"
             >
-              추가
+              {{ t("추가") }}
             </button>
           </div>
         </div>
@@ -105,6 +109,7 @@
 import { ref, onMounted, defineEmits, defineProps } from "vue";
 import { Loader } from "@googlemaps/js-api-loader";
 import ActOptionSelector from "../actOptionSelector/ActOptionSelector.vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
   activitys: Array,
@@ -112,6 +117,7 @@ const props = defineProps({
 const emit = defineEmits(["update:activitys"]);
 
 const { VITE_GOOGLE_MAP_KEY } = import.meta.env;
+const { t } = useI18n(); // 번역 함수 추가
 const sid = ref(0); // 새로운 활동의 ID 생성용
 const fileInputRef = ref(null);
 const isOptionSelectorToggled = ref(false);
@@ -123,7 +129,6 @@ const scheduleInfo = ref({
   actLatitude: null,
   actLongitude: null,
   categoryId: null,
-  //   categoryName: null,
 });
 
 const addSchedule = () => {
@@ -134,7 +139,7 @@ const addSchedule = () => {
     !scheduleInfo.value.img ||
     !scheduleInfo.value.actAddress
   ) {
-    alert("이름, 설명, 사진, 주소는 필수입니다.");
+    alert(t("이름, 설명, 사진, 주소는 필수입니다."));
     return;
   }
 

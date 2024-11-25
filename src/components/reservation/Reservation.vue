@@ -25,25 +25,25 @@
             v-if="reservation.reservationStatus === 'A'"
             class="border w-1/2 cursor-pointer self-end bg-blue-400 text-white rounded-lg self-end mt-[95px] me-[10px]"
           >
-            예약완료
+            {{ t("예약완료") }}
           </button>
           <button
             v-else-if="reservation.reservationStatus === 'P'"
             class="border w-1/2 cursor-pointer self-end bg-slate-400 text-white rounded-lg self-end mt-[95px] me-[10px]"
           >
-            예약대기
+            {{ t("예약대기") }}
           </button>
           <button
             v-else
             class="border w-1/2 cursor-pointer self-end bg-red-400 text-white rounded-lg self-end mt-[95px] me-[10px]"
           >
-            예약취소
+            {{ t("예약취소") }}
           </button>
         </div>
       </div>
     </div>
     <div class="w-1/2 pt-[30px] ps-[15px]">
-      <span class="text-lg">내 리뷰</span>
+      <span class="text-lg">{{ t("내 리뷰") }}</span>
       <div class="w-full border h-[170px] rounded-md">
         <template v-if="reviewInfo">
           <div
@@ -83,8 +83,12 @@
               </template>
               <template v-else>
                 <div class="flex items-center justify-start w-full gap-[5px]">
-                  <button class="px-[15px]" @click="clickUpdate()">완료</button>
-                  <button class="px-[15px]" @click="changeMode()">취소</button>
+                  <button class="px-[15px]" @click="clickUpdate()">
+                    {{ t("완료") }}
+                  </button>
+                  <button class="px-[15px]" @click="changeMode()">
+                    {{ t("취소") }}
+                  </button>
                 </div>
               </template>
             </div>
@@ -95,12 +99,12 @@
             v-if="!isNewReviewMode"
             class="text-xl h-full text-slate-400 flex items-center justify-center"
           >
-            <span>아직 리뷰를 작성하지 않았어요</span>
+            <span>{{ t("아직 리뷰를 작성하지 않았어요") }}</span>
             <button
               @click="startNewReview()"
               class="ml-[10px] px-[15px] py-[5px] bg-blue-400 text-white rounded-md"
             >
-              리뷰 작성
+              {{ t("리뷰 작성") }}
             </button>
           </div>
           <div
@@ -110,16 +114,18 @@
             <textarea
               v-model="newReviewContent"
               class="w-full border h-[100px] rounded-md px-[15px] py-[10px] resize-none"
-              placeholder="리뷰 내용을 입력하세요"
+              placeholder="{{ t('리뷰 내용') }}"
             ></textarea>
             <div class="flex items-center justify-start w-full gap-[5px]">
               <button
                 class="px-[15px] bg-blue-400 text-white rounded-md"
                 @click="submitNewReview()"
               >
-                리뷰 제출
+                {{ t("리뷰 제출") }}
               </button>
-              <button class="px-[15px]" @click="cancelNewReview()">취소</button>
+              <button class="px-[15px]" @click="cancelNewReview()">
+                {{ t("취소") }}
+              </button>
             </div>
           </div>
         </template>
@@ -131,7 +137,8 @@
 <script setup>
 import { ref, watch } from "vue";
 import { deleteReview, updateReview } from "@/api/member";
-
+import { translateWithChatGPT } from "@/api/translate"; // 번역 함수 추가
+const { t } = useI18n(); // 번역 함수 추가
 const props = defineProps({
   reservation: Object,
 });
@@ -141,17 +148,34 @@ const isNewReviewMode = ref(false);
 const reviewInfo = ref(null);
 const newReviewContent = ref("");
 
+// 리뷰와 예약 데이터 번역 함수
+const translateReservationData = async (reservation) => {
+  if (reservation) {
+    reservation.title = await translateWithChatGPT(reservation.title); // 패키지 제목 번역
+    reservation.guidName = await translateWithChatGPT(reservation.guidName); // 가이드 이름 번역
+    if (reservation.myReview && reservation.myReview.reviewContent) {
+      reservation.myReview.reviewContent = await translateWithChatGPT(
+        reservation.myReview.reviewContent
+      ); // 리뷰 내용 번역
+    }
+  }
+};
+
+// 예약 데이터 변경 시 번역 실행
 watch(
   () => props.reservation,
-  (newReservation) => {
-    if (newReservation && newReservation.myReview) {
-      reviewInfo.value = {
-        reservationId: newReservation.myReview.reservationId,
-        reviewContent: newReservation.myReview.reviewContent,
-        reviewScore: newReservation.myReview.reviewScore,
-      };
-    } else {
-      reviewInfo.value = null;
+  async (newReservation) => {
+    if (newReservation) {
+      await translateReservationData(newReservation); // 예약 데이터 번역
+      if (newReservation.myReview) {
+        reviewInfo.value = {
+          reservationId: newReservation.myReview.reservationId,
+          reviewContent: newReservation.myReview.reviewContent,
+          reviewScore: newReservation.myReview.reviewScore,
+        };
+      } else {
+        reviewInfo.value = null;
+      }
     }
   },
   { immediate: true }
@@ -181,16 +205,7 @@ const startNewReview = () => {
 
 // 새로운 리뷰 제출
 const submitNewReview = async () => {
-  // await createReview({
-  //   reservationId: props.reservation.reservationId,
-  //   reviewContent: newReviewContent.value,
-  //   reviewScore: 5, // 기본 점수 예시 (사용자 입력을 받을 수도 있음)
-  // });
-  // reviewInfo.value = {
-  //   reservationId: props.reservation.reservationId,
-  //   reviewContent: newReviewContent.value,
-  //   reviewScore: 5,
-  // };
+  // 서버에 새 리뷰 전송 로직
   isNewReviewMode.value = false;
   newReviewContent.value = "";
 };

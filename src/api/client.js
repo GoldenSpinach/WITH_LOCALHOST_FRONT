@@ -1,4 +1,5 @@
 import axios from "axios";
+import { translateWithChatGPT } from "./translate";
 
 const { VITE_API_BASE } = import.meta.env;
 
@@ -50,4 +51,29 @@ accessClient.interceptors.response.use(
   }
 );
 
+const addResponseInterceptor = (client) => {
+  client.interceptors.response.use(
+    async (response) => {
+      // 영어로 설정된 경우 번역하지 않음
+      // if (userLanguage === "ko") {
+      //   return response;
+      // }
+
+      // 응답 데이터 번역 처리
+      // if (response.data) {
+      //   response.data = await translateWithChatGPT(response.data, "userLanguage");
+      // }
+      if (response.data) {
+        console.log("work!");
+        response.data = await translateWithChatGPT(response.data, "일본어");
+      }
+
+      return response;
+    },
+    (error) => Promise.reject(error)
+  );
+};
+
+// addResponseInterceptor(client);
+// addResponseInterceptor(accessClient);
 export { client, accessClient };
