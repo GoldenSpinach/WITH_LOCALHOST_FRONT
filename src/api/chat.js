@@ -25,4 +25,17 @@ const getChatLogs = async (roomId) => {
     return [];
   }
 };
-export { stompClient, getChatRooms, getChatLogs };
+
+const openChatRoom = async (guidId, guestId) => {
+  try {
+    const res = await client.post(`/chat/createchatroom`, {
+      chatGuidId: guidId,
+      chatGuestId: guestId,
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
+export { stompClient, getChatRooms, getChatLogs, openChatRoom };

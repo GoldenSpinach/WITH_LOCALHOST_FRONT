@@ -1,14 +1,7 @@
 <template>
   <div class="w-full border-t"></div>
-  <div
-    class="w-full flex flex-col items-center h-screen mt-[50px]"
-    v-if="detail"
-  >
-    <img
-      class="w-[30px] self-start mb-[25px] ms-[2%] cursor-pointer"
-      src="@/assets/images/back.svg"
-      alt="Back"
-    />
+  <div class="w-full flex flex-col items-center h-screen mt-[50px]" v-if="detail">
+    <img class="w-[30px] self-start mb-[25px] ms-[2%] cursor-pointer" src="@/assets/images/back.svg" alt="Back" />
     <div class="w-full flex items-center justify-around mb-[20px]">
       <div class="w-[48%]">
         <div class="border-b mb-[15px] pb-[15px]">
@@ -27,10 +20,7 @@
             <div class="flex flex-col gap-[8px] max-h-[700px] overflow-y-auto">
               <div
                 class="w-full border rounded-lg h-[50px] min-h-[50px] shadow-lg box-border ps-[15px] flex items-center text-ellipsis overflow-hidden cursor-pointer"
-                v-for="activity in detail.activities"
-                :key="activity.actId"
-                @click="selectActivity(activity)"
-              >
+                v-for="activity in detail.activities" :key="activity.actId" @click="selectActivity(activity)">
                 {{ activity.actName }}
               </div>
             </div>
@@ -61,11 +51,8 @@
             </article>
           </div>
           <div class="w-full flex flex-wrap gap-[6px] min-h-[200px]">
-            <div
-              v-for="option in detail.options"
-              :key="option.id"
-              class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full text-center whitespace-nowrap overflow-hidden text-ellipsis"
-            >
+            <div v-for="option in detail.options" :key="option.id"
+              class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full text-center whitespace-nowrap overflow-hidden text-ellipsis">
               {{ option.optionName }}
             </div>
           </div>
@@ -75,9 +62,7 @@
             <div class="flex flex-col gap-[8px] max-h-[400px] overflow-y-auto">
               <div
                 class="w-full rounded-lg h-[50px] min-h-[50px] shadow-lg box-border ps-[15px] flex items-center text-ellipsis overflow-hidden"
-                v-for="(review, index) in detail.reviews"
-                :key="index"
-              >
+                v-for="(review, index) in detail.reviews" :key="index">
                 {{ review.reviewContent }}
               </div>
             </div>
@@ -86,19 +71,14 @@
       </div>
       <div class="flex flex-col items-center w-[40%]">
         <div>
-          <Datepicker
-            v-model="selectedDate"
-            :inline="true"
-            :disabled-dates="disabledDates"
-            :range="{ autoRange: detail.needDate - 1 }"
-            style="--dp-cell-padding: 35px"
-          />
+          <Datepicker v-model="selectedDate" :inline="true" :disabled-dates="disabledDates"
+            :range="{ autoRange: detail.needDate - 1 }" style="--dp-cell-padding: 35px" />
         </div>
         <div class="w-full justify-around flex mt-[25px]">
           <button class="w-[35%] h-[45px] bg-blue-400 text-white rounded-lg">
             {{ t("예약하기") }}
           </button>
-          <button class="w-[35%] h-[45px] bg-blue-400 text-white rounded-lg">
+          <button @click="sendChat" class="w-[35%] h-[45px] bg-blue-400 text-white rounded-lg">
             {{ t("문의하기") }}
           </button>
         </div>
@@ -128,22 +108,26 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watchEffect } from "vue";
+import { onMounted, ref } from "vue";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import Map from "@/components/map/Map.vue";
 import { getTourDetail } from "@/api/tour";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { useMemberStore } from "../stores/member";
+import { useChatStore } from "../stores/chatStore";
+import { openChatRoom } from "../api/chat";
 const { t } = useI18n(); // 다국어 번역 함수
 const detail = ref(null);
 const positions = ref([]);
 const mapCenter = ref(null); // 지도의 중심을 지정하는 ref
 const selectedDate = ref(null);
 const route = useRoute();
-
+const chatStore = useChatStore();
 const disabledDates = ref([]);
 
+const memberStore = useMemberStore();
 onMounted(async () => {
   const id = route.params.tourId;
   detail.value = await getTourDetail(id);
@@ -181,6 +165,13 @@ onMounted(async () => {
 const selectActivity = (activity) => {
   mapCenter.value = { lat: activity.actLatitude, lng: activity.actLongitude };
 };
+
+const sendChat = async () => {
+  const guest = memberStore.memberId;
+  const guide = detail.value.guidName;
+  await openChatRoom(guide, guest)
+  chatStore.toggleChat();
+}
 </script>
 
 <style></style>

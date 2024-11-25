@@ -1,25 +1,15 @@
 <template>
-  <div
-    class="w-3/4 h-full p-[20px] border-gray-900 flex flex-col justify-end rounded-xl"
-  >
+  <div class="w-3/4 h-full p-[20px] border-gray-900 flex flex-col justify-end rounded-xl">
     <!-- 메시지 표시 영역 -->
-    <div
-      ref="messageContainer"
-      class="flex-grow p-4 overflow-y-auto flex flex-col gap-[15px]"
-    >
+    <div ref="messageContainer" class="flex-grow p-4 overflow-y-auto flex flex-col gap-[15px]">
       <div v-for="message in msgs" :key="message.msgId">
         <!-- 보낸 메시지 -->
-        <div
-          v-if="message.sendId === sender"
-          class="w-full text-end flex flex-col items-end"
-        >
+        <div v-if="message.sendId === sender" class="w-full text-end flex flex-col items-end">
           <div class="flex items-end justify-end gap-[5px] w-full">
             <span class="text-xs text-gray-500 mt-1">
               {{ formatTime(message.msgSendTime) }}
             </span>
-            <span
-              class="block ps-[15px] pe-[15px] bg-white text-xl rounded-lg max-w-[70%] break-words py-[7px]"
-            >
+            <span class="block ps-[15px] pe-[15px] bg-white text-xl rounded-lg max-w-[70%] break-words py-[7px]">
               {{ message.msgContent }}
             </span>
           </div>
@@ -28,9 +18,7 @@
         <!-- 받은 메시지 -->
         <div v-else class="w-full text-start flex flex-col items-start">
           <div class="flex items-end justify-start gap-[5px] w-full">
-            <span
-              class="block ps-[15px] pe-[15px] bg-blue-300 text-xl rounded-lg max-w-[70%] break-words py-[7px]"
-            >
+            <span class="block ps-[15px] pe-[15px] bg-blue-300 text-xl rounded-lg max-w-[70%] break-words py-[7px]">
               {{ message.msgContent }}
             </span>
             <span class="text-xs text-gray-500 mt-1">
@@ -43,19 +31,9 @@
 
     <!-- 메시지 입력 영역 -->
     <div class="flex w-full p-2 items-center">
-      <input
-        class="py-[15px] px-[20px] w-[90%] rounded-md border"
-        type="text"
-        v-model="newMsg"
-        placeholder="메시지를 입력하세요"
-        @keyup.enter="sendMessage"
-      />
-      <img
-        class="w-[10%] cursor-pointer"
-        src="@/assets/images/up_arrow.svg"
-        alt="메시지 전송"
-        @click="sendMessage"
-      />
+      <input class="py-[15px] px-[20px] w-[90%] rounded-md border" type="text" v-model="newMsg" placeholder="메시지를 입력하세요"
+        @keyup.enter="sendMessage" />
+      <img class="w-[10%] cursor-pointer" src="@/assets/images/up_arrow.svg" alt="메시지 전송" @click="sendMessage" />
     </div>
   </div>
 </template>
@@ -144,7 +122,8 @@ watch(
   { deep: true } // 객체 내부 속성 변경까지 감지
 );
 
-onMounted(() => {
+onMounted(async () => {
+  msgs.value = await getChatLogs(props.roomId);
   nextTick(() => scrollToBottom()); // 컴포넌트 로드 시 스크롤 이동
 });
 </script>

@@ -1,7 +1,6 @@
 <template>
   <input type="text" v-model="userId" />
-  <button @click="initializeWebSocket">vasdfasdfasdf</button>
-  <div v-if="isChatBoxToggled"
+  <div v-if="chatStore.isChatBoxToggled"
     class="w-3/4 max-w-[1150px] h-[1000px] bg-slate-200 rounded-md fixed shadow-2xl end-[25px] bottom-[100px] z-50 flex">
     <div class="w-1/4 h-full">
       <span class="block text-xl ps-[15px] pt-[15px]">채팅</span>
@@ -16,29 +15,32 @@
       </div>
     </div>
     <div class="h-full border-black w-1px"></div>
-    <ChatPannel :roomId="roomId" :chatLogs="chattings" :receiver="receiver" :sender="sender" />
+    <ChatPannel v-if="roomId != null" :roomId="roomId" :chatLogs="chattings" :receiver="receiver" :sender="sender" />
   </div>
   <div class="fixed bottom-[15px] right-[15px] cursor-pointer">
     <img class="w-[75px] cursor-pointer" src="@/assets/images/chat.svg" alt="채팅" @click="toggleChatbox" />
   </div>
 </template>
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import ChatPannel from "@/components/chatting/ChatPannel.vue";
 import { getChatRooms } from "@/api/chat";
 import { stompClient } from "../../api/chat";
+import { useChatStore } from "../../stores/chatStore";
+import { useMemberStore } from "../../stores/member";
 const roomId = ref(null);
 const rooms = ref([]);
 const chattings = ref({});
 const sender = ref("");
 const receiver = ref("");
-const isChatBoxToggled = ref(false);
+const chatStore = useChatStore();
+const memberStore = useMemberStore();
 const userId = ref("");
 const initializeWebSocket = async () => {
   stompClient.connectHeaders = {
-    userId: userId.value, // 헤더에 사용자 ID 추가
+    userId: memberStore.memberId, // 헤더에 사용자 ID 추가
   };
-  rooms.value = await getChatRooms(userId.value);
+  rooms.value = await getChatRooms(memberStore.memberId);
   stompClient.onConnect = () => {
     console.log("WebSocket 연결 성공");
 
@@ -77,12 +79,12 @@ const subscribeToRoom = (roomId) => {
 };
 
 const toggleChatbox = async () => {
-  if (isChatBoxToggled.value) {
+  if (chatStore.isChatBoxToggled) {
     stompClient.deactivate();
   } else {
-    await initializeWebSocket(roomId.value);
+    await initializeWebSocket();
   }
-  isChatBoxToggled.value = !isChatBoxToggled.value
+  chatStore.toggleChat();
 }
 const selectRoom = (id, idx) => {
   roomId.value = id;
@@ -99,11 +101,11 @@ const selectRoom = (id, idx) => {
   // }
 };
 
-onMounted(async () => {
-  const id = userId.value;
-  rooms.value = await getChatRooms(id);
-  rooms.value.forEach((room) => (chattings.value[room.chatRoomId] = []));
-  // initializeWebSocket();
-});
+// onMounted(async () => {
+//   console.log(memberStore.memberId)
+//   rooms.value = await getChatRooms(memberStore.memberId);
+//   rooms.value.forEach((room) => (chattings.value[room.chatRoomId] = []));
+//   // initializeWebSocket();
+// });
 </script>
 <style></style>
