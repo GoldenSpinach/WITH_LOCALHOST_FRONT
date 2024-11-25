@@ -55,10 +55,21 @@ const confirmReservation = async (reservationId, type) => {
   }
 };
 
+const makeReservation = async (info) => {
+  try {
+    const res = await client.post(`/reservation/makeReservation`, info);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 export {
   getGuestReservations,
   getHostReservations,
   determineReservation,
   getWaitings,
   confirmReservation,
+  makeReservation,
 };

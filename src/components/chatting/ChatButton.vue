@@ -7,7 +7,7 @@
       <div v-for="(room, idx) in rooms" :key="room.chatRoomId" @click="selectRoom(room.chatRoomId, idx)"
         class="flex flex-col gap-[10px] p-[15px] cursor-pointer hover:bg-slate-300">
         <span class="block text-2xl w-full truncate">{{
-          room.chatGuidId === userId ? room.chatGuestId : room.chatGuidId
+          room.chatGuidId === memberStore.memberId ? room.chatGuestId : room.chatGuidId
         }}</span>
         <span class="ms-[5px] truncate w-full block">{{
           room.lastMessage
@@ -88,8 +88,8 @@ const toggleChatbox = async () => {
 }
 const selectRoom = (id, idx) => {
   roomId.value = id;
-  receiver.value = rooms.value[idx].chatGuidId !== userId ? rooms.value[idx].chatGuestId : rooms.value[idx].chatGuidId;
-  sender.value = rooms.value[idx].chatGuidId === userId ? rooms.value[idx].chatGuestId : rooms.value[idx].chatGuidId;
+  receiver.value = rooms.value[idx].chatGuidId === memberStore.memberId ? rooms.value[idx].chatGuestId : rooms.value[idx].chatGuidId;
+  sender.value = rooms.value[idx].chatGuidId !== memberStore.memberId ? rooms.value[idx].chatGuestId : rooms.value[idx].chatGuidId;
   console.log("유저아이디: ", sender.value)
   console.log("보내는아이디: ", receiver.value)
   // if (rooms.value[idx].chatGuidId !== userId.value) {

@@ -72,10 +72,10 @@
       <div class="flex flex-col items-center w-[40%]">
         <div>
           <Datepicker v-model="selectedDate" :inline="true" :disabled-dates="disabledDates"
-            :range="{ autoRange: detail.needDate - 1 }" style="--dp-cell-padding: 35px" />
+            :range="{ autoRange: detail.needDate - 1 }" auto-apply style="--dp-cell-padding: 35px" />
         </div>
         <div class="w-full justify-around flex mt-[25px]">
-          <button class="w-[35%] h-[45px] bg-blue-400 text-white rounded-lg">
+          <button class="w-[35%] h-[45px] bg-blue-400 text-white rounded-lg" @click="sendReservation">
             {{ t("예약하기") }}
           </button>
           <button @click="sendChat" class="w-[35%] h-[45px] bg-blue-400 text-white rounded-lg">
@@ -118,6 +118,7 @@ import { useI18n } from "vue-i18n";
 import { useMemberStore } from "../stores/member";
 import { useChatStore } from "../stores/chatStore";
 import { openChatRoom } from "../api/chat";
+import { makeReservation } from "../api/reservation";
 const { t } = useI18n(); // 다국어 번역 함수
 const detail = ref(null);
 const positions = ref([]);
@@ -149,13 +150,17 @@ onMounted(async () => {
       const startDate = new Date(reservation.startDate);
       const endDate = new Date(reservation.endDate);
 
-      // startDate부터 endDate까지의 날짜를 disabledDates에 추가
+      const adjustedStartDate = new Date(startDate); // 시작일 복사
+      adjustedStartDate.setDate(startDate.getDate() - detail.value.needDate - 1); // 시작일에서 needDate 만큼 뺀 날짜 계산
+
+      // adjustedStartDate부터 endDate까지의 날짜를 disabledDates에 추가
       for (
-        let date = new Date(startDate);
-        date <= endDate;
-        date.setDate(date.getDate() + 1)
+        let currentDate = new Date(adjustedStartDate);
+        currentDate <= endDate;
+        currentDate.setDate(currentDate.getDate() + 1)
       ) {
-        disabledDates.value.push(new Date(date));
+        console.log(currentDate);
+        disabledDates.value.push(new Date(currentDate));
       }
     });
   }
@@ -171,6 +176,21 @@ const sendChat = async () => {
   const guide = detail.value.guidName;
   await openChatRoom(guide, guest)
   chatStore.toggleChat();
+}
+
+const sendReservation = async () => {
+  const info = {
+    tourId: detail.value.tourId,
+    reservater: memberStore.memberId,
+    startDate: selectedDate.value[0],
+    endDate: selectedDate.value[selectedDate.value.length - 1],
+    reservationPeople: 1,
+    reservationPay: detail.value.pay
+  }
+  console.log(info)
+  console.log(selectedDate.value)
+  const data = await makeReservation(info);
+  console.log(data)
 }
 </script>
 

@@ -111,6 +111,8 @@ watch(
   () => props.chatLogs,
   () => {
     console.log("업데이트 됐습니다!!!!!!!!!!!!!!!!!!!!!!");
+    console.log(props.sender, "sender")
+    console.log(props.receiver, "reciever")
     if (props.chatLogs[props.roomId]) {
       const sendMsg = props.chatLogs[props.roomId];
       console.log(sendMsg);

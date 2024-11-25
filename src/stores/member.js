@@ -8,5 +8,9 @@ export const useMemberStore = defineStore("counter", () => {
   const memberId = computed(() => id.value);
   const isLogin = computed(() => isMemberLogin.value);
 
-  return { memberId, isLogin };
+  const setMember = (uid) => {
+    id.value = uid;
+  };
+
+  return { memberId, isLogin, setMember };
 });

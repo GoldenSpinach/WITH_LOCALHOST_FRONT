@@ -1,5 +1,5 @@
 import { getToken, onMessage } from "firebase/messaging";
-import { messaging } from "../../firebase";
+// import { messaging } from "../../firebase";
 const { VITE_PUBLIC_VAPID } = import.meta.env;
 const requestNotificationPermission = async () => {
   try {
@@ -43,4 +43,4 @@ onMessage(messaging, (payload) => {
   }
 });
 
-export { requestNotificationPermission };
+// export { requestNotificationPermission };
