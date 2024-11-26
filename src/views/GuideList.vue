@@ -5,7 +5,7 @@
       v-if="isMounted"
     >
       <div class="flex gap-[6px] ps-[15px] py-[15px] border-b relative">
-        <div class="flex gap-[6px] w-3/4">
+        <div class="flex gap-[6px] w-full flex-wrap">
           <div
             v-for="option in optionStore.selectedOptions"
             :key="option.id"
@@ -17,7 +17,7 @@
           <img
             class="w-[30px] min-w-[30px] cursor-pointer position-sticky"
             src=" @/assets/images/add.svg"
-            alt="설정추가"
+            :alt="t('설정추가')"
             @click="toggleOptionDropdown"
           />
         </div>
@@ -45,14 +45,14 @@
                   <img
                     class="rounded-md h-[420px]"
                     :src="tour.mainImgUrl"
-                    alt="체험이미지"
+                    :alt="t('체험이미지')"
                   />
                   <div class="w-full flex flex-col ms-[15px]">
                     <div class="flex items-center justify-start">
-                      <img src="@/assets/images/star.svg" alt="" /><span
-                        class="text-center"
-                        >{{ tour.reviewAvg }}</span
-                      >
+                      <img
+                        src="@/assets/images/star.svg"
+                        :alt="t('별점')"
+                      /><span class="text-center">{{ tour.reviewAvg }}</span>
                     </div>
                     <span
                       class="inline-block w-[300px] overflow-hidden whitespace-nowrap text-ellipsis text-sm"
@@ -68,7 +68,7 @@
           </div>
         </div>
         <div class="h-[calc(100vh-165px)] w-1/2">
-          <Map :positions="positions" />
+          <Map :positions="positions" :center="positions[0]" />
         </div>
       </div>
     </div>
@@ -83,7 +83,10 @@ import OptionSelector from "@/components/option/OptionSelector.vue";
 import { RouterLink } from "vue-router";
 import { getTours } from "@/api/tour";
 import { getConditionTours } from "../api/tour";
+import { useI18n } from "vue-i18n";
+import { translateWithChatGPT } from "@/api/translate"; // 번역 함수 추가
 
+const { t } = useI18n(); // 다국어 번역 함수
 const isOptionSelectorToggled = ref(false);
 const optionStore = useOptionStore();
 const isMounted = ref(false);
@@ -91,6 +94,12 @@ const tours = ref([]);
 const positions = ref([]);
 const toggleOptionDropdown = () => {
   isOptionSelectorToggled.value = !isOptionSelectorToggled.value;
+};
+
+const translateTours = async (tours) => {
+  for (const tour of tours) {
+    tour.title = await translateWithChatGPT(tour.title); // 제목 번역
+  }
 };
 
 watchEffect(() => {
@@ -109,14 +118,20 @@ watch(optionStore, async () => {
       : null;
   const regionId = optionStore.regionId;
   const cities = optionStore.cities.length !== 0 ? optionStore.cities : null;
-  tours.value = await getConditionTours({
+
+  // 조건에 따라 투어 가져오기
+  const fetchedTours = await getConditionTours({
     startDate,
     endDate,
     options,
     regionId,
     cities,
   });
+
+  await translateTours(fetchedTours); // 투어 데이터 번역
+  tours.value = fetchedTours; // 번역 완료 후 업데이트
 });
+
 const handleClickOutside = (event) => {
   const target = event.target;
 
@@ -132,7 +147,9 @@ onMounted(async () => {
   document.addEventListener("click", handleClickOutside);
   isMounted.value = true; // 마운트 시 true로 설정하여 트랜지션이 발생하게 함
   if (optionStore.regionId === null) {
-    tours.value = await getTours();
+    const fetchedTours = await getTours();
+    await translateTours(fetchedTours); // 투어 데이터 번역
+    tours.value = fetchedTours; // 번역 완료 후 업데이트
   }
 });
 
