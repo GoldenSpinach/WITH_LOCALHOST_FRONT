@@ -116,13 +116,15 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { join } from "../api/member";
+import { getMe, join } from "../api/member";
 import { useRoute, useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
+import { useMemberStore } from "../stores/member";
 
 const { t } = useI18n(); // 다국어 번역 함수
 const router = useRouter();
 const route = useRoute();
+const memberStore = useMemberStore();
 const form = ref({
   email: "",
   phoneNumber: "",
@@ -137,8 +139,23 @@ const errors = ref({
   birthDate: "",
 });
 
-onMounted(() => {
-  form.value.email = route.query.email || "";
+onMounted(async () => {
+  if (localStorage.getItem("accessToken")) {
+    const data = await getMe();
+    memberStore.setMember(data.userId);
+    const info = {
+      phoneNumber: null,
+      gender: null,
+      nickname: data.nickname,
+      birth: null,
+      profileImage: data.profileImage,
+      userId: data.userId,
+      email: data.email,
+    };
+    memberStore.setInfo(info);
+    form.value.email = memberStore.memberInfo.email;
+    console.log(form.value.email);
+  }
 });
 
 const handleSubmit = async () => {

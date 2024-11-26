@@ -1,7 +1,14 @@
 <template>
   <div class="w-full border-t"></div>
-  <div class="w-full flex flex-col items-center h-screen mt-[50px]" v-if="detail">
-    <img class="w-[30px] self-start mb-[25px] ms-[2%] cursor-pointer" src="@/assets/images/back.svg" alt="Back" />
+  <div
+    class="w-full flex flex-col items-center h-screen mt-[50px]"
+    v-if="detail"
+  >
+    <img
+      class="w-[30px] self-start mb-[25px] ms-[2%] cursor-pointer"
+      src="@/assets/images/back.svg"
+      alt="Back"
+    />
     <div class="w-full flex items-center justify-around mb-[20px]">
       <div class="w-[48%]">
         <div class="border-b mb-[15px] pb-[15px]">
@@ -20,9 +27,15 @@
             <div class="my-[25px] border-b"></div>
             <div class="flex flex-col gap-[8px] max-h-[700px] overflow-y-auto">
               <div
-                class="w-full border rounded-lg h-[50px] min-h-[50px] shadow-lg box-border ps-[15px] flex items-center text-ellipsis overflow-hidden cursor-pointer hover:bg-gray-100 transition duration-300"
-                v-for="activity in detail.activities" :key="activity.actId" @click="selectActivity(activity)">
+                class="w-full border rounded-lg h-[50px] min-h-[50px] shadow-lg box-border ps-[15px] flex flex-col items-start justify-start text-ellipsis overflow-hidden cursor-pointer hover:bg-gray-100 transition duration-300"
+                v-for="activity in detail.activities"
+                :key="activity.actId"
+                @click="selectActivity(activity)"
+              >
                 {{ activity.actName }}
+                <div class="px-[5px] text-sm text-slate-400 w-full truncate">
+                  {{ activity.actContents }}
+                </div>
               </div>
             </div>
           </div>
@@ -31,13 +44,19 @@
             <div class="my-[25px] border-b"></div>
             <div class="w-full grid h-[650px] gap-4 grid-cols-1 sm:grid-cols-2">
               <div v-for="image in detail.activities" :key="image.actId">
-                <img :src="image.actImgUrl" alt="Photo" class="w-full h-[250px] object-cover rounded-lg" />
+                <img
+                  :src="image.actImgUrl"
+                  alt="Photo"
+                  class="w-full h-[250px] object-cover rounded-lg"
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="w-2/5 h-[700px] mt-[64px] shadow-lg rounded-lg overflow-hidden">
+      <div
+        class="w-2/5 h-[700px] mt-[64px] shadow-lg rounded-lg overflow-hidden"
+      >
         <Map :positions="positions" :center="mapCenter" />
       </div>
     </div>
@@ -47,13 +66,18 @@
           <div class="w-full min-h-[300px]">
             <h2 class="text-3xl font-bold">{{ t("소개") }}</h2>
             <div class="my-[25px] border-b"></div>
-            <article class="w-full rounded-lg box-border px-[15px] py-[25px] bg-gray-50 shadow-inner">
+            <article
+              class="w-full rounded-lg box-border px-[15px] py-[25px] bg-gray-50 shadow-inner"
+            >
               {{ detail.content }}
             </article>
           </div>
           <div class="w-full flex flex-wrap gap-[8px] min-h-[200px]">
-            <div v-for="option in detail.options" :key="option.id"
-              class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-500 text-white px-3 py-1 rounded-full text-center whitespace-nowrap overflow-hidden text-ellipsis hover:bg-blue-600 transition duration-300">
+            <div
+              v-for="option in detail.options"
+              :key="option.id"
+              class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-500 text-white px-3 py-1 rounded-full text-center whitespace-nowrap overflow-hidden text-ellipsis hover:bg-blue-600 transition duration-300"
+            >
               {{ option.optionName }}
             </div>
           </div>
@@ -63,7 +87,9 @@
             <div class="flex flex-col gap-[8px] max-h-[400px] overflow-y-auto">
               <div
                 class="w-full rounded-lg h-[50px] min-h-[50px] shadow-lg box-border ps-[15px] flex items-center text-ellipsis overflow-hidden bg-white hover:bg-gray-100 transition duration-300"
-                v-for="(review, index) in detail.reviews" :key="index">
+                v-for="(review, index) in detail.reviews"
+                :key="index"
+              >
                 {{ review.reviewContent }}
               </div>
             </div>
@@ -72,46 +98,51 @@
       </div>
       <div class="flex flex-col items-center w-[40%]">
         <div class="shadow-md rounded-lg p-4">
-          <Datepicker v-model="selectedDate" :inline="true" :disabled-dates="disabledDates"
-            :range="detail.needDate == 1 ? false : { autoRange: detail.needDate - 1, noDisabledRange: true }"
-            :min-date="new Date()" auto-apply style="--dp-cell-padding: 35px" />
+          <Datepicker
+            v-model="selectedDate"
+            :inline="true"
+            :disabled-dates="disabledDates"
+            :range="
+              detail.needDate == 1
+                ? false
+                : { autoRange: detail.needDate - 1, noDisabledRange: true }
+            "
+            :min-date="new Date()"
+            auto-apply
+            style="--dp-cell-padding: 35px"
+          />
         </div>
         <div class="w-full justify-around flex mt-[25px] gap-4">
-          <button class="w-[35%] h-[45px] bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
-            @click="sendReservation">
+          <button
+            class="w-[35%] h-[45px] bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+            @click="sendReservation"
+          >
             {{ t("예약하기") }}
           </button>
-          <button @click="sendChat"
-            class="w-[35%] h-[45px] bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">
+          <button
+            @click="sendChat"
+            class="w-[35%] h-[45px] bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+          >
             {{ t("문의하기") }}
           </button>
         </div>
       </div>
     </div>
     <div class="w-full flex items-center justify-around mt-[50px]">
-      <div class="flex w-[48%]">
-        <div class="w-full min-h-[400px]">
-          <h2 class="text-3xl font-bold">{{ t("호스트 소개") }}</h2>
-          <div class="my-[25px] border-b"></div>
-          <article class="rounded-lg box-border px-[15px] py-[25px] bg-gray-50 shadow-inner">
-            {{ detail.content }}
-          </article>
-        </div>
-      </div>
       <div class="flex w-[40%]">
         <div class="w-full min-h-[400px]">
           <h2 class="text-3xl font-bold">{{ t("유의사항") }}</h2>
           <div class="my-[25px] border-b"></div>
-          <article class="rounded-lg box-border px-[15px] py-[25px] bg-gray-50 shadow-inner">
-            {{ detail.content }}
+          <article
+            class="rounded-lg box-border px-[15px] py-[25px] bg-gray-50 shadow-inner"
+          >
+            {{ detail.notice }}
           </article>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-
 
 <script setup>
 import { onMounted, ref } from "vue";
@@ -205,7 +236,7 @@ const selectActivity = (activity) => {
 
 const sendChat = async () => {
   // const guest = memberStore.memberId;
-  const guideId = detail.value.guidId
+  const guideId = detail.value.guidId;
   const guide = detail.value.guidName;
   await openChatRoom(guideId, guide);
   chatStore.toggleChat();

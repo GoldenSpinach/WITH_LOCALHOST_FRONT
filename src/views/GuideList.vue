@@ -68,7 +68,7 @@
           </div>
         </div>
         <div class="h-[calc(100vh-165px)] w-1/2">
-          <Map :positions="positions" />
+          <Map :positions="positions" :center="positions[0]" />
         </div>
       </div>
     </div>

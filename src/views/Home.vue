@@ -51,6 +51,7 @@ import { useI18n } from "vue-i18n";
 import { useMemberStore } from "../stores/member";
 import { getMe } from "../api/member";
 import { translateWithChatGPT } from "../api/translate";
+import { toast } from "vue3-toastify";
 
 const { t } = useI18n();
 const tours = ref([]);
@@ -62,16 +63,17 @@ onMounted(async () => {
     const data = await getMe();
     memberStore.setMember(data.userId);
     const info = {
-      phoneNumber: null,
-      gender: null,
+      phoneNumber: data.phoneNumber,
+      gender: data.gender,
       nickname: data.nickname,
-      birth: null,
+      birth: data.birth,
       profileImage: data.profileImage,
       userId: data.userId,
       email: data.email,
     };
     memberStore.setInfo(info);
   }
+  console.log(memberStore.memberInfo);
   if (memberStore.isLogin && memberStore.memberInfo.birth === null) {
     toast("회원가입을 완료해주세요");
     router.push("/join");

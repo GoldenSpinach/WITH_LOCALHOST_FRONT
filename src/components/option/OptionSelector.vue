@@ -47,6 +47,7 @@
             <span class="flex items-center gap-1">
               <span>{{ option.categoryName }}</span>
             </span>
+            <img :src="option.categoryImg" alt="" />
           </div>
         </template>
         <template v-else>
@@ -68,6 +69,7 @@
             <span class="flex items-center gap-1">
               <span>{{ category.categoryName }}</span>
             </span>
+            <img :src="option.categoryImg" alt="" />
           </div>
         </template>
       </div>
