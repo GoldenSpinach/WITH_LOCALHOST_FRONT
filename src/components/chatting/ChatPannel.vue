@@ -1,17 +1,25 @@
 <template>
   <div
-    class="w-3/4 h-full p-[20px] border border-gray-200 bg-gray-50 flex flex-col justify-between rounded-xl shadow-md">
+    class="w-3/4 h-full p-[20px] border border-gray-200 bg-gray-50 flex flex-col justify-between rounded-xl shadow-md"
+  >
     <!-- 메시지 표시 영역 -->
-    <div ref="messageContainer" class="flex-grow p-4 overflow-y-auto flex flex-col gap-[15px] bg-white rounded-lg">
+    <div
+      ref="messageContainer"
+      class="flex-grow p-4 overflow-y-auto flex flex-col gap-[15px] bg-white rounded-lg"
+    >
       <div v-for="message in msgs" :key="message.msgId">
         <!-- 보낸 메시지 -->
-        <div v-if="message.sendId === sender" class="w-full text-end flex flex-col items-end">
+        <div
+          v-if="message.sendId === sender"
+          class="w-full text-end flex flex-col items-end"
+        >
           <div class="flex items-end justify-end gap-[5px] w-full">
             <span class="text-xs text-gray-400 mt-1">
               {{ formatTime(message.msgSendTime) }}
             </span>
             <span
-              class="block px-[15px] py-[10px] bg-blue-500 text-white text-base rounded-lg max-w-[70%] break-words shadow-md">
+              class="block px-[15px] py-[10px] bg-blue-500 text-white text-base rounded-lg max-w-[70%] break-words shadow-md"
+            >
               {{ message.msgContent }}
             </span>
           </div>
@@ -21,7 +29,8 @@
         <div v-else class="w-full text-start flex flex-col items-start">
           <div class="flex items-end justify-start gap-[5px] w-full">
             <span
-              class="block px-[15px] py-[10px] bg-gray-200 text-gray-800 text-base rounded-lg max-w-[70%] break-words shadow-md">
+              class="block px-[15px] py-[10px] bg-gray-200 text-gray-800 text-base rounded-lg max-w-[70%] break-words shadow-md"
+            >
               {{ message.msgContent }}
             </span>
             <span class="text-xs text-gray-400 mt-1">
@@ -33,12 +42,20 @@
     </div>
 
     <!-- 메시지 입력 영역 -->
-    <div class="flex w-full p-3 items-center gap-3 bg-white rounded-lg mt-4 shadow-sm">
+    <div
+      class="flex w-full p-3 items-center gap-3 bg-white rounded-lg mt-4 shadow-sm"
+    >
       <input
         class="py-[12px] px-[15px] w-full rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm"
-        type="text" v-model="newMsg" :placeholder="t('메시지를 입력하세요')" @keyup.enter="sendMessage" />
-      <button class="py-[10px] px-[15px] bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all w-[70px]"
-        @click="sendMessage">
+        type="text"
+        v-model="newMsg"
+        :placeholder="t('메시지를 입력하세요')"
+        @keyup.enter="sendMessage"
+      />
+      <button
+        class="py-[10px] px-[15px] bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all w-[70px]"
+        @click="sendMessage"
+      >
         전송
       </button>
     </div>
@@ -49,7 +66,9 @@
 import { ref, watch, onMounted, nextTick } from "vue";
 import { stompClient } from "@/api/chat";
 import { getChatLogs } from "@/api/chat";
+import { translateWithChatGPT } from "@/api/translate"; // 번역 함수 추가
 import { useI18n } from "vue-i18n";
+
 const { t, locale } = useI18n(); // Composition API 방식
 const props = defineProps({
   roomId: String,
@@ -66,6 +85,15 @@ const messageContainer = ref(null); // 메시지 컨테이너를 참조할 ref
 const scrollToBottom = () => {
   if (messageContainer.value) {
     messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
+  }
+};
+
+// 메시지 번역 함수
+const translateMessages = async (messages) => {
+  for (const message of messages) {
+    if (message.msgContent) {
+      message.msgContent = await translateWithChatGPT(message.msgContent);
+    }
   }
 };
 
@@ -109,7 +137,7 @@ watch(
     console.log(props.roomId);
     if (props.roomId !== null) {
       msgs.value = await getChatLogs(props.roomId);
-      console.log(msgs.value);
+      await translateMessages(msgs.value); // 로드된 메시지 번역
       nextTick(() => scrollToBottom()); // 메시지 로드 후 스크롤 이동
     }
   }
@@ -117,14 +145,17 @@ watch(
 
 watch(
   () => props.chatLogs,
-  () => {
+  async () => {
     console.log("업데이트 됐습니다!!!!!!!!!!!!!!!!!!!!!!");
-    console.log(props.sender, "sender")
-    console.log(props.receiver, "reciever")
+    console.log(props.sender, "sender");
+    console.log(props.receiver, "reciever");
     if (props.chatLogs[props.roomId]) {
       const sendMsg = props.chatLogs[props.roomId];
       console.log(sendMsg);
-      msgs.value = [...msgs.value, sendMsg[sendMsg.length - 1]];
+
+      const newMessage = sendMsg[sendMsg.length - 1];
+      await translateMessages([newMessage]); // 새 메시지 번역
+      msgs.value = [...msgs.value.slice(0, sendMsg.length), newMessage];
       console.log(msgs.value);
       nextTick(() => scrollToBottom()); // 메시지 추가 후 스크롤 이동
     }
@@ -135,6 +166,7 @@ watch(
 onMounted(async () => {
   if (props.roomId === null) return;
   msgs.value = await getChatLogs(props.roomId);
+  await translateMessages(msgs.value); // 초기 메시지 번역
   nextTick(() => scrollToBottom()); // 컴포넌트 로드 시 스크롤 이동
 });
 </script>

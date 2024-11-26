@@ -177,7 +177,7 @@ onMounted(async () => {
   if (detail.value) {
     detail.value.title = await translateWithChatGPT(detail.value.title);
     detail.value.content = await translateWithChatGPT(detail.value.content);
-
+    detail.value.notice = await translateWithChatGPT(detail.value.notice);
     // 활동 목록 번역
     for (const activity of detail.value.activities) {
       activity.actName = await translateWithChatGPT(activity.actName);
