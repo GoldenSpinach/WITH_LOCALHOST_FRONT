@@ -49,10 +49,8 @@
 import { ref, watch, onMounted, nextTick } from "vue";
 import { stompClient } from "@/api/chat";
 import { getChatLogs } from "@/api/chat";
-import { translateWithChatGPT } from "@/api/translate";
 import { useI18n } from "vue-i18n";
-const { t } = useI18n(); // 번역 함수 추가
-
+const { t, locale } = useI18n(); // Composition API 방식
 const props = defineProps({
   roomId: String,
   chatLogs: Object,
@@ -75,15 +73,6 @@ const scrollToBottom = () => {
 const formatTime = (time) => {
   if (!time) return "";
   return time.split(":").slice(0, 2).join(":"); // "시:분" 형태로 변환
-};
-
-// 메시지 번역 함수
-const translateMessages = async (messages) => {
-  for (const message of messages) {
-    if (message.msgContent) {
-      message.msgContent = await translateWithChatGPT(message.msgContent);
-    }
-  }
 };
 
 const sendMessage = () => {
@@ -117,9 +106,10 @@ const sendMessage = () => {
 watch(
   () => props.roomId,
   async () => {
+    console.log(props.roomId);
     if (props.roomId !== null) {
       msgs.value = await getChatLogs(props.roomId);
-      await translateMessages(msgs.value); // 메시지 번역
+      console.log(msgs.value);
       nextTick(() => scrollToBottom()); // 메시지 로드 후 스크롤 이동
     }
   }
@@ -127,19 +117,15 @@ watch(
 
 watch(
   () => props.chatLogs,
-  async () => {
+  () => {
+    console.log("업데이트 됐습니다!!!!!!!!!!!!!!!!!!!!!!");
+    console.log(props.sender, "sender")
+    console.log(props.receiver, "reciever")
     if (props.chatLogs[props.roomId]) {
       const sendMsg = props.chatLogs[props.roomId];
-
-      // 새로 추가된 메시지만 번역
-      const newMessage = sendMsg[sendMsg.length - 1];
-      if (newMessage) {
-        newMessage.msgContent = await translateWithChatGPT(
-          newMessage.msgContent
-        );
-      }
-
-      msgs.value = [...msgs.value, newMessage];
+      console.log(sendMsg);
+      msgs.value = [...msgs.value, sendMsg[sendMsg.length - 1]];
+      console.log(msgs.value);
       nextTick(() => scrollToBottom()); // 메시지 추가 후 스크롤 이동
     }
   },
@@ -149,7 +135,6 @@ watch(
 onMounted(async () => {
   if (props.roomId === null) return;
   msgs.value = await getChatLogs(props.roomId);
-  await translateMessages(msgs.value); // 초기 메시지 번역
   nextTick(() => scrollToBottom()); // 컴포넌트 로드 시 스크롤 이동
 });
 </script>

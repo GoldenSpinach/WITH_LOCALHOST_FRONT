@@ -26,7 +26,7 @@
           <div class="truncate">
             <span class="block text-lg font-semibold neutral-text truncate">
               {{
-                room.chatGuidId === userId ? room.chatGuestNickName : room.chatGuidNickName
+                room.chatGuestNickName !== memberStore.memberInfo.nickname ? room.chatGuestNickName : room.chatGuidNickName
               }}
             </span>
             <span class="body-text neutral-text truncate">
@@ -49,8 +49,8 @@ import { getChatRooms } from "@/api/chat";
 import { stompClient } from "../../api/chat";
 import { useChatStore } from "../../stores/chatStore";
 import { useMemberStore } from "../../stores/member";
-import { translateWithChatGPT } from "@/api/translate"; // 번역 함수 추가
-
+import { useI18n } from "vue-i18n";
+const { t, locale } = useI18n(); // Composition API 방식
 const roomId = ref(null);
 const rooms = ref([]);
 const chattings = ref({});
@@ -59,27 +59,12 @@ const receiver = ref("");
 const chatStore = useChatStore();
 const memberStore = useMemberStore();
 const userId = ref("");
-
-// 채팅방 데이터 번역 함수
-const translateRooms = async (rooms) => {
-  for (const room of rooms) {
-    room.chatGuidId = await translateWithChatGPT(room.chatGuidId); // 가이드 ID 번역
-    room.chatGuestId = await translateWithChatGPT(room.chatGuestId); // 게스트 ID 번역
-    if (room.lastMessage) {
-      room.lastMessage = await translateWithChatGPT(room.lastMessage); // 최근 메시지 번역
-    }
-  }
-};
-
 const initializeWebSocket = async () => {
   stompClient.connectHeaders = {
     userId: memberStore.memberId, // 헤더에 사용자 ID 추가
   };
+  console.log(memberStore.memberInfo)
   rooms.value = await getChatRooms(memberStore.memberId);
-
-  // 번역된 채팅방 데이터 적용
-  await translateRooms(rooms.value);
-
   stompClient.onConnect = () => {
     console.log("WebSocket 연결 성공");
 
@@ -103,7 +88,6 @@ const subscribeToRoom = (roomId) => {
       chattings.value[roomId] = [];
     }
     chattings.value[roomId].push(receivedMessage);
-
     // 방 목록의 최근 메시지 업데이트 (반응형)
     const roomIndex = rooms.value.findIndex(
       (room) => room.chatRoomId === roomId
@@ -119,27 +103,34 @@ const subscribeToRoom = (roomId) => {
 };
 
 const toggleChatbox = async () => {
-  chatStore.toggleChat();
-  if (!chatStore.isChatBoxToggled) {
+  if (chatStore.isChatBoxToggled) {
     stompClient.deactivate();
   } else {
     await initializeWebSocket();
   }
-};
-
+  chatStore.toggleChat();
+}
 const selectRoom = (id, idx) => {
   roomId.value = id;
-  receiver.value =
-    rooms.value[idx].chatGuidId === memberStore.memberId
-      ? rooms.value[idx].chatGuestId
-      : rooms.value[idx].chatGuidId;
-  sender.value =
-    rooms.value[idx].chatGuidId !== memberStore.memberId
-      ? rooms.value[idx].chatGuestId
-      : rooms.value[idx].chatGuidId;
-  console.log("유저아이디: ", sender.value);
-  console.log("보내는아이디: ", receiver.value);
+  receiver.value = rooms.value[idx].chatGuidId === memberStore.memberId ? rooms.value[idx].chatGuestId : rooms.value[idx].chatGuidId;
+  sender.value = rooms.value[idx].chatGuidId !== memberStore.memberId ? rooms.value[idx].chatGuestId : rooms.value[idx].chatGuidId;
+  console.log("유저아이디: ", sender.value)
+  console.log("보내는아이디: ", receiver.value)
+  // if (rooms.value[idx].chatGuidId !== userId.value) {
+  //   sender.value = userId.value;
+  //   receiver.value = rooms.value[idx].chatGuidId;
+  // } else {
+  //   receiver.value = userId.value;
+  //   sender.value = rooms.value[idx].chatGuidId;
+  // }
 };
+
+// onMounted(async () => {
+//   console.log(memberStore.memberId)
+//   rooms.value = await getChatRooms(memberStore.memberId);
+//   rooms.value.forEach((room) => (chattings.value[room.chatRoomId] = []));
+//   // initializeWebSocket();
+// });
 </script>
 <style>
 /* 새 메시지 뱃지 스타일 */
