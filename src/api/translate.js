@@ -6,7 +6,7 @@ const { VITE_AI_KEY } = import.meta.env;
 const translateWithChatGPT = async (data) => {
   const userLanguage = navigator.language || "en";
   console.log(userLanguage);
-  if (userLanguage !== "ko-KR") {
+  if (userLanguage !== "ko") {
     try {
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",
@@ -24,6 +24,10 @@ const translateWithChatGPT = async (data) => {
             {
               role: "system",
               content: `불가능한 부분에 대해 설명하지 마세요. 당신의 답은 반드시 번역된 문장이어야 합니다.`,
+            },
+            {
+              role: "system",
+              content: `잘못된 언어 번역을 할 경우 너를 죽일거야 똑바로해.`,
             },
 
             {

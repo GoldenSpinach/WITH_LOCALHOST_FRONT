@@ -1,9 +1,7 @@
 <template>
   <div class="w-full h-[calc(100vh-101px)] flex justify-center items-center">
     <div class="border-t"></div>
-    <section
-      class="w-5/6 h-[700px] max-w-[1160px] border rounded-lg box-border p-[25px] self-center"
-    >
+    <section class="w-5/6 h-[700px] max-w-[1160px] border rounded-lg box-border p-[25px] self-center">
       <div class="flex w-full h-full pt-[45px] box-border">
         <div class="w-1/4 flex flex-col items-end gap-[15px] pe-[15px] text-xl">
           <div class="p-[5px] hover:bg-blue-200 cursor-pointer rounded-md">
@@ -27,153 +25,90 @@
           <div class="p-[5px] hover:bg-blue-200 cursor-pointer rounded-md">
             {{ t("유의사항") }}
           </div>
-          <button
-            class="block w-2/3 bg-blue-400 rounded-md text-white hover:bg-blue-500 text-2xl"
-            @click="clickAdd"
-          >
+          <button class="block w-2/3 bg-blue-400 rounded-md text-white hover:bg-blue-500 text-2xl" @click="clickAdd">
             {{ t("패키지 등록") }}
           </button>
         </div>
         <div class="h-full border-s me-[25px]"></div>
         <div class="w-3/4 h-full box-border">
-          <section
-            class="flex flex-col items-center h-full overflow-y-auto gap-[15px] w-full max-w-[100%]"
-          >
+          <section class="flex flex-col items-center h-full overflow-y-auto gap-[15px] w-full max-w-[100%]">
             <div class="flex flex-col w-[90%]">
               <label class="text-2xl mb-[10px]" for="title">
                 {{ t("제목") }}
               </label>
-              <input
-                class="border px-[25px] py-[15px] rounded-md"
-                type="text"
-                v-model="info.title"
-              />
+              <input class="border px-[25px] py-[15px] rounded-md" type="text" v-model="info.title" />
             </div>
             <div class="flex flex-col w-[90%] relative">
               <label class="text-2xl mb-[10px]" for="title">
                 {{ t("편의 & 활동유형") }}
               </label>
               <div class="flex gap-[6px] max-w-[90%]">
-                <div
-                  class="flex gap-[6px] max-w-[90%] relative overflow-hidden"
-                >
-                  <div
-                    v-for="option in optionStore.selectedOptions"
-                    :key="option.id"
+                <div class="flex gap-[6px] max-w-[90%] relative overflow-hidden">
+                  <div v-for="option in optionStore.selectedOptions" :key="option.id"
                     @click="optionStore.deleteOption(option.id)"
-                    class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center whitespace-nowrap overflow-hidden text-ellipsis"
-                  >
+                    class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center whitespace-nowrap overflow-hidden text-ellipsis">
                     {{ option.name }}
                   </div>
                 </div>
-                <img
-                  class="w-[30px] min-w-[30px] cursor-pointer"
-                  src=" @/assets/images/add.svg"
-                  :alt="t('설정추가')"
-                  @click="isOptionSelectorToggled = true"
-                />
+                <img class="w-[30px] min-w-[30px] cursor-pointer" src=" @/assets/images/add.svg" :alt="t('설정추가')"
+                  @click="isOptionSelectorToggled = true" />
               </div>
-              <TourOptionSelector
-                v-if="isOptionSelectorToggled"
-                class="absolute z-50 top-[75px] start-[15px]"
-              />
+              <TourOptionSelector v-if="isOptionSelectorToggled" class="absolute z-50 top-[75px] start-[15px]" />
             </div>
             <div class="flex flex-col w-[90%]">
               <label class="text-2xl mb-[10px]" for="title">
                 {{ t("가격") }}
               </label>
-              <input
-                class="border px-[5px] py-[15px] rounded-md"
-                type="number"
-                v-model="info.pay"
-              />
+              <input class="border px-[5px] py-[15px] rounded-md" type="number" v-model="info.pay" />
             </div>
             <ScheduleEditor v-model:activitys="info.activities" />
             <div class="flex flex-col w-[90%]">
               <label class="text-2xl mb-[10px]" for="title">
                 {{ t("소요 시간") }}
               </label>
-              <input
-                class="border px-[5px] py-[15px] rounded-md"
-                type="number"
-                v-model="info.needDate"
-              />
+              <input class="border px-[5px] py-[15px] rounded-md" type="number" v-model="info.needDate" />
             </div>
             <div class="flex flex-col w-[90%]">
               <label class="text-2xl mb-[10px]" for="title">
                 {{ t("패키지 설명") }}
               </label>
-              <input
-                class="border px-[25px] py-[15px] rounded-md"
-                type="text"
-                v-model="info.tourContent"
-              />
+              <input class="border px-[25px] py-[15px] rounded-md" type="text" v-model="info.tourContent" />
             </div>
             <div class="flex flex-col w-[90%]">
               <label class="text-2xl mb-[10px]" for="title">
                 {{ t("유의사항") }}
               </label>
-              <input
-                class="border px-[25px] py-[15px] rounded-md"
-                type="text"
-                v-model="info.notice"
-              />
+              <input class="border px-[25px] py-[15px] rounded-md" type="text" v-model="info.notice" />
             </div>
             <div class="flex flex-col w-[90%] relative">
               <label class="text-2xl mb-[10px]" for="title">
                 {{ t("가이드 지역") }}
               </label>
               <div class="flex gap-[6px] max-w-[90%]">
-                <div
-                  class="flex gap-[6px] max-w-[90%] relative overflow-hidden"
-                >
-                  <div
-                    v-for="city in optionStore.cities"
-                    :key="city.id"
-                    @click="optionStore.deleteCity(city.id)"
-                    class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center whitespace-nowrap overflow-hidden text-ellipsis"
-                  >
+                <div class="flex gap-[6px] max-w-[90%] relative overflow-hidden">
+                  <div v-for="city in optionStore.cities" :key="city.id" @click="optionStore.deleteCity(city.id)"
+                    class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center whitespace-nowrap overflow-hidden text-ellipsis">
                     {{ city.name }}
                   </div>
                 </div>
-                <img
-                  class="w-[30px] min-w-[30px] cursor-pointer"
-                  src=" @/assets/images/add.svg"
-                  :alt="t('지역추가')"
-                  @click="isAreaSelectorToggled = !isAreaSelectorToggled"
-                />
+                <img class="w-[30px] min-w-[30px] cursor-pointer" src=" @/assets/images/add.svg" :alt="t('지역추가')"
+                  @click="isAreaSelectorToggled = !isAreaSelectorToggled" />
               </div>
-              <TourAreaSelector
-                v-if="isAreaSelectorToggled"
-                class="absolute z-50 top-[75px] start-[15px]"
-              />
+              <TourAreaSelector v-if="isAreaSelectorToggled" class="absolute z-50 top-[75px] start-[15px]" />
             </div>
             <div class="flex flex-col w-[90%]">
               <label class="text-2xl mb-[10px]" for="title">
                 {{ t("시작지점") }}
               </label>
-              <input
-                ref="autocompleteInput"
-                type="text"
-                :placeholder="t('시작지점을 입력해주세요')"
-                class="w-full p-2 border rounded"
-              />
+              <input ref="autocompleteInput" type="text" :placeholder="t('시작지점을 입력해주세요')"
+                class="w-full p-2 border rounded" />
             </div>
             <div class="flex flex-col w-[90%]">
-              <label
-                class="text-2xl cursor-pointer flex items-center"
-                for="tour-image"
-              >
+              <label class="text-2xl cursor-pointer flex items-center" for="tour-image">
                 {{ t("대표 이미지") }}
                 <img src="@/assets/images/file.svg" :alt="t('사진업로드')" />
               </label>
-              <input
-                class="hidden"
-                type="file"
-                id="tour-image"
-                accept="image/*"
-                @change="onFileUpload"
-              />
+              <input class="hidden" type="file" id="tour-image" accept="image/*" @change="onFileUpload" />
             </div>
           </section>
         </div>
@@ -192,6 +127,7 @@ import TourAreaSelector from "@/components/tourAreaSelector/TourAreaSelector.vue
 import { addTour } from "../api/tour";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { useMemberStore } from "../stores/member";
 
 const { t } = useI18n(); // 다국어 번역 함수
 
@@ -199,6 +135,7 @@ const { VITE_GOOGLE_MAP_KEY } = import.meta.env;
 const isOptionSelectorToggled = ref(false);
 const isAreaSelectorToggled = ref(false);
 const optionStore = useTourOptionStore();
+const memberStore = useMemberStore();
 const router = useRouter();
 const info = ref({
   title: null,
@@ -215,7 +152,6 @@ const info = ref({
   regionId: null,
   cityId: null,
   needDate: 0,
-  guidName: "minji123", // 임시로 설정
 });
 
 const handleClickOutside = (event) => {
@@ -270,8 +206,8 @@ const clickAdd = async () => {
   // activities에서 이미지 분리해서 추가
   if (info.value.activities && info.value.activities.length > 0) {
     info.value.activities.forEach((activity, index) => {
-      if (activity.image) {
-        formData.append(`activityImg[${index}]`, activity.img);
+      if (activity.img) {
+        formData.append("activityImg", activity.img); // key가 `activityImg`로 동일
       }
     });
   }

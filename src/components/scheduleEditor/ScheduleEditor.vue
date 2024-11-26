@@ -3,99 +3,53 @@
     <span class="text-2xl">{{ t("일정") }}</span>
     <div class="w-full border-t my-[15px]"></div>
     <div class="flex w-full justify-between">
-      <div
-        class="w-[45%] h-[400px] max-h-[500px] flex flex-col gap-[15px] overflow-y-auto"
-      >
-        <div
-          class="px-[20px] py-[15px] border rounded-md flex justify-between"
-          v-for="schedule in activitys"
-          :key="schedule.id"
-        >
+      <div class="w-[45%] h-[400px] max-h-[500px] flex flex-col gap-[15px] overflow-y-auto">
+        <div class="px-[20px] py-[15px] border rounded-md flex justify-between" v-for="schedule in activitys"
+          :key="schedule.id">
           <span>{{ schedule.actName }}</span>
-          <img
-            class="w-[20px] cursor-pointer"
-            src="@/assets/images/trashcan.svg"
-            :alt="t('일정 삭제')"
-            @click="deleteSchedule(schedule.id)"
-          />
+          <img class="w-[20px] cursor-pointer" src="@/assets/images/trashcan.svg" :alt="t('일정 삭제')"
+            @click="deleteSchedule(schedule.id)" />
         </div>
       </div>
       <div class="w-[45%] flex flex-col gap-[20px]">
         <div class="w-full flex flex-col gap-[10px]">
           <label class="text-xl" for="act-title">{{ t("일정 이름") }}</label>
-          <input
-            class="border px-[25px] py-[15px]"
-            type="text"
-            id="act-title"
-            v-model="scheduleInfo.actName"
-          />
+          <input class="border px-[25px] py-[15px]" type="text" id="act-title" v-model="scheduleInfo.actName" />
         </div>
         <div class="w-full flex flex-col gap-[10px]">
           <label class="text-xl" for="act-description">{{ t("설명") }}</label>
-          <input
-            class="border px-[25px] py-[15px]"
-            type="text"
-            id="act-description"
-            v-model="scheduleInfo.actContents"
-          />
+          <input class="border px-[25px] py-[15px]" type="text" id="act-description"
+            v-model="scheduleInfo.actContents" />
         </div>
         <div class="flex flex-col w-[90%] relative">
           <label class="text-xl mb-[10px]" for="title">{{
             t("활동 유형")
           }}</label>
           <div class="flex gap-[6px] max-w-[90%] relative">
-            <div
-              v-if="scheduleInfo.categoryId !== null"
-              @click="isOptionSelectorToggled = true"
-              class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center whitespace-nowrap overflow-hidden text-ellipsis"
-            >
+            <div v-if="scheduleInfo.categoryId !== null" @click="isOptionSelectorToggled = true"
+              class="box-border min-w-[100px] max-w-[200px] h-[30px] max-h-[34px] bg-blue-400 text-white px-3 py-1 rounded-full cursor-pointer text-center whitespace-nowrap overflow-hidden text-ellipsis">
               {{ scheduleInfo.categoryId }}
             </div>
-            <img
-              v-else
-              class="w-[30px] min-w-[30px] cursor-pointer"
-              src="@/assets/images/add.svg"
-              :alt="t('설정 추가')"
-              @click="isOptionSelectorToggled = true"
-            />
+            <img v-else class="w-[30px] min-w-[30px] cursor-pointer" src="@/assets/images/add.svg" :alt="t('설정 추가')"
+              @click="isOptionSelectorToggled = true" />
           </div>
-          <ActOptionSelector
-            v-if="isOptionSelectorToggled"
-            :seletedCategory="scheduleInfo.categoryId"
-            :seletedCategoryName="scheduleInfo.categoryName"
-            @update:category="updateCategory"
-            class="absolute z-50 top-[75px] start-[-95px]"
-          />
+          <ActOptionSelector v-if="isOptionSelectorToggled" :seletedCategory="scheduleInfo.categoryId"
+            :seletedCategoryName="scheduleInfo.categoryName" @update:category="updateCategory"
+            class="absolute z-50 top-[75px] start-[-95px]" />
         </div>
         <div class="w-full flex flex-col gap-[10px]">
-          <input
-            ref="autocompleteInput"
-            type="text"
-            :placeholder="t('일정 시작 주소 입력')"
-            class="w-full p-2 border rounded"
-          />
+          <input ref="autocompleteInput" type="text" :placeholder="t('일정 시작 주소 입력')"
+            class="w-full p-2 border rounded" />
         </div>
         <div class="w-full flex flex-col gap-[10px]">
           <div class="flex justify-between">
-            <label
-              class="text-sm cursor-pointer flex items-center"
-              for="act-image"
-            >
+            <label class="text-sm cursor-pointer flex items-center" for="act-image">
               {{ t("사진 업로드") }}
               <img src="@/assets/images/file.svg" :alt="t('사진 업로드')" />
             </label>
-            <input
-              class="hidden"
-              type="file"
-              id="act-image"
-              accept="image/*"
-              ref="fileInputRef"
-              @change="onFileUpload"
-            />
-            <button
-              class="w-1/3 bg-blue-400 rounded-md text-white hover:bg-blue-500 h-[40px]"
-              @click="addSchedule"
-            >
+            <input class="hidden" type="file" id="act-image" accept="image/*" ref="fileInputRef"
+              @change="onFileUpload" />
+            <button class="w-1/3 bg-blue-400 rounded-md text-white hover:bg-blue-500 h-[40px]" @click="addSchedule">
               {{ t("추가") }}
             </button>
           </div>

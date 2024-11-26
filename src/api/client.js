@@ -39,10 +39,17 @@ accessClient.interceptors.request.use(
 // 응답 인터셉터 추가 (필요 시)
 accessClient.interceptors.response.use(
   (response) => {
-    if (response.data && response.data.accessToken) {
-      // 받은 액세스 토큰을 LocalStorage에 저장
-      localStorage.setItem("accessToken", response.data.accessToken);
+    // 응답 헤더에서 Authorization 토큰을 가져옴
+    const authorizationHeader = response.headers["authorization"]; // 소문자로 접근
+    console.log("Authorization Header:", authorizationHeader);
+
+    if (authorizationHeader) {
+      // "Bearer " 접두사를 제거하고 액세스 토큰만 저장
+      const accessToken = authorizationHeader.replace("Bearer ", "");
+      console.log("Access Token:", accessToken);
+      localStorage.setItem("accessToken", accessToken);
     }
+
     return response; // 원래 응답을 그대로 반환
   },
   (error) => {

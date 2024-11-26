@@ -1,4 +1,4 @@
-import { client } from "@/api/client";
+import { client, accessClient } from "@/api/client";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
@@ -48,7 +48,7 @@ const getTourDetail = async (id) => {
 
 const getMyTours = async (id) => {
   try {
-    const res = await client.get(`/tour/mytour?userId=${id}`);
+    const res = await accessClient.get(`/tour/mytour`);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -59,7 +59,7 @@ const getMyTours = async (id) => {
 
 const addTour = async (tour) => {
   try {
-    const res = await client.post("/tour/create", tour, {
+    const res = await accessClient.post("/tour/create", tour, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -71,11 +71,4 @@ const addTour = async (tour) => {
     return {};
   }
 };
-export {
-  getCurrentTours,
-  getTours,
-  getConditionTours,
-  getTourDetail,
-  getMyTours,
-  addTour,
-};
+export { getCurrentTours, getTours, getConditionTours, getTourDetail, getMyTours, addTour };

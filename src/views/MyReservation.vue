@@ -4,10 +4,7 @@
     <div class="border w-full my-[15px]"></div>
     <div class="w-full h-[505px] overflow-y-auto">
       <div class="flex flex-col gap-[15px]">
-        <template
-          v-for="reservation in reservationHistories"
-          :key="reservation.reservationId"
-        >
+        <template v-for="reservation in reservationHistories" :key="reservation.reservationId">
           <Reservation :reservation="reservation" />
         </template>
       </div>
@@ -38,7 +35,7 @@ const reservationHistories = computed(() => {
 });
 
 onMounted(async () => {
-  const memberId = "minji123";
+  const memberId = memberStore.memberId;
   reservations.value = await getGuestReservations(memberId);
   reviews.value = await getReviews(memberId);
 });

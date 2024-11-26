@@ -28,11 +28,11 @@ const getChatLogs = async (roomId) => {
   }
 };
 
-const openChatRoom = async (guidId, guestId) => {
+const openChatRoom = async (guidId, guidName) => {
   try {
     const res = await accessClient.post(`/chat/createchatroom`, {
       chatGuidId: guidId,
-      chatGuestId: guestId,
+      chatGuidNickName: guidName,
     });
     return res.data;
   } catch (err) {
