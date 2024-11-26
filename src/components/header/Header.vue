@@ -156,6 +156,7 @@ const handleClickOutside = (event) => {
 };
 const userLogout = async () => {
   const data = await logout();
+  memberStore.reset();
   localStorage.removeItem("accessToken");
   toggleDropdown();
   router.push("/");

@@ -17,6 +17,12 @@ export const useMemberStore = defineStore("counter", () => {
     id.value = uid;
   };
 
+  const reset = () => {
+    id.value = null;
+    isMemberLogin.value = false;
+    info.value = ref({});
+  };
+
   watch(id, () => {
     if (id.value !== null) {
       isMemberLogin.value = true;
@@ -24,5 +30,5 @@ export const useMemberStore = defineStore("counter", () => {
       isMemberLogin.value = false;
     }
   });
-  return { memberId, isLogin, memberInfo, setMember, setInfo };
+  return { memberId, isLogin, memberInfo, setMember, setInfo, reset };
 });
