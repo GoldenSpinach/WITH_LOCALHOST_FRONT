@@ -6,7 +6,7 @@ const { VITE_AI_KEY } = import.meta.env;
 const translateWithChatGPT = async (data) => {
   const userLanguage = navigator.language || "en";
   console.log(userLanguage);
-  if (userLanguage !== "ko") {
+  if (userLanguage !== "ko" || userLanguage !== "ko-KR") {
     try {
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",
