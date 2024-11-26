@@ -11,9 +11,6 @@ import { getMe } from "./api/member";
 <template>
   <div class="bg-Neutral-50">
     <Header />
-    <button @click="requestNotificationPermission">
-      oerqhguoqheorgoieqrogoerq
-    </button>
     <ChatButton />
     <RouterView />
   </div>

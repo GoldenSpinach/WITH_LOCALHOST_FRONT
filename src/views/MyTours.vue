@@ -38,7 +38,7 @@
             :alt="t('추가')" />
         </RouterLink>
       </div>
-      <div class="w-1/2 border h-[505px] rounded-lg flex relative">
+      <div class="w-1/2 border h-[505px] rounded-lg flex relative" v-if="selectedTour !== null">
         <WaitList :tourId="selectedTour" />
       </div>
     </div>

@@ -15,7 +15,7 @@
 import { computed, onMounted, ref } from "vue";
 import Reservation from "@/components/reservation/Reservation.vue";
 import { getGuestReservations } from "@/api/reservation";
-import { getReviews, deleteReview } from "@/api/member";
+import { getMyReview } from "@/api/member";
 import { useMemberStore } from "../stores/member";
 import { useI18n } from "vue-i18n";
 
@@ -37,7 +37,7 @@ const reservationHistories = computed(() => {
 onMounted(async () => {
   const memberId = memberStore.memberId;
   reservations.value = await getGuestReservations(memberId);
-  reviews.value = await getReviews(memberId);
+  reviews.value = await getMyReview(memberId);
 });
 </script>
 <style></style>

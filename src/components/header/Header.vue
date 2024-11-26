@@ -158,6 +158,7 @@ const userLogout = async () => {
   const data = await logout();
   memberStore.reset();
   localStorage.removeItem("accessToken");
+  sessionStorage.clear();
   toggleDropdown();
   router.push("/");
 };

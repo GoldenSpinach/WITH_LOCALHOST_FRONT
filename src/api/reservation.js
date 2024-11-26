@@ -3,9 +3,7 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 const getGuestReservations = async (guestId) => {
   try {
-    const res = await accessClient.get(
-      `/reservation/guestList?guestId=${guestId}`
-    );
+    const res = await accessClient.get(`/reservation/guestList`);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -16,7 +14,7 @@ const getGuestReservations = async (guestId) => {
 
 const getHostReservations = async (hostId) => {
   try {
-    const res = await accessClient.get(`/reservation/guidList/${hostId}`);
+    const res = await accessClient.get(`/reservation/guidList`);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -41,9 +39,7 @@ const determineReservation = async (reservationId, type) => {
 
 const getWaitings = async (guideId) => {
   try {
-    const res = await accessClient.get(
-      `/reservation/guidList?guidId=${guideId}`
-    );
+    const res = await accessClient.get(`/reservation/guidList`);
     return res.data;
   } catch (err) {
     toast("에러!");
