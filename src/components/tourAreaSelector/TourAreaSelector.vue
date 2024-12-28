@@ -13,7 +13,7 @@
 import { ref, onMounted, watchEffect } from "vue";
 import { getRegion, getCities } from "@/api/region";
 import { useTourOptionStore } from "@/stores/tourOptionStore";
-import RegionCitySelector from "./RegionCitySelector.vue";
+import RegionCitySelector from "@/components/selector/regionCitySelector/RegionCitySelector.vue";
 
 const tourOptionStore = useTourOptionStore();
 const regions = ref([]);
