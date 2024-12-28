@@ -1,124 +1,48 @@
 <template>
-  <div
-    class="w-[450px] border border-zinc-300 rounded-3xl mt-5 shadow-xl p-6 bg-white"
-  >
-    <div>
-      <div class="border-b w-full mb-6 flex">
-        <span
-          :class="[
-            'text-lg font-semibold inline-block px-5 pb-3 rounded-t-md me-5 cursor-pointer text-center transition-all duration-200',
-            selectorMenu === 'OPTION'
-              ? 'bg-blue-400 text-white'
-              : 'text-gray-700 hover:bg-gray-100',
-          ]"
-          @click="selectorMenu = 'OPTION'"
-        >
-          {{ t("편의") }}
-        </span>
-        <span
-          :class="[
-            'text-lg font-semibold inline-block px-5 pb-3 rounded-t-md me-5 cursor-pointer text-center transition-all duration-200',
-            selectorMenu === 'CATEGORY'
-              ? 'bg-blue-400 text-white'
-              : 'text-gray-700 hover:bg-gray-100',
-          ]"
-          @click="selectorMenu = 'CATEGORY'"
-        >
-          {{ t("활동유형") }}
-        </span>
-      </div>
-      <div class="flex flex-wrap gap-3">
-        <template v-if="selectorMenu === 'OPTION'">
-          <div
-            v-for="option in options"
-            :key="option.categoryId"
-            :class="[
-              'border p-4 rounded-lg cursor-pointer transition-all duration-200',
-              optionStore.selectedOptions.some(
-                (opt) => opt.id == option.categoryId
-              )
-                ? 'bg-blue-400 text-white border-blue-400'
-                : 'border-gray-300 hover:bg-blue-50 hover:text-blue-500',
-            ]"
-            @click="
-              optionStore.addOption(option.categoryId, option.categoryName)
-            "
-          >
-            <span class="flex items-center gap-1">
-              <span>{{ option.categoryName }}</span>
-            </span>
-            <img :src="option.categoryImg" alt="" />
-          </div>
-        </template>
-        <template v-else>
-          <div
-            v-for="category in categories"
-            :key="category.categoryId"
-            :class="[
-              'border p-4 rounded-lg cursor-pointer transition-all duration-200',
-              optionStore.selectedOptions.some(
-                (opt) => opt.id == category.categoryId
-              )
-                ? 'bg-blue-400 text-white border-blue-400'
-                : 'border-gray-300 hover:bg-blue-50 hover:text-blue-500',
-            ]"
-            @click="
-              optionStore.addOption(category.categoryId, category.categoryName)
-            "
-          >
-            <span class="flex items-center gap-1">
-              <span>{{ category.categoryName }}</span>
-            </span>
-            <img :src="option.categoryImg" alt="" />
-          </div>
-        </template>
-      </div>
-    </div>
-  </div>
+  <CommonSelector
+    :menus="menus"
+    :items="{ OPTION: options, CATEGORY: categories }"
+    :selectedItems="optionStore.selectedOptions"
+    @select="handleSelect"
+  />
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { onMounted, ref } from "vue";
-import { useOptionStore } from "../../stores/optionStore";
 import { getOptions, getCategories } from "@/api/region";
-import { useI18n } from "vue-i18n";
 import { translateWithChatGPT } from "@/api/translate";
+import { useOptionStore } from "@/stores/optionStore";
+import CommonSelector from "@/components/selector/commonOptionSelector/CommonOptionSelector.vue";
 
-const { t } = useI18n(); // 번역 함수 추가
 const optionStore = useOptionStore();
-const options = ref([]);
-const categories = ref([]);
-// OPTION = 편의 / CATEGORY = 활동유형
-const selectorMenu = ref("OPTION");
+const menus = [
+  { key: "OPTION", label: "편의" },
+  { key: "CATEGORY", label: "활동유형" },
+];
 
-// 옵션 데이터 번역
-const translateOptions = async (options) => {
-  for (const option of options) {
-    option.categoryName = await translateWithChatGPT(option.categoryName);
-  }
-};
+const options = ref([]); // 편의 옵션 데이터
+const categories = ref([]); // 활동 유형 데이터
 
-// 카테고리 데이터 번역
-const translateCategories = async (categories) => {
-  for (const category of categories) {
-    category.categoryName = await translateWithChatGPT(category.categoryName);
-  }
+const handleSelect = ({ id, name }) => {
+  optionStore.addOption(id, name);
 };
 
 onMounted(async () => {
-  // 데이터 가져오기
-  options.value = await getOptions();
-  categories.value = await getCategories();
+  // API 데이터 가져오기
+  const fetchedOptions = await getOptions();
+  const fetchedCategories = await getCategories();
 
-  // 데이터 번역
-  await translateOptions(options.value);
-  await translateCategories(categories.value);
+  // 데이터 정리 및 번역
+  options.value = fetchedOptions.map((item) => ({
+    id: item.categoryId,
+    name: item.categoryName,
+    type: item.categoryType,
+  }));
+
+  categories.value = fetchedCategories.map((item) => ({
+    id: item.categoryId,
+    name: item.categoryName,
+    type: item.categoryType,
+  }));
 });
 </script>
-
-<style scoped>
-.material-icons {
-  font-size: 16px;
-  vertical-align: middle;
-}
-</style>
