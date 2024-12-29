@@ -33,16 +33,8 @@ onMounted(async () => {
   const fetchedCategories = await getCategories();
 
   // 데이터 정리 및 번역
-  options.value = fetchedOptions.map((item) => ({
-    id: item.categoryId,
-    name: item.categoryName,
-    type: item.categoryType,
-  }));
+  options.value = fetchedOptions;
 
-  categories.value = fetchedCategories.map((item) => ({
-    id: item.categoryId,
-    name: item.categoryName,
-    type: item.categoryType,
-  }));
+  categories.value = fetchedCategories;
 });
 </script>
